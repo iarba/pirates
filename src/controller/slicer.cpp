@@ -10,6 +10,10 @@ void slicer_t::tick(obj *o)
   {
     return;
   }
+  if(o -> layer == 0)
+  {
+    tick_sea(static_cast<sea *>(o));
+  }
   if(o -> layer == 1)
   {
     tick_floater(static_cast<floater *>(o));
@@ -26,6 +30,10 @@ void slicer_t::tick(obj *o)
   {
     tick(it.second);
   }
+}
+
+void slicer_t::tick_sea(sea *o)
+{
 }
 
 void slicer_t::tick_floater(floater *o)

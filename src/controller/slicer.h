@@ -2,6 +2,7 @@
 #define CONTROLLER_SLICER_H
 
 #include "model/obj.h"
+#include "model/sea.h"
 #include "model/floater.h"
 #include "model/solid.h"
 #include "model/attachment.h"
@@ -11,6 +12,7 @@ class slicer_t
 {
 public:
   void tick(obj *o);
+  void tick_sea(sea *o);
   void tick_floater(floater *o);
   void tick_solid(solid *o);
   void tick_attachment(attachment *o);
