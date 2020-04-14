@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.10.0)
 project(pirates)
 
-file(GLOB SOURCES "src/*.cpp")
+file(GLOB_RECURSE SOURCES "src/*.cpp")
+
+include_directories(src)
 
 find_package(Boost 1.72 COMPONENTS system thread log log_setup REQUIRED)
 
