@@ -1,0 +1,15 @@
+Model: a game contains 1 object
+  objects are split into layers based on dependency
+    layer0 - world - an ocean made entirely out of water
+    layer1 - floater - floats on water - interacts with other floaters
+    layer2 - solid - interacts with other solids, move on floaters
+    layer3 - attachments
+
+world is gridless - eases movement but makes collision complex - stick to simple shapes
+floater is gridded for object placement, but movement is gridless. Objects will allign with target grid
+
+grid - square grid
+
+advantages - seamless movement improves user experience
+
+expected difficulty - unalligned grid interaction
