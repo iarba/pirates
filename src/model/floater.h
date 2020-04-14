@@ -7,7 +7,7 @@
 class floater : public obj
 {
 public:
-  floater(namer_t floater_name);
+  floater(namer_t floater_namer);
   ~floater();
   physical_properties pp;
 };
