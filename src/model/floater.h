@@ -4,12 +4,10 @@
 #include "model/obj.h"
 #include "model/physical_properties.h"
 
-extern namer_t floater_namer;
-
 class floater : public obj
 {
 public:
-  floater();
+  floater(namer_t floater_name);
   ~floater();
   physical_properties pp;
 };
