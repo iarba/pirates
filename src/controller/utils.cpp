@@ -35,6 +35,7 @@ void get_edge_closest_to_point(glm::dvec2 point, std::vector<glm::dvec2> shape, 
     {
       *offset = distance;
       *axis = normal;
+      first = false;
     }
     j = i;
   }

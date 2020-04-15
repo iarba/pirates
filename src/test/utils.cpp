@@ -1,6 +1,7 @@
 #include "test/utils.h"
 #include "test/suite.h"
 #include "controller/utils.h"
+#include "misc_utils.h"
 
 void test_point_in_shape()
 {
@@ -136,7 +137,60 @@ void test_point_in_shape()
   }
 }
 
+void test_closest_edge_to_point()
+{
+  glm::dvec2 point;
+  std::vector<glm::dvec2> shape;
+  glm::dvec2 axis;
+  double offset;
+  shape.push_back({0, 0});
+  shape.push_back({1, 0});
+  shape.push_back({1, 1});
+  shape.push_back({2, 1});
+  shape.push_back({2, 0});
+  shape.push_back({3, 0});
+  shape.push_back({3, 2});
+  shape.push_back({0, 2});
+  TEST("TESTING CLOSEST EDGE 1");
+  point = {0.25, 0.5};
+  get_edge_closest_to_point(point, shape, &axis, &offset);
+  if(_eq(axis, {1, 0}) && _eq(offset, 0.25))
+  {
+    PASS;
+  }
+  else
+  {
+    std::string reason = "expected axis {1, 0} got {" + std::to_string(axis.x) + ", " + std::to_string(axis.y) + "}, expected offset 0.25 got " + std::to_string(offset);
+    FAIL_REASON(reason);
+  }
+  TEST("TESTING CLOSEST EDGE 2");
+  point = {0.5, 0.25};
+  get_edge_closest_to_point(point, shape, &axis, &offset);
+  if(_eq(axis, {0, 1}) && _eq(offset, 0.25))
+  {
+    PASS;
+  }
+  else
+  {
+    std::string reason = "expected axis {0, 1} got {" + std::to_string(axis.x) + ", " + std::to_string(axis.y) + "}, expected offset 0.25 got " + std::to_string(offset);
+    FAIL_REASON(reason);
+  }
+  TEST("TESTING CLOSEST EDGE 3");
+  point = {3, 1};
+  get_edge_closest_to_point(point, shape, &axis, &offset);
+  if(_eq(axis, {-1, 0}) && _eq(offset, 0))
+  {
+    PASS;
+  }
+  else
+  {
+    std::string reason = "expected axis {-1, 0} got {" + std::to_string(axis.x) + ", " + std::to_string(axis.y) + "}, expected offset 0 got " + std::to_string(offset);
+    FAIL_REASON(reason);
+  }
+}
+
 void test_utils()
 {
   test_point_in_shape();
+  test_closest_edge_to_point();
 }
