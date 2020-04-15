@@ -1,6 +1,7 @@
 #include "controller/slicer.h"
 #include "model/floater.h"
 #include "model/solid.h"
+#include "controller/utils.h"
 
 slicer_t slicer;
 
@@ -57,11 +58,11 @@ void slicer_t::tick_sea(sea *o)
     {
       // prune most collisions with a bounding box check
       floater *target = static_cast<floater *>(tit.second);
-      glm::dvec2 _axis;
-      double _offset;
+      glm::dvec2 axis;
+      double offset;
       collider_box obb = origin -> get_bounding_box();
       collider_box tbb = target -> get_bounding_box();
-      if(obb.collides(&tbb, &_axis, &_offset))
+      if(obb.collides(&tbb, &axis, &offset))
       {
         // get perimeter of both shapes
         std::vector<glm::dvec2> op = origin -> get_bounding_perimeter();
@@ -70,11 +71,15 @@ void slicer_t::tick_sea(sea *o)
         std::vector<glm::dvec2> pop;
         std::vector<glm::dvec2> ptp;
         // iterate both list of points
-        // find 1 point that is contained within the perimeter of the other floater
-        // determine the edge within the other floater that is closest to the point
-        // the projection between the point and the edge is the separation requirement
-        // compute impulse
-        // apply impulse to both objects
+        for(auto point:pop)
+        {
+          if(point_is_in_shape(point, tp))
+          { // find 1 point that is contained within the perimeter of the other floater
+            // determine the edge within the other floater that is closest to the point
+            get_edge_closest_to_point(point, tp, &axis, &offset);
+            // the projection between the point and the edge is the separation requirement
+          }
+        }
       }
     }
   }

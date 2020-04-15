@@ -2,7 +2,7 @@
 #include "test/suite.h"
 #include "model/collider/circle.h"
 #include "model/collider/box.h"
-#include "utils.h"
+#include "misc_utils.h"
 
 void test_collision()
 {
