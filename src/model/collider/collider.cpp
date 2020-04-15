@@ -3,7 +3,7 @@
 #include "model/collider/box.h"
 #include "utils.h"
 
-collider_t::collider_t(physical_properties *pp, collider_s s)
+collider_t::collider_t(physical_properties pp, collider_s s)
 {
   this -> pp = pp;
   this -> s = s;
@@ -15,9 +15,9 @@ bool collider_t::collides(collider_t *other, glm::dvec2 *axis, double *offset)
   { // circle circle collision
     collider_circle *c1 = static_cast<collider_circle *>(this);
     collider_circle *c2 = static_cast<collider_circle *>(other);
-    double distance = glm::distance(c1 -> pp -> position, c2 -> pp -> position);
+    double distance = glm::distance(c1 -> pp.position, c2 -> pp.position);
     *offset = c1 -> r + c2 -> r - distance;
-    *axis = c2 -> pp -> position - c1 -> pp -> position;
+    *axis = c2 -> pp.position - c1 -> pp.position;
     if(_eq(*axis, {0, 0}))
     {
       *axis = {0, 1}; // TODO: random

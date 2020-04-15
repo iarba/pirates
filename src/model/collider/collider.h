@@ -13,9 +13,9 @@ enum collider_s
 class collider_t
 {
 public:
-  collider_t(physical_properties *pp, collider_s s);
+  collider_t(physical_properties pp, collider_s s);
   bool collides(collider_t *other, glm::dvec2 *axis, double *offset);
-  physical_properties *pp;
+  physical_properties pp;
   collider_s s;
 };
 

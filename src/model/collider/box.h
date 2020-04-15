@@ -6,7 +6,7 @@
 class collider_box : public collider_t
 {
 public:
-  collider_box(physical_properties *pp, double x, double z);
+  collider_box(physical_properties pp, double x, double z);
   double x;
   double z;
 };

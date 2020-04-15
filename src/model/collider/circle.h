@@ -6,7 +6,7 @@
 class collider_circle : public collider_t
 {
 public:
-  collider_circle(physical_properties *pp, double r);
+  collider_circle(physical_properties pp, double r);
   double r;
 };
 
