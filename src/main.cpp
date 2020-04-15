@@ -9,6 +9,7 @@ int main()
 {
   log_init("pirates");
   execute_test();
+  return 0;
   sea *s = new sea();
   forever
   {

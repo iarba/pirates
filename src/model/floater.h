@@ -3,6 +3,7 @@
 
 #include "model/obj.h"
 #include "model/physical_properties.h"
+#include "model/collider/box.h"
 #define CELL_SIZE 1
 
 class cell_t
@@ -29,6 +30,7 @@ class floater : public obj
 public:
   floater(namer_t floater_namer, int x, int z);
   ~floater();
+  collider_box get_bounding_box();
   physical_properties pp;
   grid_t grid;
 };
