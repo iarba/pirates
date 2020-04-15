@@ -3,12 +3,14 @@
 
 #include "model/obj.h"
 #include "model/physical_properties.h"
+#define CELL_SIZE 1
 
 class cell_t
 {
 public:
   bool full = false;
   bool passable = false;
+  bool solid = false;
 };
 
 class grid_t
