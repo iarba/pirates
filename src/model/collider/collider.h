@@ -2,6 +2,7 @@
 #define MODEL_COLLIDER_COLLIDER_H
 
 #include "model/physical_properties.h"
+#include <glm/glm.hpp>
 
 enum collider_s
 {
@@ -13,7 +14,8 @@ class collider_t
 {
 public:
   collider_t(physical_properties *pp, collider_s s);
-  bool collide(collider_t other, double *axis, double *offset);
+  bool collide(collider_t other, glm::dvec2 *axis, double *offset);
+  bool collide(collider_t *other, glm::dvec2 *axis, double *offset);
   physical_properties *pp;
   collider_s s;
 };
