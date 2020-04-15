@@ -27,7 +27,7 @@ void slicer_t::tick(obj *o)
     tick_attachment(static_cast<attachment *>(o));
   }
   auto cc = o -> children;
-  for(auto it : o -> children)
+  for(auto it : cc)
   {
     o -> lifespan -= dt;
     if((-10 < o -> lifespan) && (o -> lifespan < 0))
@@ -48,6 +48,36 @@ void slicer_t::tick(obj *o)
 
 void slicer_t::tick_sea(sea *o)
 {
+  // for every floater, check collision against every other floater in sight
+  // pls don't add too many floaters at once, otherwise this will get expensive
+  for(auto oit : o -> children)
+  {
+    floater *origin = static_cast<floater *>(oit.second);
+    for(auto tit : o -> children)
+    {
+      // prune most collisions with a bounding box check
+      floater *target = static_cast<floater *>(tit.second);
+      glm::dvec2 _axis;
+      double _offset;
+      collider_box obb = origin -> get_bounding_box();
+      collider_box tbb = target -> get_bounding_box();
+      if(obb.collides(&tbb, &_axis, &_offset))
+      {
+        // get perimeter of both shapes
+        std::vector<glm::dvec2> op = origin -> get_bounding_perimeter();
+        std::vector<glm::dvec2> tp = origin -> get_bounding_perimeter();
+        // get pruned vector of points, filtering by points that are in the target bounding box
+        std::vector<glm::dvec2> pop;
+        std::vector<glm::dvec2> ptp;
+        // iterate both list of points
+        // find 1 point that is contained within the perimeter of the other floater
+        // determine the edge within the other floater that is closest to the point
+        // the projection between the point and the edge is the separation requirement
+        // compute impulse
+        // apply impulse to both objects
+      }
+    }
+  }
 }
 
 void slicer_t::tick_floater(floater *o)
