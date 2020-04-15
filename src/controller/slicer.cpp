@@ -26,9 +26,23 @@ void slicer_t::tick(obj *o)
   {
     tick_attachment(static_cast<attachment *>(o));
   }
+  auto cc = o -> children;
   for(auto it : o -> children)
   {
-    tick(it.second);
+    o -> lifespan -= dt;
+    if((-10 < o -> lifespan) && (o -> lifespan < 0))
+    {
+      o -> expired = true;
+    }
+    if(o -> expired)
+    {
+      delete it.second;
+      o -> children.erase(it.first);
+    }
+    else
+    {
+      tick(it.second);
+    }
   }
 }
 

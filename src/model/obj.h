@@ -16,6 +16,7 @@ public:
   std::string name;
   std::map<oid_t, obj*> children;
   bool expired = false;
+  double lifespan = -10; // infinite
 };
 
 #endif // MODEL_OBJ_H
