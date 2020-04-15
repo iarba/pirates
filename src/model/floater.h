@@ -4,12 +4,31 @@
 #include "model/obj.h"
 #include "model/physical_properties.h"
 
+class cell_t
+{
+public:
+  bool full = false;
+  bool passable = false;
+};
+
+class grid_t
+{
+public:
+  grid_t(int x, int z);
+  ~grid_t();
+  cell_t *at(int x, int z);
+  cell_t **_grid;
+  int x;
+  int z;
+};
+
 class floater : public obj
 {
 public:
-  floater(namer_t floater_namer);
+  floater(namer_t floater_namer, int x, int z);
   ~floater();
   physical_properties pp;
+  grid_t grid;
 };
 
 #endif // MODEL_FLOATER_H

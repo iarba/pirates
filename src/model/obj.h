@@ -15,6 +15,7 @@ public:
   int layer;
   std::string name;
   std::map<oid_t, obj*> children;
+  bool expired = false;
 };
 
 #endif // MODEL_OBJ_H
