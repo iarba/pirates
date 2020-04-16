@@ -25,5 +25,80 @@ bool collider_t::collides(collider_t *other, glm::dvec2 *axis, double *offset)
     *axis = glm::normalize(*axis);
     return *offset > 0;
   }
-  return false; // no collision
+  if(this -> s == c_box && other -> s == c_box)
+  { // circle circle collision
+    collider_box *b1 = static_cast<collider_box *>(this);
+    collider_box *b2 = static_cast<collider_box *>(other);
+    std::vector<glm::dvec2> points1 = b1 -> get_points();
+    std::vector<glm::dvec2> points2 = b2 -> get_points();
+    // use SAT
+    glm::dmat2x2 normal_rotation = get_rotation_matrix(M_PI / 2);
+    glm::dvec2 axi[4] = {
+      normal_rotation * (points1[0] - points1[1]),
+      normal_rotation * (points1[0] - points1[3]),
+      normal_rotation * (points2[0] - points2[1]),
+      normal_rotation * (points2[0] - points2[3])
+    };
+    for(int i = 0; i < 4; i++)
+    {
+      axi[i] = glm::normalize(axi[i]);
+      double min1p, max1p, min2p, max2p;
+      // project shape 1 onto axis
+      bool first = true;
+      for(auto point : points1)
+      {
+        double p = glm::dot(axi[i], point);
+        if(first)
+        {
+          min1p = p;
+          max1p = p;
+          first = false;
+          continue;
+        }
+        else
+        {
+          min1p = std::min(min1p, p);
+          max1p = std::max(max1p, p);
+        }
+      }
+      // project shape 2 onto axis
+      first = true;
+      for(auto point : points2)
+      {
+        double p = glm::dot(axi[i], point);
+        if(first)
+        {
+          min2p = p;
+          max2p = p;
+          first = false;
+          continue;
+        }
+        else
+        {
+          min2p = std::min(min2p, p);
+          max2p = std::max(max2p, p);
+        }
+      }
+      if((max2p > min1p) && (max1p > min2p))
+      { // collides on this axis
+        double projection_difference = std::min(max2p - min1p, max1p - min2p);
+        if(i == 0)
+        {
+          *offset = projection_difference;
+          *axis = axi[i];
+        }
+        if(*offset > projection_difference)
+        {
+          *offset = projection_difference;
+          *axis = axi[i];
+        }
+      }
+      else
+      { // no collision on this axis
+        return false;
+      }
+    }
+    return !_eq(*offset, 0);
+  }
+  return false; // no collision or undefined collision
 }
