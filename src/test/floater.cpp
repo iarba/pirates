@@ -2,9 +2,11 @@
 #include "test/suite.h"
 #include "model/floater.h"
 #include "model/collider/box.h"
-#include "utils.h"
+#include "misc_utils.h"
+#include "model/sea.h"
+#include "controller/slicer.h"
 
-void test_floater()
+void test_floater_interaction()
 {
   floater *f = new floater("floater", 11, 16);
   f -> grid.at( 2,  2) -> collidable = true;
@@ -100,4 +102,56 @@ void test_floater()
     FAIL_REASON(reason);
   }
   delete f;
+}
+
+void test_floater_collision()
+{
+  floater *f1 = new floater("floater", 5, 5);
+  f1 -> pp.position = {0, 0};
+  f1 -> grid.at(1, 1) -> collidable = true;
+  f1 -> grid.at(1, 2) -> collidable = true;
+  f1 -> grid.at(1, 3) -> collidable = true; // this should collide
+  f1 -> grid.at(2, 1) -> collidable = true;
+  f1 -> grid.at(2, 2) -> collidable = true;
+  f1 -> grid.at(2, 3) -> collidable = true;
+  f1 -> grid.at(3, 1) -> collidable = true;
+  f1 -> grid.at(3, 2) -> collidable = true;
+  f1 -> grid.at(3, 3) -> collidable = true;
+  floater *f2 = new floater("floater", 5, 5);
+  f2 -> pp.position = {1.5, 1.5};
+  f2 -> grid.at(1, 1) -> collidable = true;
+  f2 -> grid.at(1, 2) -> collidable = true;
+  f2 -> grid.at(1, 3) -> collidable = true;
+  f2 -> grid.at(2, 1) -> collidable = true;
+  f2 -> grid.at(2, 2) -> collidable = true;
+  f2 -> grid.at(2, 3) -> collidable = true;
+  f2 -> grid.at(3, 1) -> collidable = true; // this should collide
+  f2 -> grid.at(3, 2) -> collidable = true;
+  f2 -> grid.at(3, 3) -> collidable = true;
+  sea *s = new sea();
+  s -> children[1] = f1;
+  s -> children[2] = f2;
+  TEST("TESTING SIMPLE FLOATER COLLISION");
+  slicer.tick_sea(s);
+  if(_eq(f1 -> pp.position_velocity, {0, 0}))
+  {
+    std::string reason = "floater 1 didn't move";
+    FAIL_REASON(reason);
+    goto next;
+  }
+  if(_eq(f2 -> pp.position_velocity, {0, 0}))
+  {
+    std::string reason = "floater 2 didn't move";
+    FAIL_REASON(reason);
+    goto next;
+  }
+  PASS;
+  next:
+  delete s;
+}
+
+void test_floater()
+{
+  test_floater_interaction();
+  test_floater_collision();
 }
