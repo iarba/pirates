@@ -8,7 +8,7 @@ bool _eq(double a, double b);
 
 bool _eq(glm::dvec2 a, glm::dvec2 b);
 
-glm::mat2x2 get_rotation_matrix(double angle);
+glm::dmat2x2 get_rotation_matrix(double angle);
 
 bool point_is_in_shape(glm::dvec2 point, std::vector<glm::dvec2> shape);
 

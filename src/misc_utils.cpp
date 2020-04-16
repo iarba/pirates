@@ -14,7 +14,7 @@ bool _eq(glm::dvec2 a, glm::dvec2 b)
   return _eq(a.x, b.x) && _eq(a.y, b.y);
 }
 
-glm::mat2x2 get_rotation_matrix(double angle)
+glm::dmat2x2 get_rotation_matrix(double angle)
 {
   return {{cos(angle), -sin(angle)}, {sin(angle), cos(angle)}};
 }
