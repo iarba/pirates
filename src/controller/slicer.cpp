@@ -2,6 +2,8 @@
 #include "model/floater.h"
 #include "model/solid.h"
 #include "controller/utils.h"
+#include "model/collider/circle.h"
+#include "misc_utils.h"
 
 slicer_t slicer;
 
@@ -70,14 +72,58 @@ void slicer_t::tick_sea(sea *o)
         // get pruned vector of points, filtering by points that are in the target bounding box
         std::vector<glm::dvec2> pop;
         std::vector<glm::dvec2> ptp;
+        physical_properties point_pp;
+        for(auto point : op)
+        {
+          point_pp.position = point;
+          collider_circle point_collider(point_pp, 0);
+          if(point_collider.collides(&tbb, &axis, &offset))
+          {
+            pop.push_back(point);
+          }
+        }
+        for(auto point : tp)
+        {
+          point_pp.position = point;
+          collider_circle point_collider(point_pp, 0);
+          if(point_collider.collides(&obb, &axis, &offset))
+          {
+            ptp.push_back(point);
+          }
+        }
         // iterate both list of points
         for(auto point:pop)
         {
+          // find 1 point that is contained within the perimeter of the other floater
           if(point_is_in_shape(point, tp))
-          { // find 1 point that is contained within the perimeter of the other floater
+          {
             // determine the edge within the other floater that is closest to the point
             get_edge_closest_to_point(point, tp, &axis, &offset);
             // the projection between the point and the edge is the separation requirement
+            glm::dvec2 impulse = axis * offset;
+            double mass = origin -> pp.mass + target -> pp.mass;
+            // push the origin
+            glm::dvec2 push_axis = glm::normalize(point - origin -> pp.position);
+            glm::dvec2 push_delta = glm::dot(impulse, push_axis) * push_axis;
+            origin -> pp.position_velocity += push_delta * floater_collision_push_strength * mass * origin -> pp.inverse_mass;
+            // rotate the origin
+            glm::dvec2 torque_axis = get_rotation_matrix(M_PI / 2) * push_axis;
+            double torque_delta = glm::dot(impulse, push_axis);
+            origin -> pp.angular_velocity += torque_delta * floater_collision_torque_strength * mass * origin -> pp.inverse_mass;
+            // tilt the origin
+            origin -> pp.tilt_velocity += push_delta * floater_collision_tilt_strength * mass * origin -> pp.inverse_mass;
+            // invert the impulse
+            impulse = -impulse;
+            // push the target
+            push_axis = glm::normalize(point - target -> pp.position);
+            push_delta = glm::dot(impulse, push_axis) * push_axis;
+            target -> pp.position_velocity += push_delta * floater_collision_push_strength * mass * origin -> pp.inverse_mass;
+            // rotate the target
+            torque_axis = get_rotation_matrix(M_PI / 2) * push_axis;
+            torque_delta = glm::dot(impulse, push_axis);
+            target -> pp.angular_velocity += torque_delta * floater_collision_torque_strength * mass * origin -> pp.inverse_mass;
+            // tilt the target
+            target -> pp.tilt_velocity += push_delta * floater_collision_tilt_strength * mass * origin -> pp.inverse_mass;
           }
         }
       }

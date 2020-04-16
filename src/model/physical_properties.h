@@ -12,6 +12,7 @@ public:
   glm::dvec2 tilt = {0, 0};
   glm::dvec2 tilt_velocity = {0, 0};
   double mass = 1;
+  double inverse_mass = 1;
 };
 
 class pp_builder

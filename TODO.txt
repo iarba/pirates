@@ -19,8 +19,8 @@ development steps
 1. floaters
   1.1 generate grids for floaters                                          V
   1.2 generate bounding box from grid                                      V
-  1.3 check for perimeter collision between 2 floaters of abstract shape
-  1.4 handle collisions between floaters in a fair way
+  1.3 check for perimeter collision between 2 floaters of abstract shape   V
+  1.4 handle collisions between floaters in a fair way                     V
 2. solids
   2.1 drag stopped solids onto grid
   2.2 circle/square collision detection between solids on the same floater

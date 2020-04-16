@@ -20,10 +20,13 @@ public:
   bool enabled = true;
   double sps = 100;
   double dt = 0.01;
-  double tilt_acceleration;
-  glm::dvec2 position_velocity_decay;
-  double angular_velocity_decay;
-  glm::dvec2 tilt_velocity_decay;
+  double tilt_acceleration = 1;
+  double position_velocity_decay = 0.9;
+  double angular_velocity_decay = 0.9;
+  double tilt_velocity_decay = 0.9;
+  double floater_collision_push_strength = 1;
+  double floater_collision_torque_strength = 1;
+  double floater_collision_tilt_strength = 1;
 };
 
 extern slicer_t slicer;

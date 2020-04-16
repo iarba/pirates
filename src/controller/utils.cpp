@@ -22,10 +22,11 @@ bool point_is_in_shape(glm::dvec2 point, std::vector<glm::dvec2> shape)
   return contained;
 }
 
-void get_edge_closest_to_point(glm::dvec2 point, std::vector<glm::dvec2> shape, glm::dvec2 *axis, double *offset)
+glm::dvec2 get_edge_closest_to_point(glm::dvec2 point, std::vector<glm::dvec2> shape, glm::dvec2 *axis, double *offset)
 {
   bool first = true;
   int i, j = shape.size() - 1;
+  glm::dvec2 ret = {0, 0};
   for(i = 0; i < shape.size(); i++)
   {
     glm::dvec2 projected_point = glm::closestPointOnLine(point, shape[i], shape[j]);
@@ -35,8 +36,10 @@ void get_edge_closest_to_point(glm::dvec2 point, std::vector<glm::dvec2> shape, 
     {
       *offset = distance;
       *axis = normal;
+      ret = shape[i] - shape[j];
       first = false;
     }
     j = i;
   }
+  return ret;
 }
