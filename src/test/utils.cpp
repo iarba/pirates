@@ -1,6 +1,5 @@
 #include "test/utils.h"
 #include "test/suite.h"
-#include "controller/utils.h"
 #include "misc_utils.h"
 
 void test_point_in_shape()

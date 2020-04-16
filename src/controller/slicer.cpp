@@ -1,7 +1,6 @@
 #include "controller/slicer.h"
 #include "model/floater.h"
 #include "model/solid.h"
-#include "controller/utils.h"
 #include "model/collider/circle.h"
 #include "misc_utils.h"
 
