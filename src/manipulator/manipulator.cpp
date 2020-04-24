@@ -2,6 +2,7 @@
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
 #include <boost/lambda/lambda.hpp>
+#include "controller/slicer.h"
 
 void keyboard_callback_wrapper(void *data_point, int key, int scancode, int action, int mods)
 {
@@ -46,6 +47,10 @@ void manipulator_t::keyboard_callback(int key, int scancode, int action, int mod
     if(key == GLFW_KEY_D)
     {
       camera -> accelerate({0, 1});
+    }
+    if(key == GLFW_KEY_SPACE)
+    {
+      slicer.tick(s);
     }
   }
   if(action == GLFW_RELEASE)

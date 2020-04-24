@@ -118,7 +118,7 @@ void test_floater_collision()
   f1 -> grid.at(3, 2) -> collidable = true;
   f1 -> grid.at(3, 3) -> collidable = true;
   floater *f2 = new floater("floater", 5, 5);
-  f2 -> pp.position = {1.5, 1.5};
+  f2 -> pp.position = {2.5, 2.5};
   f2 -> grid.at(1, 1) -> collidable = true;
   f2 -> grid.at(1, 2) -> collidable = true;
   f2 -> grid.at(1, 3) -> collidable = true;
