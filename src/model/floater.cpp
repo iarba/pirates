@@ -14,17 +14,17 @@ enum direction_t
 
 // directional delta x
 std::map<direction_t, int> ddx = boost::assign::map_list_of
-(up, 0)
-(down, 0)
-(left, -1)
-(right, 1);
-
-// directional delta z
-std::map<direction_t, int> ddz = boost::assign::map_list_of
 (up, -1)
 (down, 1)
 (left, 0)
 (right, 0);
+
+// directional delta z
+std::map<direction_t, int> ddz = boost::assign::map_list_of
+(up, 0)
+(down, 0)
+(left, -1)
+(right, 1);
 
 // directional right of
 std::map<direction_t, direction_t> dro = boost::assign::map_list_of
@@ -77,7 +77,7 @@ collider_box floater::get_bounding_box()
 {
   double x = grid.x * CELL_SIZE;
   double z = grid.z * CELL_SIZE;
-  return collider_box(this -> pp, x/2, z/2);
+  return collider_box(this -> pp, x, z);
 }
 
 void floater::generate_perimeter()
@@ -96,6 +96,10 @@ void floater::generate_perimeter()
         break;
       }
     }
+    if(found)
+    {
+      break;
+    }
   }
   if(!found)
   {
@@ -105,10 +109,10 @@ void floater::generate_perimeter()
   // assumption - grid edge is uncollidable
   direction_t d = right; // we know up and left is uncollidable
   bounding_perimeter.push_back({x, z});
-  while(x != bounding_perimeter[0].x && z != bounding_perimeter[0].y && d != up)
+  while(!(x == bounding_perimeter[0].x && z == bounding_perimeter[0].y && d == up))
   { // while we're not where we started
-    if(!grid.at(x + ddx[dlo[d]], z + ddz[dlo[d]]) -> collidable)
-    { // left is not collidable anymore, move there and add to perimeter
+    if(grid.at(x + ddx[dlo[d]], z + ddz[dlo[d]]) -> collidable)
+    { // left is collidable now, move there and add to perimeter
       d = dlo[d];
       x += ddx[d];
       z += ddz[d];

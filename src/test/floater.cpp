@@ -70,7 +70,7 @@ void test_floater_interaction()
   f -> grid.at( 8, 10) -> collidable = true;
 
   f -> grid.at( 9,  7) -> collidable = true;
-  f -> grid.at( 9,  9) -> collidable = true;
+  f -> grid.at( 9,  8) -> collidable = true;
 
   /*             111111
    *   0123456789012345
@@ -92,13 +92,13 @@ void test_floater_interaction()
   PASS;
   TEST("TESTING PERIMETER GENERATION");
   std::vector<glm::dvec2> v = f -> get_bounding_perimeter();
-  if(v.size() != 48)
+  if(v.size() == 49)
   {
     PASS;
   }
   else
   {
-    std::string reason = "expected size 48 got " + std::to_string(v.size());
+    std::string reason = "expected size 49 got " + std::to_string(v.size());
     FAIL_REASON(reason);
   }
   delete f;

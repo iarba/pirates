@@ -26,7 +26,7 @@ bool collider_t::collides(collider_t *other, glm::dvec2 *axis, double *offset)
     return *offset > 0;
   }
   if(this -> s == c_box && other -> s == c_box)
-  { // circle circle collision
+  { // box box collision
     collider_box *b1 = static_cast<collider_box *>(this);
     collider_box *b2 = static_cast<collider_box *>(other);
     std::vector<glm::dvec2> points1 = b1 -> get_points();
@@ -100,5 +100,5 @@ bool collider_t::collides(collider_t *other, glm::dvec2 *axis, double *offset)
     }
     return !_eq(*offset, 0);
   }
-  return false; // no collision or undefined collision
+  return true; // no collision or undefined collision
 }

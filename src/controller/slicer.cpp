@@ -59,6 +59,10 @@ void slicer_t::tick_sea(sea *o)
     {
       // prune most collisions with a bounding box check
       floater *target = static_cast<floater *>(tit.second);
+      if(origin == target)
+      { // yes pointer equality
+        continue;
+      }
       glm::dvec2 axis;
       double offset;
       collider_box obb = origin -> get_bounding_box();
