@@ -12,6 +12,7 @@ public:
   void draw(sea *s);
   bool is_open();
 private:
+  scppr::model_t *cube;
   scppr::scppr *renderer;
   std::string path;
 };
