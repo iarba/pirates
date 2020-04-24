@@ -16,13 +16,16 @@ int main(int argc, char **argv)
   }
   std::string path = std::string(argv[0]);
   std::string directory = path.substr(0, path.find_last_of('/')) + "/../scppr/assets/";
-  viewer.init(directory);
   sea *s = new sea();
+  manipulator_t *man = viewer.init(directory, s);
   while(viewer.is_open())
   {
+    man -> poll();
     slicer.tick(s);
     viewer.draw(s);
   }
+  delete man;
+  viewer.destroy();
   delete s;
   return 0;
 }

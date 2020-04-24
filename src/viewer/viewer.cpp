@@ -1,20 +1,26 @@
 #include "viewer/viewer.h"
 
-void viewer_t::init(std::string path)
+
+manipulator_t *viewer_t::init(std::string path, sea *s)
 {
   this -> path = path;
   renderer = new scppr::scppr("Pirates", path);
   cube = new scppr::model_t(path + "cube.obj");
+  camera = new camera_t(renderer);
+  return new manipulator_t(s, camera, renderer);
 }
 
 void viewer_t::destroy()
 {
+  delete camera;
   delete renderer;
 }
 
 void viewer_t::draw(sea *s)
 {
-  renderer -> poll();
+  // update the camera
+  camera -> update();
+
   scppr::object_t *obj = new scppr::object_t();
   obj -> model = cube;
   renderer -> add_object(obj);

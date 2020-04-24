@@ -3,11 +3,13 @@
 
 #include <scppr.h>
 #include "model/sea.h"
+#include "viewer/camera.h"
+#include "manipulator/manipulator.h"
 
 class viewer_t
 {
 public:
-  void init(std::string path);
+  manipulator_t *init(std::string path, sea *s);
   void destroy();
   void draw(sea *s);
   bool is_open();
@@ -15,6 +17,7 @@ private:
   scppr::model_t *cube;
   scppr::scppr *renderer;
   std::string path;
+  camera_t *camera;
 };
 
 extern viewer_t viewer;
