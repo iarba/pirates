@@ -3,6 +3,8 @@
 #include "model/solid.h"
 #include "model/collider/circle.h"
 #include "misc_utils.h"
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/matrix_transform_2d.hpp>
 
 slicer_t slicer;
 
@@ -71,7 +73,25 @@ void slicer_t::tick_sea(sea *o)
       {
         // get perimeter of both shapes
         std::vector<glm::dvec2> op = origin -> get_bounding_perimeter();
+        glm::dmat3 transform = glm::dmat3(1);
+                   transform = glm::translate(transform, origin -> pp.position);
+                   transform = glm::translate(transform, {-origin -> grid.x / 2, -origin -> grid.z / 2});
+                   transform = glm::rotate(transform, origin -> pp.angle);
+        for(int i = 0; i < op.size(); i++)
+        {
+          glm::dvec3 transformed = transform * glm::dvec3(op[i], 1);
+          op[i] = {transformed.x, transformed.y};
+        }
         std::vector<glm::dvec2> tp = origin -> get_bounding_perimeter();
+        transform = glm::dmat3(1);
+        transform = glm::translate(transform, target -> pp.position);
+        transform = glm::translate(transform, {-target -> grid.x / 2, -target -> grid.z / 2});
+        transform = glm::rotate(transform, target -> pp.angle);
+        for(int i = 0; i < tp.size(); i++)
+        {
+          glm::dvec3 transformed = transform * glm::dvec3(tp[i], 1);
+          tp[i] = {transformed.x, transformed.y};
+        }
         // get pruned vector of points, filtering by points that are in the target bounding box
         std::vector<glm::dvec2> pop;
         std::vector<glm::dvec2> ptp;
@@ -79,7 +99,7 @@ void slicer_t::tick_sea(sea *o)
         for(auto point : op)
         {
           point_pp.position = point;
-          collider_circle point_collider(point_pp, 0);
+          collider_box point_collider(point_pp, 0.1, 0.1);
           if(point_collider.collides(&tbb, &axis, &offset))
           {
             pop.push_back(point);
@@ -88,7 +108,7 @@ void slicer_t::tick_sea(sea *o)
         for(auto point : tp)
         {
           point_pp.position = point;
-          collider_circle point_collider(point_pp, 0);
+          collider_box point_collider(point_pp, 0.1, 0.1);
           if(point_collider.collides(&obb, &axis, &offset))
           {
             ptp.push_back(point);
@@ -120,13 +140,48 @@ void slicer_t::tick_sea(sea *o)
             // push the target
             push_axis = glm::normalize(point - target -> pp.position);
             push_delta = glm::dot(impulse, push_axis) * push_axis;
-            target -> pp.position_velocity += push_delta * floater_collision_push_strength * mass * origin -> pp.inverse_mass;
+            target -> pp.position_velocity += push_delta * floater_collision_push_strength * mass * target -> pp.inverse_mass;
             // rotate the target
             torque_axis = get_rotation_matrix(M_PI / 2) * push_axis;
             torque_delta = glm::dot(impulse, push_axis);
-            target -> pp.angular_velocity += torque_delta * floater_collision_torque_strength * mass * origin -> pp.inverse_mass;
+            target -> pp.angular_velocity += torque_delta * floater_collision_torque_strength * mass * target -> pp.inverse_mass;
             // tilt the target
-            target -> pp.tilt_velocity += push_delta * floater_collision_tilt_strength * mass * origin -> pp.inverse_mass;
+            target -> pp.tilt_velocity += push_delta * floater_collision_tilt_strength * mass * target -> pp.inverse_mass;
+          }
+        }
+        // iterate both list of points
+        for(auto point:ptp)
+        {
+          // find 1 point that is contained within the perimeter of the other floater
+          if(point_is_in_shape(point, op))
+          {
+            // determine the edge within the other floater that is closest to the point
+            get_edge_closest_to_point(point, op, &axis, &offset);
+            // the projection between the point and the edge is the separation requirement
+            glm::dvec2 impulse = axis * offset;
+            double mass = target -> pp.mass + origin -> pp.mass;
+            // push the target
+            glm::dvec2 push_axis = glm::normalize(point - target -> pp.position);
+            glm::dvec2 push_delta = glm::dot(impulse, push_axis) * push_axis;
+            target -> pp.position_velocity += push_delta * floater_collision_push_strength * mass * target -> pp.inverse_mass;
+            // rotate the target
+            glm::dvec2 torque_axis = get_rotation_matrix(M_PI / 2) * push_axis;
+            double torque_delta = glm::dot(impulse, push_axis);
+            target -> pp.angular_velocity += torque_delta * floater_collision_torque_strength * mass * target -> pp.inverse_mass;
+            // tilt the target
+            target -> pp.tilt_velocity += push_delta * floater_collision_tilt_strength * mass * target -> pp.inverse_mass;
+            // invert the impulse
+            impulse = -impulse;
+            // push the origin
+            push_axis = glm::normalize(point - origin -> pp.position);
+            push_delta = glm::dot(impulse, push_axis) * push_axis;
+            origin -> pp.position_velocity += push_delta * floater_collision_push_strength * mass * origin -> pp.inverse_mass;
+            // rotate the origin
+            torque_axis = get_rotation_matrix(M_PI / 2) * push_axis;
+            torque_delta = glm::dot(impulse, push_axis);
+            origin -> pp.angular_velocity += torque_delta * floater_collision_torque_strength * mass * origin -> pp.inverse_mass;
+            // tilt the origin
+            origin -> pp.tilt_velocity += push_delta * floater_collision_tilt_strength * mass * origin -> pp.inverse_mass;
           }
         }
       }

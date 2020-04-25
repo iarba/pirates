@@ -15,6 +15,7 @@ public:
   bool passable = false;
   bool solid = false;
   bool collidable = false;
+  int mark = 0;
 };
 
 class grid_t
@@ -40,6 +41,7 @@ public:
   bool perimeter_expired = true;
   physical_properties pp;
   grid_t grid;
+  int marker = 0;
 };
 
 #endif // MODEL_FLOATER_H

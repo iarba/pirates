@@ -75,14 +75,16 @@ floater::~floater()
 
 collider_box floater::get_bounding_box()
 {
-  double x = grid.x * CELL_SIZE;
-  double z = grid.z * CELL_SIZE;
-  return collider_box(this -> pp, x, z);
+  // -2 because the border is water guaranteed
+  double x = (grid.x - 2) * CELL_SIZE;
+  double z = (grid.z - 2) * CELL_SIZE;
+  return collider_box(pp, x, z);
 }
 
 void floater::generate_perimeter()
 {
   bounding_perimeter.clear();
+  marker++;
   // step 1 - find first collidable = true
   int x, z;
   bool found = false;
@@ -108,6 +110,7 @@ void floater::generate_perimeter()
   // step 2 - travel around the border, always keeping uncollidable to your left
   // assumption - grid edge is uncollidable
   direction_t d = right; // we know up and left is uncollidable
+  grid.at(x, z) -> mark = marker;
   bounding_perimeter.push_back({x, z});
   while(!(x == bounding_perimeter[0].x && z == bounding_perimeter[0].y && d == up))
   { // while we're not where we started
@@ -116,14 +119,22 @@ void floater::generate_perimeter()
       d = dlo[d];
       x += ddx[d];
       z += ddz[d];
-      bounding_perimeter.push_back({x, z});
+      if(grid.at(x, z) -> mark != marker)
+      {
+        grid.at(x, z) -> mark = marker;
+        bounding_perimeter.push_back({x, z});
+      }
       continue;
     }
     if(grid.at(x + ddx[d], z + ddz[d]) -> collidable)
     { // forward is collidable
       x += ddx[d];
       z += ddz[d];
-      bounding_perimeter.push_back({x, z});
+      if(grid.at(x, z) -> mark != marker)
+      {
+        grid.at(x, z) -> mark = marker;
+        bounding_perimeter.push_back({x, z});
+      }
       continue;
     }
     // if we got here, that means there's uncollidable both to our left and forward, so we turn right
