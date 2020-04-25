@@ -131,7 +131,7 @@ void slicer_t::tick_sea(sea *o)
             origin -> pp.position_velocity += push_delta * floater_collision_push_strength * mass * origin -> pp.inverse_mass;
             // rotate the origin
             glm::dvec2 torque_axis = get_rotation_matrix(M_PI / 2) * push_axis;
-            double torque_delta = glm::dot(impulse, push_axis);
+            double torque_delta = glm::dot(impulse, torque_axis);
             origin -> pp.angular_velocity += torque_delta * floater_collision_torque_strength * mass * origin -> pp.inverse_mass;
             // tilt the origin
             origin -> pp.tilt_velocity += push_delta * floater_collision_tilt_strength * mass * origin -> pp.inverse_mass;
@@ -143,7 +143,7 @@ void slicer_t::tick_sea(sea *o)
             target -> pp.position_velocity += push_delta * floater_collision_push_strength * mass * target -> pp.inverse_mass;
             // rotate the target
             torque_axis = get_rotation_matrix(M_PI / 2) * push_axis;
-            torque_delta = glm::dot(impulse, push_axis);
+            torque_delta = glm::dot(impulse, torque_axis);
             target -> pp.angular_velocity += torque_delta * floater_collision_torque_strength * mass * target -> pp.inverse_mass;
             // tilt the target
             target -> pp.tilt_velocity += push_delta * floater_collision_tilt_strength * mass * target -> pp.inverse_mass;
@@ -166,7 +166,7 @@ void slicer_t::tick_sea(sea *o)
             target -> pp.position_velocity += push_delta * floater_collision_push_strength * mass * target -> pp.inverse_mass;
             // rotate the target
             glm::dvec2 torque_axis = get_rotation_matrix(M_PI / 2) * push_axis;
-            double torque_delta = glm::dot(impulse, push_axis);
+            double torque_delta = glm::dot(impulse, torque_axis);
             target -> pp.angular_velocity += torque_delta * floater_collision_torque_strength * mass * target -> pp.inverse_mass;
             // tilt the target
             target -> pp.tilt_velocity += push_delta * floater_collision_tilt_strength * mass * target -> pp.inverse_mass;
@@ -178,7 +178,7 @@ void slicer_t::tick_sea(sea *o)
             origin -> pp.position_velocity += push_delta * floater_collision_push_strength * mass * origin -> pp.inverse_mass;
             // rotate the origin
             torque_axis = get_rotation_matrix(M_PI / 2) * push_axis;
-            torque_delta = glm::dot(impulse, push_axis);
+            torque_delta = glm::dot(impulse, torque_axis);
             origin -> pp.angular_velocity += torque_delta * floater_collision_torque_strength * mass * origin -> pp.inverse_mass;
             // tilt the origin
             origin -> pp.tilt_velocity += push_delta * floater_collision_tilt_strength * mass * origin -> pp.inverse_mass;
