@@ -24,7 +24,7 @@ public:
   double position_velocity_decay = 0.9;
   double angular_velocity_decay = 0.9;
   double tilt_velocity_decay = 0.9;
-  double floater_collision_push_strength = 3;
+  double floater_collision_push_strength = 1;
   double floater_collision_torque_strength = 1;
   double floater_collision_tilt_strength = 1;
 };

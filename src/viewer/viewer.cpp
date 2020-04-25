@@ -1,5 +1,6 @@
 #include "viewer/viewer.h"
 #include "viewer/alias.h"
+#include "viewer/floater.h"
 
 manipulator_t *viewer_t::init(std::string path, sea *s)
 {
@@ -54,17 +55,13 @@ void viewer_t::draw_sea(sea *s, physical_properties pp)
 
 void viewer_t::draw_floater(floater *f, physical_properties pp)
 {
-  scppr::object_t *o = (scppr::object_t *)alias.get(f);
-  if(o == NULL)
+  floater_viewer *fv = (floater_viewer *)alias.get(f);
+  if(fv == NULL)
   {
-    o = new scppr::object_t();
-    o -> model = cube;
-    o -> scale = {1.5, 0.5, 1.5};
-    alias.put(f, o);
-    renderer -> add_object(o);
+    fv = new floater_viewer(f, cube);
+    alias.put(f, fv);
   }
-  o -> position = {f -> pp.position.x + pp.position.x, 0, f -> pp.position.y + pp.position.y};
-  o -> rotation = {f -> pp.tilt.x + pp.tilt.x, f -> pp.angle + pp.angle, f -> pp.tilt.y + pp.tilt.y};
+  fv -> update(renderer, f);
 }
 
 void viewer_t::draw_solid(solid *s, physical_properties pp)

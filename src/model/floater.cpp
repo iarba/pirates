@@ -26,6 +26,21 @@ std::map<direction_t, int> ddz = boost::assign::map_list_of
 (left, -1)
 (right, 1);
 
+// directional bottom left x
+std::map<direction_t, double> dblx = boost::assign::map_list_of
+(up, 0.5)
+(down, -0.5)
+(left, 0.5)
+(right, -0.5);
+
+// directional bottom left z
+std::map<direction_t, double> dblz = boost::assign::map_list_of
+(up, -0.5)
+(down, 0.5)
+(left, 0.5)
+(right, -0.5);
+
+
 // directional right of
 std::map<direction_t, direction_t> dro = boost::assign::map_list_of
 (up, right)
@@ -110,35 +125,38 @@ void floater::generate_perimeter()
   // step 2 - travel around the border, always keeping uncollidable to your left
   // assumption - grid edge is uncollidable
   direction_t d = right; // we know up and left is uncollidable
-  grid.at(x, z) -> mark = marker;
-  bounding_perimeter.push_back({x, z});
-  while(!(x == bounding_perimeter[0].x && z == bounding_perimeter[0].y && d == up))
+  int startx = x;
+  int startz = z;
+  printf("starting %d %d\n", x, z);
+  while(!(x == startx && z == startz && d == up))
   { // while we're not where we started
+    if(grid.at(x + dblx[d], z + dblz[d]) -> mark != marker)
+    {
+      printf("%lf %lf\n", x + dblx[d], z + dblz[d]);
+      bounding_perimeter.push_back({x + dblx[d], z + dblz[d]});
+      grid.at(x + dblx[d], z + dblz[d]) -> mark = marker;
+    }
     if(grid.at(x + ddx[dlo[d]], z + ddz[dlo[d]]) -> collidable)
     { // left is collidable now, move there and add to perimeter
       d = dlo[d];
       x += ddx[d];
       z += ddz[d];
-      if(grid.at(x, z) -> mark != marker)
-      {
-        grid.at(x, z) -> mark = marker;
-        bounding_perimeter.push_back({x, z});
-      }
       continue;
     }
     if(grid.at(x + ddx[d], z + ddz[d]) -> collidable)
     { // forward is collidable
       x += ddx[d];
       z += ddz[d];
-      if(grid.at(x, z) -> mark != marker)
-      {
-        grid.at(x, z) -> mark = marker;
-        bounding_perimeter.push_back({x, z});
-      }
       continue;
     }
     // if we got here, that means there's uncollidable both to our left and forward, so we turn right
     d = dro[d];
+  }
+  if(grid.at(x + dblx[d], z + dblz[d]) -> mark != marker)
+  {
+    printf("%lf %lf\n", x + dblx[d], z + dblz[d]);
+    bounding_perimeter.push_back({x + dblx[d], z + dblz[d]});
+    grid.at(x + dblx[d], z + dblz[d]) -> mark = marker;
   }
 }
 
