@@ -3,6 +3,8 @@
 camera_t::camera_t(scppr::scppr *renderer)
 {
   this -> renderer = renderer;
+  this -> position = {0, 0};
+  this -> acceleration = {0, 0};
 }
 
 camera_t::~camera_t()
