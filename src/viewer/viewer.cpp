@@ -5,8 +5,12 @@
 manipulator_t *viewer_t::init(std::string path, sea *s)
 {
   this -> path = path;
-  renderer = new scppr::scppr("Pirates", path);
-  cube = new scppr::model_t(path + "cube.obj");
+  renderer = new scppr::scppr("Pirates", path + "scppr/assets/");
+  cube = new scppr::model_t(path + "scppr/assets/cube.obj");
+  dirt.diffuse = new scppr::texture_t(path + "assets/dirt.jpg");
+  grass.diffuse = new scppr::texture_t(path + "assets/grass.jpg");
+  stone.diffuse = new scppr::texture_t(path + "assets/stone.jpg");
+  wood.diffuse = new scppr::texture_t(path + "assets/wood.jpg");
   camera = new camera_t(renderer);
   return new manipulator_t(s, camera, renderer);
 }

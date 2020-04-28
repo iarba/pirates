@@ -28,6 +28,10 @@ private:
   scppr::scppr *renderer;
   std::string path;
   camera_t *camera;
+  scppr::material_t dirt;
+  scppr::material_t grass;
+  scppr::material_t stone;
+  scppr::material_t wood;
 };
 
 extern viewer_t viewer;

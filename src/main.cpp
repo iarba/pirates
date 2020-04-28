@@ -15,7 +15,7 @@ int main(int argc, char **argv)
     return 0;
   }
   std::string path = std::string(argv[0]);
-  std::string directory = path.substr(0, path.find_last_of('/')) + "/../scppr/assets/";
+  std::string directory = path.substr(0, path.find_last_of('/')) + "/../";
   floater *f1 = new floater("floater", 5, 5);
   f1 -> pp.position = {0, 0};
   f1 -> grid.at(1, 1) -> collidable = true;

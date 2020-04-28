@@ -20,4 +20,4 @@ link_libraries(${Boost_LIBRARIES} glm scppr)
 
 add_executable(pirates ${SOURCES})
 
-file(COPY asset DESTINATION ${CMAKE_BINARY_DIR})
+file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
