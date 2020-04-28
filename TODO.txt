@@ -22,14 +22,22 @@ development steps
   1.3 check for perimeter collision between 2 floaters of abstract shape   V
   1.4 handle collisions between floaters in a fair way                     V
 2. viewer
-  2.1 create a window
-  2.2 create a orthogonal camera
-  2.3 render anything
+  2.1 create a window                                                      V
+  2.2 create a orthogonal camera                                           v
+  2.3 render anything                                                      V
 3. solids
   3.1 drag stopped solids onto grid
   3.2 circle/square collision detection between solids on the same floater
   3.3 handle collisions between solids in a fair way
 4. duty cycle
-  4.1 detect mouse and keyboard input
-  4.2 transfer mouse and keyboard input to controller
-  4.3 act based on said input
+  4.1 detect mouse and keyboard input                                      V
+  4.2 transfer mouse and keyboard input to controller                      V
+  4.3 act based on said input                                              V
+
+Solids delayed for later
+
+5. floaters
+  5.1 defining materials for floater tiles
+  5.2 create islands and ships instances of floaters
+  5.3 apply input to select floater
+  5.4 serialising/deserialising floaters
