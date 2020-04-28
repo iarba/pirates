@@ -22,7 +22,7 @@ floater_viewer::~floater_viewer()
   delete[] grid;
 }
 
-void floater_viewer::update(scppr::scppr *renderer, floater *f)
+void floater_viewer::update(scppr::scppr *renderer, floater *f, std::map<floater_material_t, scppr::material_t> *material_vector)
 {
   glm::dvec2 translation = {f -> pp.position.x, f -> pp.position.y};
   glm::dmat2 rotation = get_rotation_matrix(f -> pp.angle);
@@ -45,6 +45,7 @@ void floater_viewer::update(scppr::scppr *renderer, floater *f)
         pos = pos + translation;
         grid[i][j] -> position = {pos.x, 0, pos.y};
         grid[i][j] -> rotation = {0, f -> pp.angle, 0};
+        grid[i][j] -> material_overwrite[0] = (*material_vector)[c -> material];
       }
     }
   }

@@ -7,17 +7,33 @@ manipulator_t *viewer_t::init(std::string path, sea *s)
   this -> path = path;
   renderer = new scppr::scppr("Pirates", path + "scppr/assets/");
   cube = new scppr::model_t(path + "scppr/assets/cube.obj");
+  scppr::material_t dirt, grass, sand, stone, wood;
   dirt.diffuse = new scppr::texture_t(path + "assets/dirt.jpg");
   grass.diffuse = new scppr::texture_t(path + "assets/grass.jpg");
+  sand.diffuse = new scppr::texture_t(path + "assets/sand.jpg");
   stone.diffuse = new scppr::texture_t(path + "assets/stone.jpg");
   wood.diffuse = new scppr::texture_t(path + "assets/wood.jpg");
+  floater_material_vector[floater_dirt] = dirt;
+  floater_material_vector[floater_grass] = grass;
+  floater_material_vector[floater_sand] = sand;
+  floater_material_vector[floater_stone] = stone;
+  floater_material_vector[floater_wood] = wood;
   camera = new camera_t(renderer);
+  sun = new scppr::light_t();
+  sun -> position = {0, 1000, 0};
+  renderer -> add_light(sun);
   return new manipulator_t(s, camera, renderer);
 }
 
 void viewer_t::destroy()
 {
   delete camera;
+  delete sun;
+  for( auto it : floater_material_vector)
+  {
+    delete it.second.diffuse;
+  }
+  delete cube;
   delete renderer;
 }
 
@@ -65,7 +81,7 @@ void viewer_t::draw_floater(floater *f, physical_properties pp)
     fv = new floater_viewer(f, cube);
     alias.put(f, fv);
   }
-  fv -> update(renderer, f);
+  fv -> update(renderer, f, &floater_material_vector);
 }
 
 void viewer_t::draw_solid(solid *s, physical_properties pp)
