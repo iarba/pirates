@@ -52,6 +52,7 @@ public:
   physical_properties pp;
   grid_t grid;
   int marker = 0;
+  bool targeted = false;
 };
 
 #endif // MODEL_FLOATER_H

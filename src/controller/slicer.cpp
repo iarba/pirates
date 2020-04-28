@@ -191,6 +191,13 @@ void slicer_t::tick_sea(sea *o)
 
 void slicer_t::tick_floater(floater *o)
 {
+  if(o -> targeted)
+  {
+    glm::dvec2 forward_axis = get_rotation_matrix(o -> pp.angle) * glm::dvec2(0, 1);
+    o -> pp.position_velocity += target_f_acc * forward_axis;
+    o -> pp.angular_velocity -= target_r_acc;
+    o -> pp.tilt_velocity -= target_f_acc * glm::dvec2(1, 0);// + target_r_acc * glm::dvec2(0, 1);
+  }
   tick_physical_properties(o -> pp);
 }
 
@@ -217,4 +224,34 @@ void slicer_t::tick_physical_properties(physical_properties &pp)
   pp.angle             += pp.angular_velocity * dt;
   pp.tilt              += pp.tilt_velocity * dt;
   double mass = 1;
+}
+
+void slicer_t::targeted_forward_enable()
+{
+  target_f_acc += 1;
+}
+
+void slicer_t::targeted_forward_disable()
+{
+  target_f_acc -= 1;
+}
+
+void slicer_t::targeted_turn_right_enable()
+{
+  target_r_acc += 1;
+}
+
+void slicer_t::targeted_turn_right_disable()
+{
+  target_r_acc -= 1;
+}
+
+void slicer_t::targeted_turn_left_enable()
+{
+  target_r_acc -= 1;
+}
+
+void slicer_t::targeted_turn_left_disable()
+{
+  target_r_acc += 1;
 }

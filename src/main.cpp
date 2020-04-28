@@ -27,6 +27,8 @@ int main(int argc, char **argv)
   f1 -> grid.at(3, 1) -> collidable = true;
   f1 -> grid.at(3, 2) -> collidable = true;
   f1 -> grid.at(3, 3) -> collidable = true;
+  f1 -> focused = true;
+  f1 -> targeted = true;
   floater *f2 = new floater("floater", 5, 5);
   f2 -> pp.position = {2.5, 2.5};
   f2 -> pp.inverse_mass = 0;
@@ -56,7 +58,7 @@ int main(int argc, char **argv)
   while(viewer.is_open())
   {
     man -> poll();
-//    slicer.tick(s);
+    slicer.tick(s);
     viewer.draw(s);
   }
   delete man;

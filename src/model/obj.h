@@ -17,6 +17,7 @@ public:
   std::map<oid_t, obj*> children;
   bool expired = false;
   double lifespan = -10; // infinite
+  bool focused = false;
 };
 
 #endif // MODEL_OBJ_H

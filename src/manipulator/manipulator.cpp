@@ -34,19 +34,18 @@ void manipulator_t::keyboard_callback(int key, int scancode, int action, int mod
   {
     if(key == GLFW_KEY_W)
     {
-      camera -> accelerate({1, 0});
+      slicer.targeted_forward_enable();
     }
     if(key == GLFW_KEY_A)
     {
-      camera -> accelerate({0, -1});
+      slicer.targeted_turn_left_enable();
     }
     if(key == GLFW_KEY_S)
     {
-      camera -> accelerate({-1, 0});
     }
     if(key == GLFW_KEY_D)
     {
-      camera -> accelerate({0, 1});
+      slicer.targeted_turn_right_enable();
     }
     if(key == GLFW_KEY_SPACE)
     {
@@ -57,19 +56,18 @@ void manipulator_t::keyboard_callback(int key, int scancode, int action, int mod
   {
     if(key == GLFW_KEY_W)
     {
-      camera -> accelerate({-1, 0});
+      slicer.targeted_forward_disable();
     }
     if(key == GLFW_KEY_A)
     {
-      camera -> accelerate({0, 1});
+      slicer.targeted_turn_left_disable();
     }
     if(key == GLFW_KEY_S)
     {
-      camera -> accelerate({1, 0});
     }
     if(key == GLFW_KEY_D)
     {
-      camera -> accelerate({0, -1});
+      slicer.targeted_turn_right_disable();
     }
   }
 }
