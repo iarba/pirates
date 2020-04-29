@@ -35,7 +35,7 @@ int main(int argc, char **argv)
   f1 -> focused = true;
   f1 -> targeted = true;
   floater *f2 = new island(5, 5);
-  f2 -> pp.position = {5.5, 2.5};
+  f2 -> pp.position = {5, 5};
   f2 -> grid.at(1, 1) -> collidable = true;
   f2 -> grid.at(1, 1) -> material = floater_sand;
   f2 -> grid.at(1, 2) -> collidable = true;

@@ -73,24 +73,18 @@ void slicer_t::tick_sea(sea *o)
       {
         // get perimeter of both shapes
         std::vector<glm::dvec2> op = origin -> get_bounding_perimeter();
-        glm::dmat3 transform = glm::dmat3(1);
-                   transform = glm::translate(transform, origin -> pp.position);
-                   transform = glm::translate(transform, {-origin -> grid.x / 2, -origin -> grid.z / 2});
-                   transform = glm::rotate(transform, origin -> pp.angle);
+        glm::dvec2 translation = origin -> pp.position;
+        glm::dmat2 rotation = get_rotation_matrix(origin -> pp.angle);
         for(int i = 0; i < op.size(); i++)
         {
-          glm::dvec3 transformed = transform * glm::dvec3(op[i], 1);
-          op[i] = {transformed.x, transformed.y};
+          op[i] = translation + rotation * (op[i] - glm::dvec2(origin -> grid.x / 2, origin -> grid.z / 2));
         }
-        std::vector<glm::dvec2> tp = origin -> get_bounding_perimeter();
-        transform = glm::dmat3(1);
-        transform = glm::translate(transform, target -> pp.position);
-        transform = glm::translate(transform, {-target -> grid.x / 2, -target -> grid.z / 2});
-        transform = glm::rotate(transform, target -> pp.angle);
+        std::vector<glm::dvec2> tp = target -> get_bounding_perimeter();
+        translation = target -> pp.position;
+        rotation = get_rotation_matrix(target -> pp.angle);
         for(int i = 0; i < tp.size(); i++)
         {
-          glm::dvec3 transformed = transform * glm::dvec3(tp[i], 1);
-          tp[i] = {transformed.x, transformed.y};
+          tp[i] = translation + rotation * (tp[i] - glm::dvec2(target -> grid.x / 2, target -> grid.z / 2));
         }
         // get pruned vector of points, filtering by points that are in the target bounding box
         std::vector<glm::dvec2> pop;
