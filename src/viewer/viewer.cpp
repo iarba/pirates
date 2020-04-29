@@ -75,6 +75,10 @@ void viewer_t::draw_sea(sea *s, physical_properties pp)
 
 void viewer_t::draw_floater(floater *f, physical_properties pp)
 {
+  if(f -> focused)
+  {
+    camera -> set_position(f -> pp.position);
+  }
   floater_viewer *fv = (floater_viewer *)alias.get(f);
   if(fv == NULL)
   {

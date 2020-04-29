@@ -10,6 +10,7 @@ public:
   ~camera_t();
   void update();
   void accelerate(glm::dvec2 direction);
+  void set_position(glm::dvec2 position);
   glm::dvec2 position;
   glm::dvec2 acceleration;
   scppr::scppr *renderer;

@@ -20,19 +20,22 @@ int main(int argc, char **argv)
   std::string directory = path.substr(0, path.find_last_of('/')) + "/../";
   floater *f1 = new ship(5, 5);
   f1 -> pp.position = {0, 0};
+  //
+  // **
+  // ***
+  // **
+  //
   f1 -> grid.at(1, 1) -> collidable = true;
   f1 -> grid.at(1, 2) -> collidable = true;
-  f1 -> grid.at(1, 3) -> collidable = true; // this should collide
   f1 -> grid.at(2, 1) -> collidable = true;
   f1 -> grid.at(2, 2) -> collidable = true;
   f1 -> grid.at(2, 3) -> collidable = true;
   f1 -> grid.at(3, 1) -> collidable = true;
   f1 -> grid.at(3, 2) -> collidable = true;
-  f1 -> grid.at(3, 3) -> collidable = true;
   f1 -> focused = true;
   f1 -> targeted = true;
   floater *f2 = new island(5, 5);
-  f2 -> pp.position = {2.5, 2.5};
+  f2 -> pp.position = {5.5, 2.5};
   f2 -> grid.at(1, 1) -> collidable = true;
   f2 -> grid.at(1, 1) -> material = floater_sand;
   f2 -> grid.at(1, 2) -> collidable = true;
@@ -45,7 +48,7 @@ int main(int argc, char **argv)
   f2 -> grid.at(2, 2) -> material = floater_grass;
   f2 -> grid.at(2, 3) -> collidable = true;
   f2 -> grid.at(2, 3) -> material = floater_sand;
-  f2 -> grid.at(3, 1) -> collidable = true; // this should collide
+  f2 -> grid.at(3, 1) -> collidable = true;
   f2 -> grid.at(3, 1) -> material = floater_sand;
   f2 -> grid.at(3, 2) -> collidable = true;
   f2 -> grid.at(3, 2) -> material = floater_sand;

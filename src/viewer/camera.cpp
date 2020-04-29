@@ -22,3 +22,8 @@ void camera_t::accelerate(glm::dvec2 direction)
 {
   acceleration += direction;
 }
+
+void camera_t::set_position(glm::dvec2 position)
+{
+  this -> position = position;
+}
