@@ -9,3 +9,8 @@ sea::sea():obj(0, sea_namer)
 sea::~sea()
 {
 }
+
+boost::property_tree::ptree sea::serialise()
+{
+  return obj::serialise();
+}

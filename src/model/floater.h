@@ -10,7 +10,7 @@
 
 enum floater_material_t
 {
-  floater_dirt,
+  floater_dirt = 1,
   floater_grass,
   floater_sand,
   floater_stone,
@@ -20,6 +20,7 @@ enum floater_material_t
 class cell_t
 {
 public:
+  boost::property_tree::ptree serialise();
   bool full = false;
   bool passable = false;
   bool solid = false;
@@ -34,6 +35,7 @@ public:
   grid_t(int x, int z);
   ~grid_t();
   cell_t *at(int x, int z);
+  boost::property_tree::ptree serialise();
   cell_t **_grid;
   int x;
   int z;
@@ -47,12 +49,14 @@ public:
   collider_box get_bounding_box();
   void generate_perimeter();
   std::vector<glm::dvec2> get_bounding_perimeter();
-  std::vector<glm::dvec2> bounding_perimeter;
-  bool perimeter_expired = true;
+  virtual boost::property_tree::ptree serialise();
   physical_properties pp;
   grid_t grid;
-  int marker = 0;
   bool targeted = false;
+  // V not serialised V
+  std::vector<glm::dvec2> bounding_perimeter;
+  int marker = 0;
+  bool perimeter_expired = true;
 };
 
 #endif // MODEL_FLOATER_H

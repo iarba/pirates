@@ -10,6 +10,7 @@ public:
   solid(namer_t solid_name);
   ~solid();
   physical_properties pp;
+  virtual boost::property_tree::ptree serialise();
 };
 
 #endif // MODEL_SOLID_H

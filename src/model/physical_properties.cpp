@@ -1,4 +1,19 @@
 #include "model/physical_properties.h"
+#include "misc_utils.h"
+
+boost::property_tree::ptree physical_properties::serialise()
+{
+  boost::property_tree::ptree node;
+  node.put_child("position", vec2_to_tree(position));
+  node.put_child("position_velocity", vec2_to_tree(position_velocity));
+  node.put("angle", angle);
+  node.put("angular_velocity", angular_velocity);
+  node.put_child("tilt", vec2_to_tree(tilt));
+  node.put_child("tilt_velocity", vec2_to_tree(tilt_velocity));
+  node.put("mass", mass);
+  node.put("inverse_mass", inverse_mass);
+  return node;
+}
 
 pp_builder::pp_builder()
 {

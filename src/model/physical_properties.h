@@ -1,6 +1,8 @@
 #ifndef MODEL_PHYSICAL_PROPERTIES_H
 #define MODEL_PHYSICAL_PROPERTIES_H
+
 #include <glm/glm.hpp>
+#include <boost/property_tree/ptree.hpp>
 
 class physical_properties
 {
@@ -13,6 +15,7 @@ public:
   glm::dvec2 tilt_velocity = {0, 0};
   double mass = 1;
   double inverse_mass = 1;
+  boost::property_tree::ptree serialise();
 };
 
 class pp_builder

@@ -60,3 +60,37 @@ glm::dvec2 get_edge_closest_to_point(glm::dvec2 point, std::vector<glm::dvec2> s
   }
   return ret;
 }
+
+boost::property_tree::ptree vec2_to_tree(glm::dvec2 input)
+{
+  boost::property_tree::ptree ret;
+  ret.put("x", input.x);
+  ret.put("y", input.y);
+  return ret;
+}
+
+boost::property_tree::ptree vec3_to_tree(glm::dvec3 input)
+{
+  boost::property_tree::ptree ret;
+  ret.put("x", input.x);
+  ret.put("y", input.y);
+  ret.put("z", input.z);
+  return ret;
+}
+
+glm::dvec2 tree_to_vec2(boost::property_tree::ptree input)
+{
+  glm::dvec2 ret;
+  ret.x = input.get<double>("x");
+  ret.y = input.get<double>("y");
+  return ret;
+}
+
+glm::dvec3 tree_to_vec3(boost::property_tree::ptree input)
+{
+  glm::dvec3 ret;
+  ret.x = input.get<double>("x");
+  ret.y = input.get<double>("y");
+  ret.z = input.get<double>("z");
+  return ret;
+}

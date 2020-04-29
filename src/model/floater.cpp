@@ -55,6 +55,17 @@ std::map<direction_t, direction_t> dlo = boost::assign::map_list_of
 (left, down)
 (right, up);
 
+boost::property_tree::ptree cell_t::serialise()
+{
+  boost::property_tree::ptree node;
+  node.put("full", full);
+  node.put("passable", passable);
+  node.put("solid", solid);
+  node.put("collidable", collidable);
+  node.put("material", static_cast<int> (material));
+  return node;
+}
+
 grid_t::grid_t(int x, int z)
 {
   this -> x = x;
@@ -78,6 +89,21 @@ grid_t::~grid_t()
 cell_t *grid_t::at(int x, int z)
 {
   return _grid[x] + z;
+}
+
+boost::property_tree::ptree grid_t::serialise()
+{
+  boost::property_tree::ptree node;
+  node.put("x", x);
+  node.put("z", x);
+  for(int i = 0; i < x; i++)
+  {
+    for(int j = 0; j < z; j++)
+    {
+      node.put_child(std::to_string(i) + "." + std::to_string(j), at(i, j) -> serialise());
+    }
+  }
+  return node;
 }
 
 floater::floater(namer_t floater_namer, int x, int z):obj(1, floater_namer), grid(x, z)
@@ -165,4 +191,13 @@ std::vector<glm::dvec2> floater::get_bounding_perimeter()
     this -> generate_perimeter();
   }
   return bounding_perimeter;
+}
+
+boost::property_tree::ptree floater::serialise()
+{
+  boost::property_tree::ptree node = obj::serialise();
+  node.put_child("pp", pp.serialise());
+  node.put_child("grid", grid.serialise());
+  node.put("targeted", targeted);
+  return node;
 }
