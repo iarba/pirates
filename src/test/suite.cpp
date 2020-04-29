@@ -3,6 +3,7 @@
 #include "test/collision.h"
 #include "test/floater.h"
 #include "test/utils.h"
+#include "test/serialisation.h"
 
 int failures;
 int tests;
@@ -13,6 +14,7 @@ int execute_test()
   test_collision();
   test_floater();
   test_utils();
+  test_serialisation();
   printf("PASSED %d/%d TESTS!\n", tests - failures, tests);
   return failures;
 }

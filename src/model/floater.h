@@ -20,6 +20,8 @@ enum floater_material_t
 class cell_t
 {
 public:
+  cell_t();
+  cell_t(boost::property_tree::ptree node);
   boost::property_tree::ptree serialise();
   bool full = false;
   bool passable = false;
@@ -33,6 +35,7 @@ class grid_t
 {
 public:
   grid_t(int x, int z);
+  grid_t(boost::property_tree::ptree node);
   ~grid_t();
   cell_t *at(int x, int z);
   boost::property_tree::ptree serialise();
@@ -45,6 +48,7 @@ class floater : public obj
 {
 public:
   floater(namer_t floater_namer, int x, int z);
+  floater(boost::property_tree::ptree node);
   ~floater();
   collider_box get_bounding_box();
   void generate_perimeter();

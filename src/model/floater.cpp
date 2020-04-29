@@ -55,6 +55,19 @@ std::map<direction_t, direction_t> dlo = boost::assign::map_list_of
 (left, down)
 (right, up);
 
+cell_t::cell_t()
+{
+}
+
+cell_t::cell_t(boost::property_tree::ptree node)
+{
+  full = node.get<bool>("full");
+  passable = node.get<bool>("passable");
+  solid = node.get<bool>("solid");
+  collidable = node.get<bool>("collidable");
+  material = static_cast<floater_material_t>(node.get<int>("material"));
+}
+
 boost::property_tree::ptree cell_t::serialise()
 {
   boost::property_tree::ptree node;
@@ -74,6 +87,21 @@ grid_t::grid_t(int x, int z)
   for(int i = 0; i < x; i++)
   {
     _grid[i] = new cell_t[z];
+  }
+}
+
+grid_t::grid_t(boost::property_tree::ptree node)
+{
+  x = node.get<int>("x");
+  z = node.get<int>("z");
+  _grid = new cell_t*[x];
+  for(int i = 0; i < x; i++)
+  {
+    _grid[i] = new cell_t[z];
+    for(int j = 0; j < z; j++)
+    {
+      _grid[i][j] = cell_t(node.get_child(std::to_string(i) + "." + std::to_string(j)));
+    }
   }
 }
 
@@ -108,6 +136,11 @@ boost::property_tree::ptree grid_t::serialise()
 
 floater::floater(namer_t floater_namer, int x, int z):obj(1, floater_namer), grid(x, z)
 {
+}
+
+floater::floater(boost::property_tree::ptree node):obj(node), grid(node.get_child("grid")), pp(node.get_child("pp"))
+{
+  targeted = node.get<bool>("targeted");
 }
 
 floater::~floater()

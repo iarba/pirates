@@ -21,7 +21,6 @@ glm::dmat2x2 get_rotation_matrix(double angle)
 
 bool point_is_in_shape(glm::dvec2 point, std::vector<glm::dvec2> shape)
 {
-  _eq(3,6);
   int i, j = shape.size() - 1;
   bool contained = false;
 

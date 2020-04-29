@@ -40,4 +40,5 @@ Solids delayed for later
   5.1 defining materials for floater tiles                                 V
   5.2 create islands and ships instances of floaters                       V
   5.3 apply input to select floater                                        V
-  5.4 serialising/deserialising floaters
+  5.4 serialising/deserialising floaters                                   V
+  5.5 improve collisions between floaters                                  

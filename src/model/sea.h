@@ -9,6 +9,7 @@ class sea : public obj
 {
 public:
   sea();
+  sea(boost::property_tree::ptree node);
   ~sea();
   virtual boost::property_tree::ptree serialise();
 };

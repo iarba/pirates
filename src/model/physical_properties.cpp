@@ -1,6 +1,22 @@
 #include "model/physical_properties.h"
 #include "misc_utils.h"
 
+physical_properties::physical_properties()
+{
+}
+
+physical_properties::physical_properties(boost::property_tree::ptree node)
+{
+  position = tree_to_vec2(node.get_child("position"));
+  position_velocity = tree_to_vec2(node.get_child("position_velocity"));
+  angle = node.get<double>("angle");
+  angular_velocity = node.get<double>("angular_velocity");
+  tilt = tree_to_vec2(node.get_child("tilt"));
+  tilt_velocity = tree_to_vec2(node.get_child("tilt_velocity"));
+  mass = node.get<double>("mass");
+  inverse_mass = node.get<double>("inverse_mass");
+}
+
 boost::property_tree::ptree physical_properties::serialise()
 {
   boost::property_tree::ptree node;
