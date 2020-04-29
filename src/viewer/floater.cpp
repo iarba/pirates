@@ -44,7 +44,7 @@ void floater_viewer::update(scppr::scppr *renderer, floater *f, std::map<floater
         pos = rotation * pos;
         pos = pos + translation;
         grid[i][j] -> position = {pos.x, 0, pos.y};
-        grid[i][j] -> rotation = {f -> pp.tilt.x, f -> pp.angle,  f -> pp.tilt.y};
+        grid[i][j] -> rotation = {0, f -> pp.angle, 0};
         grid[i][j] -> material_overwrite[0] = (*material_vector)[c -> material];
       }
     }

@@ -127,12 +127,10 @@ void floater::generate_perimeter()
   direction_t d = right; // we know up and left is uncollidable
   int startx = x;
   int startz = z;
-  printf("starting %d %d\n", x, z);
   while(!(x == startx && z == startz && d == up))
   { // while we're not where we started
     if(grid.at(x + dblx[d], z + dblz[d]) -> mark != marker)
     {
-      printf("%lf %lf\n", x + dblx[d], z + dblz[d]);
       bounding_perimeter.push_back({x + dblx[d], z + dblz[d]});
       grid.at(x + dblx[d], z + dblz[d]) -> mark = marker;
     }
@@ -154,10 +152,10 @@ void floater::generate_perimeter()
   }
   if(grid.at(x + dblx[d], z + dblz[d]) -> mark != marker)
   {
-    printf("%lf %lf\n", x + dblx[d], z + dblz[d]);
     bounding_perimeter.push_back({x + dblx[d], z + dblz[d]});
     grid.at(x + dblx[d], z + dblz[d]) -> mark = marker;
   }
+  perimeter_expired = false;
 }
 
 std::vector<glm::dvec2> floater::get_bounding_perimeter()
