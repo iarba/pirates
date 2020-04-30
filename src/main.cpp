@@ -2,6 +2,7 @@
 #include "model/sea.h"
 #include "model/ship.h"
 #include "model/island.h"
+#include "model/pirate.h"
 #include "controller/slicer.h"
 #include "viewer/viewer.h"
 #include "test/suite.h"
@@ -32,8 +33,11 @@ int main(int argc, char **argv)
   f1 -> grid.at(2, 3) -> collidable = true;
   f1 -> grid.at(3, 1) -> collidable = true;
   f1 -> grid.at(3, 2) -> collidable = true;
-  f1 -> focused = true;
   f1 -> targeted = true;
+  pirate *p1 = new pirate();
+  p1 -> pp.position = {0, -1};
+  p1 -> focused = true;
+  f1 -> children[1] = p1;
   floater *f2 = new island(5, 5);
   f2 -> pp.position = {5, 5};
   f2 -> grid.at(1, 1) -> collidable = true;

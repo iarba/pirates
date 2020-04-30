@@ -31,6 +31,28 @@ boost::property_tree::ptree physical_properties::serialise()
   return node;
 }
 
+physical_properties operator+(const physical_properties &pp1, const physical_properties &pp2)
+{
+  physical_properties res = pp1;
+  glm::dmat2 rmat = get_rotation_matrix(pp1.angle);
+  res.position += rmat * pp2.position;
+  res.position_velocity += rmat * pp2.position;
+  res.angle += pp2.angle;
+  res.angular_velocity += pp2.angular_velocity;
+  res.tilt += pp2.tilt;
+  res.tilt_velocity += pp2.tilt_velocity;
+  res.mass += pp2.mass;
+  if(_eq(pp1.inverse_mass, 0) || _eq(pp2.inverse_mass, 0))
+  {
+    res.inverse_mass = 0;
+  }
+  else
+  {
+    res.inverse_mass = 1.0 / (1.0 / pp1.inverse_mass + 1.0 / pp2.inverse_mass);
+  }
+  return res;
+}
+
 pp_builder::pp_builder()
 {
 }

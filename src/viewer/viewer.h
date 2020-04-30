@@ -6,6 +6,7 @@
 #include "model/sea.h"
 #include "model/floater.h"
 #include "model/solid.h"
+#include "model/pirate.h"
 #include "model/attachment.h"
 #include "model/physical_properties.h"
 #include "viewer/camera.h"
@@ -29,6 +30,7 @@ private:
   std::string path;
   camera_t *camera;
   std::map<floater_material_t, scppr::material_t> floater_material_vector;
+  std::map<pirate_race_t, scppr::material_t> pirate_material_vector;
   scppr::light_t *sun;
 };
 

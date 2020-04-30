@@ -18,7 +18,9 @@ public:
   double mass = 1;
   double inverse_mass = 1;
   boost::property_tree::ptree serialise();
+  friend physical_properties operator+(const physical_properties &pp1, const physical_properties &pp2);
 };
+
 
 class pp_builder
 {
