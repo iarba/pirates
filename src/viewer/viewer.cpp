@@ -7,6 +7,7 @@ manipulator_t *viewer_t::init(std::string path, sea *s)
   this -> path = path;
   renderer = new scppr::scppr("Pirates", path + "scppr/assets/");
   cube = new scppr::model_t(path + "scppr/assets/cube.obj");
+  cannon = new scppr::model_t(path + "assets/cannon/14054_Pirate_Ship_Cannon_on_Cart_v1_l3.obj");
   scppr::material_t dirt, grass, sand, stone, wood, neko;
   dirt.diffuse = new scppr::texture_t(path + "assets/dirt.jpg");
   grass.diffuse = new scppr::texture_t(path + "assets/grass.jpg");
@@ -41,6 +42,7 @@ void viewer_t::destroy()
     delete it.second.diffuse;
   }
   delete cube;
+  delete cannon;
   delete renderer;
 }
 
@@ -111,7 +113,6 @@ void viewer_t::draw_solid(solid *s, physical_properties pp)
   if(s -> name == pirate_namer)
   {
     pirate *p = static_cast<pirate *>(s);
-    abs_pp = pp + p -> pp;
     scppr::object_t *pv = (scppr::object_t *)alias.get(p);
     if(pv == NULL)
     {
@@ -124,6 +125,21 @@ void viewer_t::draw_solid(solid *s, physical_properties pp)
       alias.put(p, pv);
     }
     pv -> position = {abs_pp.position.x, 1, abs_pp.position.y};
+  }
+  if(s -> name == structure_namer)
+  {
+    structure *st = static_cast<structure *>(s);
+    scppr::object_t *stv = (scppr::object_t *)alias.get(st);
+    if(stv == NULL)
+    {
+      stv = new scppr::object_t();
+      stv -> model = cannon;
+      stv -> scale = {0.005, 0.005, 0.005};
+      renderer -> add_object(stv);
+      alias.put(st, stv);
+    }
+    stv -> position = {abs_pp.position.x, 1, abs_pp.position.y};
+    stv -> rotation = {M_PI / 2, 0, -abs_pp.angle};
   }
   auto cc = s -> children;
   for(auto it : cc)

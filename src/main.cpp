@@ -3,6 +3,7 @@
 #include "model/ship.h"
 #include "model/island.h"
 #include "model/pirate.h"
+#include "model/structure.h"
 #include "controller/slicer.h"
 #include "viewer/viewer.h"
 #include "test/suite.h"
@@ -38,6 +39,15 @@ int main(int argc, char **argv)
   p1 -> pp.position = {0, -1};
   p1 -> focused = true;
   f1 -> children[1] = p1;
+  structure *st = new structure();
+  st -> type = cannon;
+  st -> pp.position = {-1, 0};
+  st -> pp.angle = M_PI;
+  f1 -> children[2] = st;
+  st = new structure();
+  st -> type = cannon;
+  st -> pp.position = {1, 0};
+  f1 -> children[3] = st;
   floater *f2 = new island(5, 5);
   f2 -> pp.position = {5, 5};
   f2 -> grid.at(1, 1) -> collidable = true;

@@ -7,6 +7,7 @@
 #include "model/floater.h"
 #include "model/solid.h"
 #include "model/pirate.h"
+#include "model/structure.h"
 #include "model/attachment.h"
 #include "model/physical_properties.h"
 #include "viewer/camera.h"
@@ -26,6 +27,7 @@ private:
   void draw_solid(solid *s, physical_properties pp);
   void draw_attachment(attachment *a, physical_properties pp);
   scppr::model_t *cube;
+  scppr::model_t *cannon;
   scppr::scppr *renderer;
   std::string path;
   camera_t *camera;
