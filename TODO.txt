@@ -46,6 +46,6 @@ Solids delayed for later
 3. solids
   3.1 drag stopped solids onto grid
   3.2 circle/square collision detection between solids on the same floater
-  3.3 handle collisions between solids in a fair way
-  3.4 render solids relative to floater
+  3.3 handle collisions between solids in a fair way                       V
+  3.4 render solids relative to floater                                    V
   3.5 make solids selectable

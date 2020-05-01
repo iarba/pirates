@@ -2,6 +2,7 @@
 #include "model/floater.h"
 #include "model/solid.h"
 #include "model/collider/circle.h"
+#include "model/pirate.h"
 #include "misc_utils.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/matrix_transform_2d.hpp>
@@ -193,6 +194,40 @@ void slicer_t::tick_floater(floater *o)
     o -> pp.tilt_velocity -= target_f_acc * glm::dvec2(1, 0);// + target_r_acc * glm::dvec2(0, 1);
   }
   tick_physical_properties(o -> pp);
+  for(auto oit : o -> children)
+  {
+    if(oit.second -> name != pirate_namer)
+    { // pointless
+      continue;
+    }
+    pirate *origin = static_cast<pirate *>(oit.second);
+    for(auto tit : o -> children)
+    {
+      if(origin == tit.second)
+      { // yes pointer equality
+        continue;
+      }
+      if(tit.second -> name == pirate_namer)
+      {
+        pirate *target = static_cast<pirate *>(tit.second);
+        glm::dvec2 axis;
+        double offset;
+        collider_circle oc = origin -> get_collider();
+        collider_circle tc = target -> get_collider();
+        if(oc.collides(&tc, &axis, &offset))
+        {
+          glm::dvec2 impulse = axis * offset;
+          double mass = origin -> pp.mass + target -> pp.mass;
+          // push the origin
+          origin -> pp.position_velocity += impulse * solid_collision_push_strength * mass * origin -> pp.inverse_mass;
+          // invert the impulse
+          impulse = -impulse;
+          // push the target
+          target -> pp.position_velocity += impulse * solid_collision_push_strength * mass * target -> pp.inverse_mass;
+        }
+      }
+    }
+  }
 }
 
 void slicer_t::tick_solid(solid *o)

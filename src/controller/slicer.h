@@ -33,6 +33,7 @@ public:
   double floater_collision_push_strength = 1;
   double floater_collision_torque_strength = 1;
   double floater_collision_tilt_strength = 1;
+  double solid_collision_push_strength = 1;
   double target_f_acc = 0;
   double target_r_acc = 0;
 };
