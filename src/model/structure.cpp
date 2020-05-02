@@ -4,6 +4,7 @@ namer_t structure_namer = "structure";
 
 structure::structure():solid(structure_namer)
 {
+  this -> pp.inverse_mass = 0;
 }
 
 structure::~structure()
