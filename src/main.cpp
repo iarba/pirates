@@ -42,11 +42,12 @@ int main(int argc, char **argv)
   structure *st = new structure();
   st -> type = cannon;
   st -> pp.position = {-1, 0};
-  st -> pp.angle = M_PI;
+  st -> pp.angle = M_PI + M_PI / 2;
   f1 -> children[2] = st;
   st = new structure();
   st -> type = cannon;
   st -> pp.position = {1, 0};
+  st -> pp.angle = M_PI / 2;
   f1 -> children[3] = st;
   floater *f2 = new island(5, 5);
   f2 -> pp.position = {5, 5};

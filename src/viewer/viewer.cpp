@@ -7,7 +7,7 @@ manipulator_t *viewer_t::init(std::string path, sea *s)
   this -> path = path;
   renderer = new scppr::scppr("Pirates", path + "scppr/assets/");
   cube = new scppr::model_t(path + "scppr/assets/cube.obj");
-  cannon = new scppr::model_t(path + "assets/cannon/14054_Pirate_Ship_Cannon_on_Cart_v1_l3.obj");
+  cannon = new scppr::model_t(path + "assets/cannon.obj");
   scppr::material_t dirt, grass, sand, stone, wood, neko;
   dirt.diffuse = new scppr::texture_t(path + "assets/dirt.jpg");
   grass.diffuse = new scppr::texture_t(path + "assets/grass.jpg");
@@ -134,12 +134,12 @@ void viewer_t::draw_solid(solid *s, physical_properties pp)
     {
       stv = new scppr::object_t();
       stv -> model = cannon;
-      stv -> scale = {0.005, 0.005, 0.005};
+      stv -> scale = {0.5, 0.5, 0.5};
       renderer -> add_object(stv);
       alias.put(st, stv);
     }
     stv -> position = {abs_pp.position.x, 1, abs_pp.position.y};
-    stv -> rotation = {M_PI / 2, 0, -abs_pp.angle};
+    stv -> rotation = {0, abs_pp.angle, 0};
   }
   auto cc = s -> children;
   for(auto it : cc)
