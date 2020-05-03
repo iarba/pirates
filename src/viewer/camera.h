@@ -14,6 +14,9 @@ public:
   glm::dvec2 position;
   glm::dvec2 acceleration;
   scppr::scppr *renderer;
+  double height = 10;
+  double fov = M_PI / 2;
+  glm::dvec2 viewport = {800, 800};
 };
 
 #endif // VIEWER_CAMERA_H

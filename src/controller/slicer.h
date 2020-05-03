@@ -7,6 +7,7 @@
 #include "model/solid.h"
 #include "model/attachment.h"
 #include "model/physical_properties.h"
+#include "manipulator/rays.h"
 
 class slicer_t
 {
@@ -24,6 +25,8 @@ public:
   void targeted_turn_right_disable();
   void targeted_turn_left_enable();
   void targeted_turn_left_disable();
+  void add_ray(ray r);
+  std::vector<ray> rays;
   bool enabled = true;
   double sps = 100;
   double dt = 0.01;

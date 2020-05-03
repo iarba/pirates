@@ -308,3 +308,9 @@ void slicer_t::targeted_turn_left_disable()
 {
   target_r_acc += 1;
 }
+
+void slicer_t::add_ray(ray r)
+{
+  printf("registered ray %lf %lf\n", r.x, r.y);
+  rays.push_back(r);
+}
