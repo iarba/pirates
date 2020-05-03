@@ -11,6 +11,7 @@ public:
   ~solid();
   physical_properties pp;
   virtual boost::property_tree::ptree serialise();
+  bool targeted = false;
 };
 
 #endif // MODEL_SOLID_H

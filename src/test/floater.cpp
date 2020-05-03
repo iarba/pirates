@@ -134,7 +134,7 @@ void test_floater_collision()
   f2 -> pp = physical_properties();
   f1 -> pp.position = {55, 55};
   f2 -> pp.position = {57.5, 57.5};
-  slicer.tick_sea(s);
+  slicer.tick(s);
   if(_eq(f1 -> pp.position_velocity, {0, 0}))
   {
     std::string reason = "floater 1 didn't move";
@@ -154,7 +154,7 @@ void test_floater_collision()
   f2 -> pp = physical_properties();
   f1 -> pp.position = {55, 55};
   f2 -> pp.position = {52.5, 57.5};
-  slicer.tick_sea(s);
+  slicer.tick(s);
   if(_eq(f1 -> pp.position_velocity, {0, 0}))
   {
     std::string reason = "floater 1 didn't move";
@@ -174,7 +174,7 @@ void test_floater_collision()
   f2 -> pp = physical_properties();
   f1 -> pp.position = {55, 55};
   f2 -> pp.position = {57.5, 52.5};
-  slicer.tick_sea(s);
+  slicer.tick(s);
   if(_eq(f1 -> pp.position_velocity, {0, 0}))
   {
     std::string reason = "floater 1 didn't move";
@@ -194,7 +194,7 @@ void test_floater_collision()
   f2 -> pp = physical_properties();
   f1 -> pp.position = {55, 55};
   f2 -> pp.position = {52.5, 52.5};
-  slicer.tick_sea(s);
+  slicer.tick(s);
   if(_eq(f1 -> pp.position_velocity, {0, 0}))
   {
     std::string reason = "floater 1 didn't move";

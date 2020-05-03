@@ -7,8 +7,7 @@ class ray
 {
 public:
   ray(camera_t *camera, double x, double y, int button);
-  double x;
-  double y;
+  glm::dvec2 position;
   int button;
 };
 

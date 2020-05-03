@@ -188,6 +188,7 @@ void slicer_t::tick_sea(sea *o)
     }
   }
   tick_children_of(o);
+  rays.clear();
 }
 
 void slicer_t::tick_floater(floater *o)
@@ -254,6 +255,21 @@ void slicer_t::tick_floater(floater *o)
 
 void slicer_t::tick_solid(solid *o)
 {
+  for(auto ray : rays)
+  {
+    if(ray.button == GLFW_MOUSE_BUTTON_1)
+    {
+      o -> targeted = glm::distance(ray.position, o -> pp.position) < 1;
+      o -> focused = glm::distance(ray.position, o -> pp.position) < 1;
+    }
+    if(ray.button == GLFW_MOUSE_BUTTON_2)
+    {
+      if(o -> targeted)
+      {
+        // move target to new position
+      }
+    }
+  }
   tick_physical_properties(o -> pp);
   tick_children_of(o);
 }
@@ -311,6 +327,6 @@ void slicer_t::targeted_turn_left_disable()
 
 void slicer_t::add_ray(ray r)
 {
-  printf("registered ray %lf %lf\n", r.x, r.y);
+  printf("%lf %lf\n", r.position.x, r.position.y);
   rays.push_back(r);
 }
