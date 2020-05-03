@@ -32,11 +32,12 @@ public:
   double floater_collision_tilt_strength = 1;
   double solid_collision_push_strength = 1;
 private:
-  void tick_children_of(obj *o);
-  void tick_sea(sea *o);
-  void tick_floater(floater *o);
-  void tick_solid(solid *o);
-  void tick_attachment(attachment *o);
+  void _tick(obj *o, physical_properties pp);
+  void tick_children_of(obj *o, physical_properties pp);
+  void tick_sea(sea *o, physical_properties pp);
+  void tick_floater(floater *o, physical_properties pp);
+  void tick_solid(solid *o, physical_properties pp);
+  void tick_attachment(attachment *o, physical_properties pp);
   void tick_physical_properties(physical_properties &pp);
   double target_f_acc = 0;
   double target_r_acc = 0;

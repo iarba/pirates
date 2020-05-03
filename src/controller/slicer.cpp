@@ -10,7 +10,7 @@
 
 slicer_t slicer;
 
-void slicer_t::tick_children_of(obj *o)
+void slicer_t::tick_children_of(obj *o, physical_properties pp)
 {
   auto cc = o -> children;
   for(auto it : cc)
@@ -27,7 +27,7 @@ void slicer_t::tick_children_of(obj *o)
     }
     else
     {
-      tick(it.second);
+      _tick(it.second, pp);
     }
   }
 }
@@ -38,25 +38,30 @@ void slicer_t::tick(obj *o)
   {
     return;
   }
+  _tick(o, physical_properties());
+}
+
+void slicer_t::_tick(obj *o, physical_properties pp)
+{
   if(o -> layer == 0)
   {
-    tick_sea(static_cast<sea *>(o));
+    tick_sea(static_cast<sea *>(o), pp);
   }
   if(o -> layer == 1)
   {
-    tick_floater(static_cast<floater *>(o));
+    tick_floater(static_cast<floater *>(o), pp);
   }
   if(o -> layer == 2)
   {
-    tick_solid(static_cast<solid *>(o));
+    tick_solid(static_cast<solid *>(o), pp);
   }
   if(o -> layer == 3)
   {
-    tick_attachment(static_cast<attachment *>(o));
+    tick_attachment(static_cast<attachment *>(o), pp);
   }
 }
 
-void slicer_t::tick_sea(sea *o)
+void slicer_t::tick_sea(sea *o, physical_properties pp)
 {
   // for every floater, check collision against every other floater in sight
   // pls don't add too many floaters at once, otherwise this will get expensive
@@ -187,11 +192,11 @@ void slicer_t::tick_sea(sea *o)
       }
     }
   }
-  tick_children_of(o);
+  tick_children_of(o, pp);
   rays.clear();
 }
 
-void slicer_t::tick_floater(floater *o)
+void slicer_t::tick_floater(floater *o, physical_properties pp)
 {
   if(o -> targeted)
   {
@@ -250,17 +255,18 @@ void slicer_t::tick_floater(floater *o)
       }
     }
   }
-  tick_children_of(o);
+  tick_children_of(o, pp + o -> pp);
 }
 
-void slicer_t::tick_solid(solid *o)
+void slicer_t::tick_solid(solid *o, physical_properties pp)
 {
+  physical_properties abs_pp = pp + o -> pp;
   for(auto ray : rays)
   {
     if(ray.button == GLFW_MOUSE_BUTTON_1)
     {
-      o -> targeted = glm::distance(ray.position, o -> pp.position) < 1;
-      o -> focused = glm::distance(ray.position, o -> pp.position) < 1;
+      o -> targeted = glm::distance(ray.position, abs_pp.position) < 0.5;
+      o -> focused = glm::distance(ray.position, abs_pp.position) < 0.5;
     }
     if(ray.button == GLFW_MOUSE_BUTTON_2)
     {
@@ -271,13 +277,13 @@ void slicer_t::tick_solid(solid *o)
     }
   }
   tick_physical_properties(o -> pp);
-  tick_children_of(o);
+  tick_children_of(o, abs_pp);
 }
 
-void slicer_t::tick_attachment(attachment *o)
+void slicer_t::tick_attachment(attachment *o, physical_properties pp)
 {
   tick_physical_properties(o -> pp);
-  tick_children_of(o);
+  tick_children_of(o, pp);
 }
 
 void slicer_t::tick_physical_properties(physical_properties &pp)
@@ -327,6 +333,5 @@ void slicer_t::targeted_turn_left_disable()
 
 void slicer_t::add_ray(ray r)
 {
-  printf("%lf %lf\n", r.position.x, r.position.y);
   rays.push_back(r);
 }

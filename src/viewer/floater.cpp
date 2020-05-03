@@ -37,7 +37,7 @@ void floater_viewer::update(scppr::scppr *renderer, floater *f, std::map<floater
         {
           grid[i][j] = new scppr::object_t();
           grid[i][j] -> model = cube;
-          grid[i][j] -> scale = {0.5, 0.5, 0.5};
+          grid[i][j] -> scale = {0.50, 0.50, 0.50};
           renderer -> add_object(grid[i][j]);
         }
         glm::dvec2 pos = {i - x / 2, j - z / 2};

@@ -118,13 +118,13 @@ void viewer_t::draw_solid(solid *s, physical_properties pp)
     {
       pv = new scppr::object_t();
       pv -> model = cube;
-      pv -> scale = {0.5, 0.01, 0.5};
+      pv -> scale = {0.50, 0.01, 0.50};
       pv -> rotation = {0, M_PI / 2, 0};
       pv -> material_overwrite[0] = pirate_material_vector[p -> race];
       renderer -> add_object(pv);
       alias.put(p, pv);
     }
-    pv -> position = {abs_pp.position.x, 1, abs_pp.position.y};
+    pv -> position = {abs_pp.position.x, 0.51, abs_pp.position.y};
   }
   if(s -> name == structure_namer)
   {
@@ -134,7 +134,7 @@ void viewer_t::draw_solid(solid *s, physical_properties pp)
     {
       stv = new scppr::object_t();
       stv -> model = cannon;
-      stv -> scale = {0.5, 0.5, 0.5};
+      stv -> scale = {0.50, 0.50, 0.50};
       renderer -> add_object(stv);
       alias.put(st, stv);
     }
