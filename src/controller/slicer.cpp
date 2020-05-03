@@ -3,11 +3,34 @@
 #include "model/solid.h"
 #include "model/collider/circle.h"
 #include "model/pirate.h"
+#include "model/structure.h"
 #include "misc_utils.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/matrix_transform_2d.hpp>
 
 slicer_t slicer;
+
+void slicer_t::tick_children_of(obj *o)
+{
+  auto cc = o -> children;
+  for(auto it : cc)
+  {
+    o -> lifespan -= dt;
+    if((-10 < o -> lifespan) && (o -> lifespan < 0))
+    {
+      o -> expired = true;
+    }
+    if(o -> expired)
+    {
+      delete it.second;
+      o -> children.erase(it.first);
+    }
+    else
+    {
+      tick(it.second);
+    }
+  }
+}
 
 void slicer_t::tick(obj *o)
 {
@@ -30,24 +53,6 @@ void slicer_t::tick(obj *o)
   if(o -> layer == 3)
   {
     tick_attachment(static_cast<attachment *>(o));
-  }
-  auto cc = o -> children;
-  for(auto it : cc)
-  {
-    o -> lifespan -= dt;
-    if((-10 < o -> lifespan) && (o -> lifespan < 0))
-    {
-      o -> expired = true;
-    }
-    if(o -> expired)
-    {
-      delete it.second;
-      o -> children.erase(it.first);
-    }
-    else
-    {
-      tick(it.second);
-    }
   }
 }
 
@@ -182,6 +187,7 @@ void slicer_t::tick_sea(sea *o)
       }
     }
   }
+  tick_children_of(o);
 }
 
 void slicer_t::tick_floater(floater *o)
@@ -226,18 +232,36 @@ void slicer_t::tick_floater(floater *o)
           target -> pp.position_velocity += impulse * solid_collision_push_strength * mass * target -> pp.inverse_mass;
         }
       }
+      if(tit.second -> name == structure_namer)
+      {
+        structure *target = static_cast<structure *>(tit.second);
+        glm::dvec2 axis;
+        double offset;
+        collider_circle oc = origin -> get_collider();
+        collider_box tc = target -> get_collider();
+        if(oc.collides(&tc, &axis, &offset))
+        {
+          glm::dvec2 impulse = axis * offset;
+          double mass = origin -> pp.mass + target -> pp.mass;
+          // push the origin
+          origin -> pp.position_velocity += impulse * solid_collision_push_strength * mass * origin -> pp.inverse_mass;
+        }
+      }
     }
   }
+  tick_children_of(o);
 }
 
 void slicer_t::tick_solid(solid *o)
 {
   tick_physical_properties(o -> pp);
+  tick_children_of(o);
 }
 
 void slicer_t::tick_attachment(attachment *o)
 {
   tick_physical_properties(o -> pp);
+  tick_children_of(o);
 }
 
 void slicer_t::tick_physical_properties(physical_properties &pp)

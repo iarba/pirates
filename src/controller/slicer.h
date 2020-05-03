@@ -11,6 +11,7 @@
 class slicer_t
 {
 public:
+  void tick_children_of(obj *o);
   void tick(obj *o);
   void tick_sea(sea *o);
   void tick_floater(floater *o);
