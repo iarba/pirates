@@ -266,7 +266,6 @@ void slicer_t::tick_solid(solid *o, physical_properties pp)
     if(ray.button == GLFW_MOUSE_BUTTON_1)
     {
       o -> targeted = glm::distance(ray.position, abs_pp.position) < 0.5;
-      o -> focused = glm::distance(ray.position, abs_pp.position) < 0.5;
     }
     if(ray.button == GLFW_MOUSE_BUTTON_2)
     {
