@@ -38,6 +38,7 @@ void slicer_t::tick(obj *o)
   {
     return;
   }
+  occupation++;
   _tick(o, physical_properties());
 }
 
@@ -88,14 +89,14 @@ void slicer_t::tick_sea(sea *o, physical_properties pp)
         glm::dmat2 rotation = get_rotation_matrix(origin -> pp.angle);
         for(int i = 0; i < op.size(); i++)
         {
-          op[i] = translation + rotation * (op[i] - glm::dvec2(origin -> grid.x / 2, origin -> grid.z / 2));
+          op[i] = translation + rotation * (op[i] - glm::dvec2((double)(origin -> grid.x - 1) / 2, (double)(origin -> grid.z - 1) / 2));
         }
         std::vector<glm::dvec2> tp = target -> get_bounding_perimeter();
         translation = target -> pp.position;
         rotation = get_rotation_matrix(target -> pp.angle);
         for(int i = 0; i < tp.size(); i++)
         {
-          tp[i] = translation + rotation * (tp[i] - glm::dvec2(target -> grid.x / 2, target -> grid.z / 2));
+          tp[i] = translation + rotation * (tp[i] - glm::dvec2((double)(target -> grid.x - 1) / 2, (double)(target -> grid.z - 1) / 2));
         }
         // get pruned vector of points, filtering by points that are in the target bounding box
         std::vector<glm::dvec2> pop;
@@ -208,6 +209,15 @@ void slicer_t::tick_floater(floater *o, physical_properties pp)
   tick_physical_properties(o -> pp);
   for(auto oit : o -> children)
   {
+    if(oit.second -> name != structure_namer)
+    {
+      continue;
+    }
+    structure *str = static_cast<structure *>(oit.second);
+    o -> grid.at(str -> pp.position.x + (double)(o -> grid.x - 1) / 2, str -> pp.position.y + (double(o -> grid.z - 1) / 2)) -> occupied = occupation;
+  }
+  for(auto oit : o -> children)
+  {
     if(oit.second -> name != pirate_namer)
     { // pointless
       continue;
@@ -251,6 +261,39 @@ void slicer_t::tick_floater(floater *o, physical_properties pp)
           double mass = origin -> pp.mass + target -> pp.mass;
           // push the origin
           origin -> pp.position_velocity += impulse * solid_collision_push_strength * mass * origin -> pp.inverse_mass;
+        }
+      }
+    }
+    if(_eq(origin -> pp.position_velocity, {0, 0}))
+    {
+      double x = std::floor(origin -> pp.position.x);
+      double y = std::floor(origin -> pp.position.y);
+      if(o -> grid.x % 2 == 0)
+      {
+        x += 0.5;
+      }
+      if(o -> grid.z % 2 == 0)
+      {
+        y += 0.5;
+      }
+      bool found = false;
+      for(int dx = 0; dx <= 1; dx++)
+      {
+        for(int dy = 0; dy <= 1; dy++)
+        {
+          cell_t *cell = o -> grid.at(x + (double)dx + (double)(o -> grid.x - 1) / 2.0, y + (double)dy + (double)(o -> grid.z - 1) / 2.0);
+          if((cell -> occupied != occupation) && (cell -> collidable))
+          {
+            cell -> occupied = occupation;
+            origin -> pp.position.x = x + (double)dx;
+            origin -> pp.position.y = y + (double)dy;
+            found = true;
+            break;
+          }
+        }
+        if(found)
+        {
+          break;
         }
       }
     }

@@ -61,7 +61,6 @@ cell_t::cell_t()
 
 cell_t::cell_t(boost::property_tree::ptree node)
 {
-  full = node.get<bool>("full");
   passable = node.get<bool>("passable");
   solid = node.get<bool>("solid");
   collidable = node.get<bool>("collidable");
@@ -71,7 +70,6 @@ cell_t::cell_t(boost::property_tree::ptree node)
 boost::property_tree::ptree cell_t::serialise()
 {
   boost::property_tree::ptree node;
-  node.put("full", full);
   node.put("passable", passable);
   node.put("solid", solid);
   node.put("collidable", collidable);

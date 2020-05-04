@@ -23,7 +23,7 @@ public:
   cell_t();
   cell_t(boost::property_tree::ptree node);
   boost::property_tree::ptree serialise();
-  bool full = false;
+  int occupied = 0;
   bool passable = false;
   bool solid = false;
   bool collidable = false;

@@ -44,19 +44,26 @@ Solids delayed for later
   5.5 improve collisions between floaters                                  V
 
 3. solids
-  3.1 drag stopped solids onto grid
+  3.1 drag stopped solids onto grid                                        V
   3.2 circle/square collision detection between solids on the same floater V
   3.3 handle collisions between solids in a fair way                       V
   3.4 render solids relative to floater                                    V
-  3.5 make solids selectable
+  3.5 make solids selectable                                               V
 
 6. rays
   6.1 detect mouse input                                                   V
   6.2 translate camera-based input into world coordinates                  V
   6.3 pass world coordinates to slicer                                     V
-  6.4 seek object pointed by world coordinates
+  6.4 seek object pointed by world coordinates                             V
 
 7. models
   7.1 refactor the way models are loaded
   7.2 export models to file
   7.3 load models from file
+
+models delayes for later
+
+8. solids
+  8.1 selected solids are highlighted
+  8.2 selected solids can be moved using rightclick
+  8.3 solid movement is target based

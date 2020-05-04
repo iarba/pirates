@@ -41,6 +41,7 @@ private:
   void tick_physical_properties(physical_properties &pp);
   double target_f_acc = 0;
   double target_r_acc = 0;
+  int occupation = 0;
   std::vector<ray> rays;
 };
 

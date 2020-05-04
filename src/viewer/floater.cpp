@@ -40,7 +40,7 @@ void floater_viewer::update(scppr::scppr *renderer, floater *f, std::map<floater
           grid[i][j] -> scale = {0.50, 0.50, 0.50};
           renderer -> add_object(grid[i][j]);
         }
-        glm::dvec2 pos = {i - x / 2, j - z / 2};
+        glm::dvec2 pos = {(double)i - (double)(x - 1) / 2, (double)j - (double)(z - 1) / 2};
         pos = rotation * pos;
         pos = pos + translation;
         grid[i][j] -> position = {pos.x, 0, pos.y};
