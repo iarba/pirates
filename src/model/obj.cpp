@@ -65,3 +65,28 @@ boost::property_tree::ptree obj::serialise()
   node.put("focused", focused);
   return node;
 }
+
+oid_t obj::add(obj *o)
+{
+  counter++;
+  children[counter] = o;
+  return counter;
+}
+
+std::vector<oid_t> obj::find_id(namer_t namer)
+{
+  std::vector<oid_t> ids;
+  for(auto it : children)
+  {
+    if(it.second -> name == namer)
+    {
+      ids.push_back(it.first);
+    }
+  }
+  return ids;
+}
+
+void obj::erase_id(oid_t id)
+{
+  children.erase(id);
+}

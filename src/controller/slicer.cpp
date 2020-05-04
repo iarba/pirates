@@ -4,6 +4,7 @@
 #include "model/collider/circle.h"
 #include "model/pirate.h"
 #include "model/structure.h"
+#include "model/highlight.h"
 #include "misc_utils.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/matrix_transform_2d.hpp>
@@ -38,8 +39,15 @@ void slicer_t::tick(obj *o)
   {
     return;
   }
+  ray_targeted = NULL;
+  selected = NULL;
   occupation++;
   _tick(o, physical_properties());
+  if(ray_targeted && selected)
+  {
+    selected -> pp.position_velocity += glm::dvec2(0, 1);
+  }
+  rays.clear();
 }
 
 void slicer_t::_tick(obj *o, physical_properties pp)
@@ -105,7 +113,7 @@ void slicer_t::tick_sea(sea *o, physical_properties pp)
         for(auto point : op)
         {
           point_pp.position = point;
-          collider_box point_collider(point_pp, 0.1, 0.1);
+          collider_circle point_collider(point_pp, 0.1);
           if(point_collider.collides(&tbb, &axis, &offset))
           {
             pop.push_back(point);
@@ -114,7 +122,7 @@ void slicer_t::tick_sea(sea *o, physical_properties pp)
         for(auto point : tp)
         {
           point_pp.position = point;
-          collider_box point_collider(point_pp, 0.1, 0.1);
+          collider_circle point_collider(point_pp, 0.1);
           if(point_collider.collides(&obb, &axis, &offset))
           {
             ptp.push_back(point);
@@ -194,11 +202,24 @@ void slicer_t::tick_sea(sea *o, physical_properties pp)
     }
   }
   tick_children_of(o, pp);
-  rays.clear();
 }
 
 void slicer_t::tick_floater(floater *o, physical_properties pp)
 {
+  for(auto ray:rays)
+  {
+    collider_box floater_c = o -> get_bounding_box();
+    physical_properties ppp; // pseudo physical properties, don't bash my naming convention
+    ppp.position = ray.position;
+    collider_circle ray_c(ppp, 0.1);
+    glm::dvec2 _axis;
+    double _offset;
+    if(floater_c.collides(&ray_c, &_axis, &_offset))
+    {
+      ray_targeted = o;
+      pos_targeted = ray.position;
+    }
+  }
   if(o -> targeted)
   {
     glm::dvec2 forward_axis = get_rotation_matrix(o -> pp.angle) * glm::dvec2(0, 1);
@@ -308,13 +329,28 @@ void slicer_t::tick_solid(solid *o, physical_properties pp)
   {
     if(ray.button == GLFW_MOUSE_BUTTON_1)
     {
-      o -> targeted = glm::distance(ray.position, abs_pp.position) < 0.5;
+      bool old_targeted = o -> targeted;
+      bool new_targeted = glm::distance(ray.position, abs_pp.position) < 0.5;
+      if(old_targeted && !new_targeted)
+      {
+        std::vector<oid_t> highlights = o -> find_id(highlight_namer);
+        for(auto hl : highlights)
+        {
+          o -> erase_id(hl);
+        }
+      }
+      if(!old_targeted && new_targeted)
+      {
+        o -> add(new highlight());
+      }
+      o -> targeted = new_targeted;
     }
     if(ray.button == GLFW_MOUSE_BUTTON_2)
     {
       if(o -> targeted)
       {
         // move target to new position
+        selected = o;
       }
     }
   }

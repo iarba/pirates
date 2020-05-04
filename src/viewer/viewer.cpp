@@ -1,6 +1,7 @@
 #include "viewer/viewer.h"
 #include "viewer/alias.h"
 #include "viewer/floater.h"
+#include "model/highlight.h"
 
 manipulator_t *viewer_t::init(std::string path, sea *s)
 {
@@ -15,6 +16,7 @@ manipulator_t *viewer_t::init(std::string path, sea *s)
   stone.diffuse = new scppr::texture_t(path + "assets/stone.jpg");
   wood.diffuse = new scppr::texture_t(path + "assets/wood.jpg");
   neko.diffuse = new scppr::texture_t(path + "assets/neko.png");
+  highlight_material.diffuse = new scppr::texture_t(path + "assets/highlight.png");
   floater_material_vector[floater_dirt] = dirt;
   floater_material_vector[floater_grass] = grass;
   floater_material_vector[floater_sand] = sand;
@@ -50,6 +52,8 @@ void viewer_t::draw(obj *o)
 {
   camera -> update();
   _draw(o, physical_properties());
+  // TODO: clear alias
+  // alias.clear();
   renderer -> draw();
 }
 
@@ -151,6 +155,22 @@ void viewer_t::draw_solid(solid *s, physical_properties pp)
 void viewer_t::draw_attachment(attachment *a, physical_properties pp)
 {
   physical_properties abs_pp = pp + a -> pp;
+  if(a -> name == highlight_namer)
+  {
+    highlight *hl = static_cast<highlight *>(a);
+    scppr::object_t *hlv = (scppr::object_t *)alias.get(hl);
+    if(hlv == NULL)
+    {
+      hlv = new scppr::object_t();
+      hlv -> model = cube;
+      hlv -> scale = {0.50, 0.01, 0.50};
+      hlv -> material_overwrite[0] = highlight_material;
+      renderer -> add_object(hlv);
+      alias.put(hl, hlv);
+    }
+    hlv -> position = {abs_pp.position.x, 0.53, abs_pp.position.y};
+    hlv -> rotation = {0, abs_pp.angle, 0};
+  }
   auto cc = a -> children;
   for(auto it : cc)
   {
