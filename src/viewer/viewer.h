@@ -20,6 +20,7 @@ public:
   void destroy();
   void draw(obj *o);
   bool is_open();
+  scppr::scppr *renderer;
 private:
   void _draw(obj *o, physical_properties pp);
   void draw_sea(sea *s, physical_properties pp);
@@ -28,7 +29,6 @@ private:
   void draw_attachment(attachment *a, physical_properties pp);
   scppr::model_t *cube;
   scppr::model_t *cannon;
-  scppr::scppr *renderer;
   std::string path;
   camera_t *camera;
   std::map<floater_material_t, scppr::material_t> floater_material_vector;

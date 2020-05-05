@@ -17,9 +17,30 @@ floater_viewer::~floater_viewer()
 {
   for(int i = 0; i < x; i++)
   {
+    for(int j = 0; j < z; j++)
+    {
+      if(grid[i][j])
+      {
+        delete grid[i][j];
+      }
+    }
     delete[] grid[i];
   }
   delete[] grid;
+}
+
+void floater_viewer::unload(scppr::scppr *renderer)
+{
+  for(int i = 0; i < x; i++)
+  {
+    for(int j = 0; j < z; j++)
+    {
+      if(grid[i][j])
+      {
+        renderer -> remove_object(grid[i][j]);
+      }
+    }
+  }
 }
 
 void floater_viewer::update(scppr::scppr *renderer, floater *f, std::map<floater_material_t, scppr::material_t> *material_vector)
@@ -46,6 +67,15 @@ void floater_viewer::update(scppr::scppr *renderer, floater *f, std::map<floater
         grid[i][j] -> position = {pos.x, 0, pos.y};
         grid[i][j] -> rotation = {0, f -> pp.angle, 0};
         grid[i][j] -> material_overwrite[0] = (*material_vector)[c -> material];
+      }
+      else
+      {
+        if(grid[i][j])
+        {
+          renderer -> remove_object(grid[i][j]);
+          delete grid[i][j];
+          grid[i][j] = 0;
+        }
       }
     }
   }

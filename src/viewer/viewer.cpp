@@ -3,6 +3,9 @@
 #include "viewer/floater.h"
 #include "model/highlight.h"
 
+#define SIMPLE_ID 1
+#define FLOATER_ID 2
+
 manipulator_t *viewer_t::init(std::string path, sea *s)
 {
   this -> path = path;
@@ -50,10 +53,26 @@ void viewer_t::destroy()
 
 void viewer_t::draw(obj *o)
 {
+  alias.clean();
   camera -> update();
   _draw(o, physical_properties());
-  // TODO: clear alias
-  // alias.clear();
+  std::map<void *, aliased_t> clean = alias.get_clean();
+  for(auto it : clean)
+  {
+    alias.remove(it.first);
+    if(it.second.identifier == SIMPLE_ID)
+    {
+      scppr::object_t *o = (scppr::object_t *)it.second.what;
+      renderer -> remove_object(o);
+      delete o;
+    }
+    if(it.second.identifier == FLOATER_ID)
+    {
+      floater_viewer *fv = (floater_viewer *)it.second.what;
+      fv -> unload(renderer);
+      delete fv;
+    }
+  }
   renderer -> draw();
 }
 
@@ -97,7 +116,7 @@ void viewer_t::draw_floater(floater *f, physical_properties pp)
   if(fv == NULL)
   {
     fv = new floater_viewer(f, cube);
-    alias.put(f, fv);
+    alias.put(f, fv, FLOATER_ID);
   }
   fv -> update(renderer, f, &floater_material_vector);
   auto cc = f -> children;
@@ -126,8 +145,9 @@ void viewer_t::draw_solid(solid *s, physical_properties pp)
       pv -> rotation = {0, M_PI / 2, 0};
       pv -> material_overwrite[0] = pirate_material_vector[p -> race];
       renderer -> add_object(pv);
-      alias.put(p, pv);
+      alias.put(p, pv, SIMPLE_ID);
     }
+    abs_pp.angle = 0;
     pv -> position = {abs_pp.position.x, 0.51, abs_pp.position.y};
   }
   if(s -> name == structure_namer)
@@ -140,7 +160,7 @@ void viewer_t::draw_solid(solid *s, physical_properties pp)
       stv -> model = cannon;
       stv -> scale = {0.50, 0.50, 0.50};
       renderer -> add_object(stv);
-      alias.put(st, stv);
+      alias.put(st, stv, SIMPLE_ID);
     }
     stv -> position = {abs_pp.position.x, 1, abs_pp.position.y};
     stv -> rotation = {0, abs_pp.angle, 0};
@@ -166,7 +186,7 @@ void viewer_t::draw_attachment(attachment *a, physical_properties pp)
       hlv -> scale = {0.50, 0.01, 0.50};
       hlv -> material_overwrite[0] = highlight_material;
       renderer -> add_object(hlv);
-      alias.put(hl, hlv);
+      alias.put(hl, hlv, SIMPLE_ID);
     }
     hlv -> position = {abs_pp.position.x, 0.53, abs_pp.position.y};
     hlv -> rotation = {0, abs_pp.angle, 0};
