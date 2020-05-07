@@ -68,6 +68,10 @@ boost::property_tree::ptree obj::serialise()
 
 oid_t obj::add(obj *o)
 {
+  if(children.size() > counter)
+  {
+    counter = children.size();
+  }
   counter++;
   children[counter] = o;
   return counter;

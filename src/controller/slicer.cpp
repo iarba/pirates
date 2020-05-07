@@ -5,6 +5,7 @@
 #include "model/pirate.h"
 #include "model/structure.h"
 #include "model/highlight.h"
+#include "model/target_indicator.h"
 #include "misc_utils.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/matrix_transform_2d.hpp>
@@ -16,12 +17,13 @@ void slicer_t::tick_children_of(obj *o, physical_properties pp)
   auto cc = o -> children;
   for(auto it : cc)
   {
-    o -> lifespan -= dt;
-    if((-10 < o -> lifespan) && (o -> lifespan < 0))
+    it.second -> parent = o;
+    it.second -> lifespan -= dt;
+    if((-10 < it.second -> lifespan) && (it.second -> lifespan < 0))
     {
-      o -> expired = true;
+      it.second -> expired = true;
     }
-    if(o -> expired)
+    if(it.second -> expired)
     {
       delete it.second;
       o -> children.erase(it.first);
@@ -45,7 +47,27 @@ void slicer_t::tick(obj *o)
   _tick(o, physical_properties());
   if(ray_targeted && selected)
   {
-    selected -> pp.position_velocity += glm::dvec2(0, 1);
+    if(selected -> parent == ray_targeted)
+    {
+      pos_targeted.x -= ray_targeted -> pp.position.x;
+      pos_targeted.y -= ray_targeted -> pp.position.y;
+      pos_targeted = pos_targeted * get_rotation_matrix(ray_targeted -> pp.angle);
+      double x = std::floor(pos_targeted.x);
+      double y = std::floor(pos_targeted.y);
+      if(ray_targeted -> grid.x % 2 == 0)
+      {
+        x += 0.5;
+      }
+      if(ray_targeted -> grid.z % 2 == 0)
+      {
+        y += 0.5;
+      }
+      selected -> target = {x, y};
+      target_indicator *ti = new target_indicator();
+      ti -> pp.position = {x, y};
+      ti -> lifespan = 1;
+      ray_targeted -> add(ti);
+    }
   }
   rays.clear();
 }
@@ -214,7 +236,7 @@ void slicer_t::tick_floater(floater *o, physical_properties pp)
     collider_circle ray_c(ppp, 0.1);
     glm::dvec2 _axis;
     double _offset;
-    if(floater_c.collides(&ray_c, &_axis, &_offset))
+    if(!selected && floater_c.collides(&ray_c, &_axis, &_offset))
     {
       ray_targeted = o;
       pos_targeted = ray.position;

@@ -26,6 +26,7 @@ public:
   bool expired = false;
   double lifespan = -10; // infinite
   bool focused = false;
+  obj *parent = NULL;
 private:
   oid_t counter = 0;
 };

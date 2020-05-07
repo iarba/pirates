@@ -2,6 +2,7 @@
 #include "viewer/alias.h"
 #include "viewer/floater.h"
 #include "model/highlight.h"
+#include "model/target_indicator.h"
 
 #define SIMPLE_ID 1
 #define FLOATER_ID 2
@@ -20,6 +21,7 @@ manipulator_t *viewer_t::init(std::string path, sea *s)
   wood.diffuse = new scppr::texture_t(path + "assets/wood.jpg");
   neko.diffuse = new scppr::texture_t(path + "assets/neko.png");
   highlight_material.diffuse = new scppr::texture_t(path + "assets/highlight.png");
+  target_indicator_material.diffuse = new scppr::texture_t(path + "assets/target_indicator.png");
   floater_material_vector[floater_dirt] = dirt;
   floater_material_vector[floater_grass] = grass;
   floater_material_vector[floater_sand] = sand;
@@ -190,6 +192,22 @@ void viewer_t::draw_attachment(attachment *a, physical_properties pp)
     }
     hlv -> position = {abs_pp.position.x, 0.53, abs_pp.position.y};
     hlv -> rotation = {0, abs_pp.angle, 0};
+  }
+  if(a -> name == target_indicator_namer)
+  {
+    target_indicator *ti = static_cast<target_indicator *>(a);
+    scppr::object_t *tiv = (scppr::object_t *)alias.get(ti);
+    if(tiv == NULL)
+    {
+      tiv = new scppr::object_t();
+      tiv -> model = cube;
+      tiv -> scale = {0.50, 0.01, 0.50};
+      tiv -> material_overwrite[0] = target_indicator_material;
+      renderer -> add_object(tiv);
+      alias.put(ti, tiv, SIMPLE_ID);
+    }
+    tiv -> position = {abs_pp.position.x, 0.53, abs_pp.position.y};
+    tiv -> rotation = {0, abs_pp.angle, 0};
   }
   auto cc = a -> children;
   for(auto it : cc)

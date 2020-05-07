@@ -3,6 +3,7 @@
 
 #include "model/obj.h"
 #include "model/physical_properties.h"
+#include <vector>
 
 class solid : public obj
 {
@@ -12,6 +13,8 @@ public:
   physical_properties pp;
   virtual boost::property_tree::ptree serialise();
   bool targeted = false;
+  std::vector<glm::dvec2> path;
+  glm::dvec2 target;
 };
 
 #endif // MODEL_SOLID_H

@@ -34,6 +34,7 @@ private:
   std::map<floater_material_t, scppr::material_t> floater_material_vector;
   std::map<pirate_race_t, scppr::material_t> pirate_material_vector;
   scppr::material_t highlight_material;
+  scppr::material_t target_indicator_material;
   scppr::light_t *sun;
 };
 
