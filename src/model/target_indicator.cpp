@@ -1,6 +1,6 @@
 #include "model/target_indicator.h"
 
-namer_t target_indicator_namer = "target_indicator";
+namer_t target_indicator_namer = 0;
 
 target_indicator::target_indicator() : attachment(target_indicator_namer)
 {

@@ -1,6 +1,6 @@
 #include "model/sea.h"
 
-namer_t sea_namer = "Sea";
+namer_t sea_namer = 0;
 
 sea::sea():obj(0, sea_namer)
 {

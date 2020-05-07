@@ -8,7 +8,7 @@
 
 void test_floater_interaction()
 {
-  floater *f = new floater("floater", 11, 16);
+  floater *f = new floater(-1, 11, 16);
   f -> grid.at( 2,  2) -> collidable = true;
   f -> grid.at( 2,  3) -> collidable = true;
   f -> grid.at( 2,  4) -> collidable = true;
@@ -106,7 +106,7 @@ void test_floater_interaction()
 
 void test_floater_collision()
 {
-  floater *f1 = new floater("floater", 5, 5);
+  floater *f1 = new floater(-1, 5, 5);
   f1 -> grid.at(1, 1) -> collidable = true;
   f1 -> grid.at(1, 2) -> collidable = true;
   f1 -> grid.at(1, 3) -> collidable = true; // this should collide
@@ -116,7 +116,7 @@ void test_floater_collision()
   f1 -> grid.at(3, 1) -> collidable = true;
   f1 -> grid.at(3, 2) -> collidable = true;
   f1 -> grid.at(3, 3) -> collidable = true;
-  floater *f2 = new floater("floater", 5, 5);
+  floater *f2 = new floater(-1, 5, 5);
   f2 -> grid.at(1, 1) -> collidable = true;
   f2 -> grid.at(1, 2) -> collidable = true;
   f2 -> grid.at(1, 3) -> collidable = true;

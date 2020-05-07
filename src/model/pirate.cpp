@@ -1,6 +1,6 @@
 #include "model/pirate.h"
 
-namer_t pirate_namer = "pirate";
+namer_t pirate_namer = 0;
 
 pirate::pirate():solid(pirate_namer)
 {

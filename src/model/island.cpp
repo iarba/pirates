@@ -1,6 +1,6 @@
 #include "model/island.h"
 
-namer_t island_namer = "island";
+namer_t island_namer = 0;
 
 island::island(int x, int z):floater(island_namer, x, z)
 {

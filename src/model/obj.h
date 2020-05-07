@@ -6,7 +6,7 @@
 #include <string>
 #include <boost/property_tree/ptree.hpp>
 
-typedef std::string namer_t;
+typedef int namer_t;
 typedef int oid_t;
 
 class obj

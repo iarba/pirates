@@ -12,7 +12,7 @@ void test_solid_collision()
   solid *s1 = new pirate();
   solid *s2 = new pirate();
   s2 -> pp.position = {1, 1};
-  floater *f = new floater("floater", 5, 5);
+  floater *f = new floater(-1, 5, 5);
   f -> children[1] = s1;
   f -> children[2] = s2;
   sea *s = new sea();
@@ -54,7 +54,7 @@ void test_solid_collision()
   s1 = new structure();
   s2 = new pirate();
   s2 -> pp.position = {1, 1};
-  f = new floater("floater", 5, 5);
+  f = new floater(-1, 5, 5);
   f -> children[1] = s1;
   f -> children[2] = s2;
   s = new sea();

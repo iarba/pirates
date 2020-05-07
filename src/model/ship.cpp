@@ -1,6 +1,6 @@
 #include "model/ship.h"
 
-namer_t ship_namer = "ship";
+namer_t ship_namer = 0;
 
 ship::ship(int x, int z):floater(ship_namer, x, z)
 {

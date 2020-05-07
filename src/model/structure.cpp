@@ -1,6 +1,6 @@
 #include "model/structure.h"
 
-namer_t structure_namer = "structure";
+namer_t structure_namer = 0;
 
 structure::structure():solid(structure_namer)
 {

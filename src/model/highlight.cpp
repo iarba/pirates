@@ -1,6 +1,6 @@
 #include "model/highlight.h"
 
-namer_t highlight_namer = "highlight";
+namer_t highlight_namer = 0;
 
 highlight::highlight() : attachment(highlight_namer)
 {
