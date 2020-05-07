@@ -52,8 +52,27 @@ void slicer_t::tick(obj *o)
       pos_targeted.x -= ray_targeted -> pp.position.x;
       pos_targeted.y -= ray_targeted -> pp.position.y;
       pos_targeted = pos_targeted * get_rotation_matrix(ray_targeted -> pp.angle);
-      double x = std::floor(pos_targeted.x);
-      double y = std::floor(pos_targeted.y);
+      double fx = std::floor(pos_targeted.x);
+      double fy = std::floor(pos_targeted.y);
+      double cx = std::ceil(pos_targeted.x);
+      double cy = std::ceil(pos_targeted.y);
+      double x, y;
+      if(cx - pos_targeted.x > pos_targeted.x - fx)
+      {
+        x = fx;
+      }
+      else
+      {
+        x = cx;
+      }
+      if(cy - pos_targeted.y > pos_targeted.y - fy)
+      {
+        y = fy;
+      }
+      else
+      {
+        y = cy;
+      }
       if(ray_targeted -> grid.x % 2 == 0)
       {
         x += 0.5;
