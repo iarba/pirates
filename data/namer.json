@@ -1,0 +1,100 @@
+{
+  "namer":
+  {
+    "example":
+    {
+      "message1": "this is used for world object identification between",
+      "message2": "integer based code and string based configs",
+      "message3": "structure of this node can be whatever you want",
+      "message3": "the data SHOULD be unique, otherwise stuff catches fire",
+      "namer": -42,
+      "name": "foo"
+    },
+    "base":
+    {
+      "objects":
+      {
+        "sea":
+        {
+          "namer": 1,
+          "name": "sea"
+        },
+        "floater":
+        {
+          "island":
+          {
+            "namer": 2,
+            "name": "island"
+          },
+          "ship":
+          {
+            "namer": 3,
+            "name": "ship"
+          }
+        },
+        "solid":
+        {
+          "pirate":
+          {
+            "namer": 4,
+            "name": "pirate"
+          },
+          "structure":
+          {
+            "namer": 5,
+            "name": "structure"
+          }
+        },
+        "attachment":
+        {
+          "highlight":
+          {
+            "namer": 6,
+            "name": "highlight"
+          },
+          "target_indicator":
+          {
+            "namer": 7,
+            "name": "target_indicator"
+          }
+        }
+      },
+      "race":
+      {
+        "neko":
+        {
+          "namer": 8,
+          "name": "neko"
+        }
+      },
+      "material":
+      {
+        "dirt":
+        {
+          "namer": 9,
+          "name": "dirt"
+        },
+        "grass":
+        {
+          "namer": 10,
+          "name": "grass"
+        },
+        "sand":
+        {
+          "namer": 11,
+          "name": "sand"
+        },
+        "stone":
+        {
+          "namer": 12,
+          "name": "stone"
+        },
+        "wood":
+        {
+          "namer": 13,
+          "name": "wood"
+        }
+      }
+    }
+  }
+}

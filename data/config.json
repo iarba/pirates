@@ -1,0 +1,62 @@
+{
+  "include":
+  {
+    "target": "namer.json"
+  },
+  "model":
+  {
+    "cube":
+    {
+      "name": "cube",
+      "path": "../scppr/assets/cube.obj"
+    },
+    "cannon":
+    {
+      "name": "cannon",
+      "path": "../assets/cannon.obj"
+    }
+  },
+  "texture":
+  {
+    "dirt":
+    {
+      "name:": "dirt",
+      "path": "../assets/dirt.jpg"
+    },
+    "grass":
+    {
+      "name:": "grass",
+      "path": "../assets/grass.jpg"
+    },
+    "sand":
+    {
+      "name:": "sand",
+      "path": "../assets/sand.jpg"
+    },
+    "stone":
+    {
+      "name:": "stone",
+      "path": "../assets/stone.jpg"
+    },
+    "wood":
+    {
+      "name:": "wood",
+      "path": "../assets/wood.jpg"
+    },
+    "neko":
+    {
+      "name:": "neko",
+      "path": "../assets/neko.png"
+    },
+    "highlight":
+    {
+      "name:": "highlight",
+      "path": "../assets/highlight.png"
+    },
+    "target_indicator":
+    {
+      "name:": "target_indicator",
+      "path": "../assets/target_indicator.png"
+    }
+  }
+}
