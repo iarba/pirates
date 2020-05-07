@@ -81,7 +81,7 @@ void slicer_t::tick(obj *o)
       {
         y += 0.5;
       }
-      selected -> target = {x, y};
+      selected -> path.push_back({x, y});
       target_indicator *ti = new target_indicator();
       ti -> pp.position = {x, y};
       ti -> lifespan = 1;
@@ -326,10 +326,42 @@ void slicer_t::tick_floater(floater *o, physical_properties pp)
         }
       }
     }
-    if(_eq(origin -> pp.position_velocity, {0, 0}))
+    if(origin -> path.size() > 0)
     {
-      double x = std::floor(origin -> pp.position.x);
-      double y = std::floor(origin -> pp.position.y);
+      if(_eq(origin -> path[0], origin -> pp.position, 0.1))
+      {
+        origin -> path.pop_front();
+      }
+      else
+      {
+        origin -> pp.position_velocity += glm::normalize(origin -> path[0] - origin -> pp.position) * solid_speed * std::min(1.0, glm::distance(origin -> path[0], origin -> pp.position));
+      }
+    } 
+    if(_eq(origin -> pp.position_velocity, {0, 0}, 0.1))
+    {
+      double fx = std::floor(origin -> pp.position.x);
+      double fy = std::floor(origin -> pp.position.y);
+      double cx = std::ceil(origin -> pp.position.x);
+      double cy = std::ceil(origin -> pp.position.y);
+      double x, y, mx = 1, my = 1;
+      if(cx - origin -> pp.position.x > origin -> pp.position.x - fx)
+      {
+        x = fx;
+      }
+      else
+      {
+        x = cx;
+        mx = -1;
+      }
+      if(cy - origin -> pp.position.y > origin -> pp.position.y - fy)
+      {
+        y = fy;
+      }
+      else
+      {
+        y = cy;
+        my = -1;
+      }
       if(o -> grid.x % 2 == 0)
       {
         x += 0.5;
@@ -338,24 +370,26 @@ void slicer_t::tick_floater(floater *o, physical_properties pp)
       {
         y += 0.5;
       }
-      bool found = false;
-      for(int dx = 0; dx <= 1; dx++)
+      if(!_eq(origin -> pp.position, {x, y}, 0.1))
       {
-        for(int dy = 0; dy <= 1; dy++)
+        bool found = false;
+        for(int dx = 0; dx <= 1; dx++)
         {
-          cell_t *cell = o -> grid.at(x + (double)dx + (double)(o -> grid.x - 1) / 2.0, y + (double)dy + (double)(o -> grid.z - 1) / 2.0);
-          if((cell -> occupied != occupation) && (cell -> collidable))
+          for(int dy = 0; dy <= 1; dy++)
           {
-            cell -> occupied = occupation;
-            origin -> pp.position.x = x + (double)dx;
-            origin -> pp.position.y = y + (double)dy;
-            found = true;
+            cell_t *cell = o -> grid.at(x + mx * (double)dx + (double)(o -> grid.x - 1) / 2.0, y + my * (double)dy + (double)(o -> grid.z - 1) / 2.0);
+            if((cell -> occupied != occupation) && (cell -> collidable))
+            {
+              cell -> occupied = occupation;
+              origin -> path.push_front({x + mx * (double)dx, y + my * (double)dy});
+              found = true;
+              break;
+            }
+          }
+          if(found)
+          {
             break;
           }
-        }
-        if(found)
-        {
-          break;
         }
       }
     }

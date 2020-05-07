@@ -31,6 +31,7 @@ public:
   double floater_collision_torque_strength = 1;
   double floater_collision_tilt_strength = 1;
   double solid_collision_push_strength = 1;
+  double solid_speed = 0.4;
 private:
   void _tick(obj *o, physical_properties pp);
   void tick_children_of(obj *o, physical_properties pp);

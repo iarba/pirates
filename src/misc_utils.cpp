@@ -2,16 +2,26 @@
 #include <cmath>
 #include <glm/gtx/closest_point.hpp>
 
-#define EPSILON 0.00001
+#define DEF_EPSILON 0.00001
 
 bool _eq(double a, double b)
 {
-  return std::abs(a - b) < EPSILON;
+  return _eq(a, b, DEF_EPSILON);
 }
 
 bool _eq(glm::dvec2 a, glm::dvec2 b)
 {
-  return _eq(a.x, b.x) && _eq(a.y, b.y);
+  return _eq(a, b, DEF_EPSILON);
+}
+
+bool _eq(double a, double b, double epsilon)
+{
+  return std::abs(a - b) < epsilon;
+}
+
+bool _eq(glm::dvec2 a, glm::dvec2 b, double epsilon)
+{
+  return _eq(a.x, b.x, epsilon) && _eq(a.y, b.y, epsilon);
 }
 
 glm::dmat2x2 get_rotation_matrix(double angle)

@@ -66,4 +66,4 @@ models delayes for later
 8. solids
   8.1 selected solids are highlighted                                      V
   8.2 selected solids can be moved using rightclick                        V
-  8.3 solid movement is target based
+  8.3 solid movement is target based                                       V
