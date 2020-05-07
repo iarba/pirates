@@ -81,6 +81,7 @@ void slicer_t::tick(obj *o)
       {
         y += 0.5;
       }
+      selected -> path.clear();
       selected -> path.push_back({x, y});
       target_indicator *ti = new target_indicator();
       ti -> pp.position = {x, y};
