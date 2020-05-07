@@ -7,19 +7,22 @@
 #include "controller/slicer.h"
 #include "viewer/viewer.h"
 #include "test/suite.h"
+#include "loader.h"
 
 #define forever while(true)
 
 int main(int argc, char **argv)
 {
   log_init("pirates");
+  std::string path = std::string(argv[0]);
+  std::string directory = path.substr(0, path.find_last_of('/')) + "/../";
+  loader::load(directory + "data/config.json");
+  return 0;
   execute_test();
   if(argc == 1)
   {
     return 0;
   }
-  std::string path = std::string(argv[0]);
-  std::string directory = path.substr(0, path.find_last_of('/')) + "/../";
   floater *f1 = new ship(5, 5);
   f1 -> pp.position = {0, 0};
   //

@@ -8,6 +8,7 @@ extern namer_t sea_namer;
 class sea : public obj
 {
 public:
+  static void init(boost::property_tree::ptree namer_node);
   sea();
   sea(boost::property_tree::ptree node);
   ~sea();

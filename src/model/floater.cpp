@@ -4,6 +4,10 @@
 #include <boost/unordered_map.hpp>
 #include <map>
 
+void floater::init(boost::property_tree::ptree namer_node)
+{
+}
+
 enum direction_t
 {
   up,

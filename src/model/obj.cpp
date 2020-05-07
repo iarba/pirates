@@ -3,6 +3,10 @@
 #include "model/ship.h"
 #include "model/island.h"
 
+void obj::init(boost::property_tree::ptree namer_node)
+{
+}
+
 obj *obj::deserialise(boost::property_tree::ptree node)
 {
   namer_t name = node.get<namer_t>("name");

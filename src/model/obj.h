@@ -12,6 +12,7 @@ typedef int oid_t;
 class obj
 {
 public:
+  static void init(boost::property_tree::ptree namer_node);
   static obj *deserialise(boost::property_tree::ptree node);
   obj(int layer, namer_t name);
   obj(boost::property_tree::ptree node);
