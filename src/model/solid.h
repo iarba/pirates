@@ -8,6 +8,7 @@
 class solid : public obj
 {
 public:
+  static void init(boost::property_tree::ptree namer_node);
   solid(namer_t solid_name);
   ~solid();
   physical_properties pp;

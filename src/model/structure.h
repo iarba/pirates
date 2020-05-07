@@ -16,6 +16,7 @@ extern namer_t structure_namer;
 class structure : public solid
 {
 public:
+  static void init(boost::property_tree::ptree namer_node);
   structure();
   ~structure();
   collider_box get_collider();

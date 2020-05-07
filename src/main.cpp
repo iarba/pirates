@@ -17,7 +17,6 @@ int main(int argc, char **argv)
   std::string path = std::string(argv[0]);
   std::string directory = path.substr(0, path.find_last_of('/')) + "/../";
   loader::load(directory + "data/config.json");
-  return 0;
   execute_test();
   if(argc == 1)
   {

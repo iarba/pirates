@@ -14,6 +14,7 @@ extern namer_t pirate_namer;
 class pirate : public solid
 {
 public:
+  static void init(boost::property_tree::ptree namer_node);
   pirate();
   ~pirate();
   collider_circle get_collider();

@@ -67,7 +67,7 @@ void test_serialisation()
     FAIL_REASON(reason);
     goto test_serialisation_end;
   }
-  if(f2 -> grid.at(1, 3) -> collidable != true)
+  if(f1 -> grid.at(1, 3) -> collidable != true)
   {
     reason = "mismatched collision status in first floater";
     FAIL_REASON(reason);

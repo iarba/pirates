@@ -7,6 +7,7 @@
 class attachment : public obj
 {
 public:
+  static void init(boost::property_tree::ptree namer_node);
   attachment(namer_t attachment_namer);
   ~attachment();
   physical_properties pp;

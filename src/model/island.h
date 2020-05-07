@@ -8,6 +8,7 @@ extern namer_t island_namer;
 class island : public floater
 {
 public:
+  static void init(boost::property_tree::ptree namer_node);
   island(int x, int z);
   island(boost::property_tree::ptree node);
   ~island();
