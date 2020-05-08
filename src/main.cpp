@@ -47,12 +47,10 @@ int main(int argc, char **argv)
   p1 -> focused = true;
   f1 -> children[1] = p1;
   structure *st = new structure();
-  st -> type = cannon;
   st -> pp.position = {-1, 0};
   st -> pp.angle = M_PI + M_PI / 2;
   f1 -> children[2] = st;
   st = new structure();
-  st -> type = cannon;
   st -> pp.position = {1, 0};
   st -> pp.angle = M_PI / 2;
   f1 -> children[3] = st;

@@ -146,13 +146,12 @@ void viewer_t::draw_solid(solid *s, physical_properties pp)
     if(stv == NULL)
     {
       stv = new scppr::object_t();
-      stv -> model = cannon;
-      stv -> scale = {0.50, 0.50, 0.50};
       renderer -> add_object(stv);
       alias.put(st, stv, SIMPLE_ID);
     }
-    stv -> position = {abs_pp.position.x, 1, abs_pp.position.y};
-    stv -> rotation = {0, abs_pp.angle, 0};
+    loader::name_registry.apply_loader(st -> type, stv);
+    stv -> position += glm::dvec3(abs_pp.position.x, 0, abs_pp.position.y);
+    stv -> rotation += glm::dvec3(0, abs_pp.angle, 0);
   }
   auto cc = s -> children;
   for(auto it : cc)

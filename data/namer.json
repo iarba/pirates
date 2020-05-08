@@ -87,6 +87,19 @@
           }
         }
       },
+      "structure":
+      {
+        "cannon":
+        {
+          "namer": 14,
+          "name": "cannon",
+          "model": "model_cannon",
+          "default": true,
+          "texture":
+          {
+          }
+        }
+      },
       "material":
       {
         "dirt":

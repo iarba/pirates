@@ -4,12 +4,7 @@
 #include "model/solid.h"
 #include "model/collider/box.h"
 
-enum structure_type_t
-{
-  wall,
-  cannon,
-  tree
-};
+typedef namer_t structure_type_t;
 
 extern namer_t structure_namer;
 
@@ -21,7 +16,7 @@ public:
   ~structure();
   collider_box get_collider();
   virtual boost::property_tree::ptree serialise();
-  structure_type_t type = wall;
+  structure_type_t type;
 };
 
 #endif // MODEL_STRUCTURE_H
