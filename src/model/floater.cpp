@@ -10,10 +10,19 @@ floater_material_t floater_default_material;
 void floater::init(boost::property_tree::ptree namer_node)
 {
   boost::property_tree::ptree node = namer_node.get_child("base.material");
-  floater_default_material = node.get<namer_t>("wood.namer");
   for(auto mat:node)
   {
     namer_t namer = mat.second.get<namer_t>("namer");
+    try
+    {
+      if(mat.second.get<bool>("default"))
+      {
+        floater_default_material = namer;
+      }
+    }
+    catch(std::exception &e)
+    {
+    }
     loader::name_registry.bind(namer, mat.second.get<std::string>("name"));
     glm::dvec3 position = {0, 0, 0};
     glm::dvec3 rotation = {0, 0, 0};
@@ -23,7 +32,6 @@ void floater::init(boost::property_tree::ptree namer_node)
     boost::property_tree::ptree t_node = mat.second.get_child("texture");
     for(auto tex : t_node)
     {
-      printf("dbg\n");
       texture_overload[std::stoi(tex.first)] = loader::name_registry.get_texture(tex.second.get<std::string>(""));
     }
     loader::name_registry.bind_loader(namer, boost::bind(handy_loader, _1, position, rotation, scale, model, texture_overload));

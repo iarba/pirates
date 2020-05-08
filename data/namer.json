@@ -80,6 +80,7 @@
           "namer": 8,
           "name": "neko",
           "model": "model_cube",
+          "default": true,
           "texture":
           {
             "0": "texture_neko"
@@ -133,6 +134,7 @@
           "namer": 13,
           "name": "wood",
           "model": "model_cube",
+          "default": true,
           "texture":
           {
             "0": "texture_wood"

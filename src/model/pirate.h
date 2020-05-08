@@ -4,10 +4,7 @@
 #include "model/solid.h"
 #include "model/collider/circle.h"
 
-enum pirate_race_t
-{
-  pirate_neko
-};
+typedef namer_t pirate_race_t;
 
 extern namer_t pirate_namer;
 
@@ -20,7 +17,7 @@ public:
   collider_circle get_collider();
   virtual boost::property_tree::ptree serialise();
   bool owned = false;
-  pirate_race_t race = pirate_neko;
+  pirate_race_t race = 0;
 };
 
 #endif // MODEL_PIRATE_H
