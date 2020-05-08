@@ -23,9 +23,8 @@ void click_callback_wrapper(void *data_point, int button, int state, int mods)
   man -> click_callback(button, state, mods);
 }
 
-manipulator_t::manipulator_t(sea *s, camera_t *camera, scppr::scppr *renderer)
+manipulator_t::manipulator_t(camera_t *camera, scppr::scppr *renderer)
 {
-  this -> s = s;
   this -> camera = camera;
   this -> renderer = renderer;
   renderer -> add_listener(scppr::keyboard_listener, (void *)&keyboard_callback_wrapper, (void *)this);

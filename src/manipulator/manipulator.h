@@ -8,7 +8,7 @@
 class manipulator_t
 {
 public:
-  manipulator_t(sea *s, camera_t *camera, scppr::scppr *renderer);
+  manipulator_t(camera_t *camera, scppr::scppr *renderer);
   ~manipulator_t();
   void poll();
   void keyboard_callback(int key, int scancode, int action, int mods);

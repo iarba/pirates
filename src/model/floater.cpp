@@ -3,9 +3,31 @@
 #include <boost/assign/list_of.hpp>
 #include <boost/unordered_map.hpp>
 #include <map>
+#include "loader.h"
+
+floater_material_t floater_default_material;
 
 void floater::init(boost::property_tree::ptree namer_node)
 {
+  boost::property_tree::ptree node = namer_node.get_child("base.material");
+  floater_default_material = node.get<namer_t>("wood.namer");
+  for(auto mat:node)
+  {
+    namer_t namer = mat.second.get<namer_t>("namer");
+    loader::name_registry.bind(namer, mat.second.get<std::string>("name"));
+    glm::dvec3 position = {0, 0, 0};
+    glm::dvec3 rotation = {0, 0, 0};
+    glm::dvec3 scale = {0.5, 0.5, 0.5};
+    scppr::model_t *model = loader::name_registry.get_model(mat.second.get<std::string>("model"));
+    std::map<int, scppr::material_t> texture_overload;
+    boost::property_tree::ptree t_node = mat.second.get_child("texture");
+    for(auto tex : t_node)
+    {
+      printf("dbg\n");
+      texture_overload[std::stoi(tex.first)] = loader::name_registry.get_texture(tex.second.get<std::string>(""));
+    }
+    loader::name_registry.bind_loader(namer, boost::bind(handy_loader, _1, position, rotation, scale, model, texture_overload));
+  }
 }
 
 enum direction_t
@@ -61,6 +83,7 @@ std::map<direction_t, direction_t> dlo = boost::assign::map_list_of
 
 cell_t::cell_t()
 {
+  material = floater_default_material;
 }
 
 cell_t::cell_t(boost::property_tree::ptree node)
@@ -68,7 +91,7 @@ cell_t::cell_t(boost::property_tree::ptree node)
   passable = node.get<bool>("passable");
   solid = node.get<bool>("solid");
   collidable = node.get<bool>("collidable");
-  material = static_cast<floater_material_t>(node.get<int>("material"));
+  material = node.get<floater_material_t>("material");
 }
 
 boost::property_tree::ptree cell_t::serialise()
@@ -77,7 +100,7 @@ boost::property_tree::ptree cell_t::serialise()
   node.put("passable", passable);
   node.put("solid", solid);
   node.put("collidable", collidable);
-  node.put("material", static_cast<int> (material));
+  node.put("material", material);
   return node;
 }
 

@@ -16,12 +16,17 @@ int main(int argc, char **argv)
   log_init("pirates");
   std::string path = std::string(argv[0]);
   std::string directory = path.substr(0, path.find_last_of('/')) + "/../";
+  manipulator_t *man = viewer.init(directory);
   loader::load(directory + "data/config.json");
   execute_test();
   if(argc == 1)
   {
     return 0;
   }
+  floater_material_t floater_sand = loader::name_registry.get_namer("sand");
+  floater_material_t floater_dirt = loader::name_registry.get_namer("dirt");
+  floater_material_t floater_stone = loader::name_registry.get_namer("stone");
+  floater_material_t floater_grass = loader::name_registry.get_namer("grass");
   floater *f1 = new ship(5, 5);
   f1 -> pp.position = {0, 0};
   //
@@ -493,7 +498,6 @@ int main(int argc, char **argv)
   s -> children[1] = f1;
   s -> children[2] = f2;
   s -> children[3] = f3;
-  manipulator_t *man = viewer.init(directory, s);
   while(viewer.is_open())
   {
     man -> poll();

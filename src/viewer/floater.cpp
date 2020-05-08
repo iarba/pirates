@@ -1,5 +1,6 @@
 #include "viewer/floater.h"
 #include "misc_utils.h"
+#include "loader.h"
 
 floater_viewer::floater_viewer(floater *f, scppr::model_t *cube)
 {
@@ -43,7 +44,7 @@ void floater_viewer::unload(scppr::scppr *renderer)
   }
 }
 
-void floater_viewer::update(scppr::scppr *renderer, floater *f, std::map<floater_material_t, scppr::material_t> *material_vector)
+void floater_viewer::update(scppr::scppr *renderer, floater *f)
 {
   glm::dvec2 translation = {f -> pp.position.x, f -> pp.position.y};
   glm::dmat2 rotation = get_rotation_matrix(f -> pp.angle);
@@ -57,16 +58,14 @@ void floater_viewer::update(scppr::scppr *renderer, floater *f, std::map<floater
         if(grid[i][j] == NULL)
         {
           grid[i][j] = new scppr::object_t();
-          grid[i][j] -> model = cube;
-          grid[i][j] -> scale = {0.50, 0.50, 0.50};
           renderer -> add_object(grid[i][j]);
         }
+        loader::name_registry.apply_loader(c -> material, grid[i][j]);
         glm::dvec2 pos = {(double)i - (double)(x - 1) / 2, (double)j - (double)(z - 1) / 2};
         pos = rotation * pos;
         pos = pos + translation;
-        grid[i][j] -> position = {pos.x, 0, pos.y};
-        grid[i][j] -> rotation = {0, f -> pp.angle, 0};
-        grid[i][j] -> material_overwrite[0] = (*material_vector)[c -> material];
+        grid[i][j] -> position += glm::dvec3(pos.x, 0, pos.y);
+        grid[i][j] -> rotation += glm::dvec3(0, f -> pp.angle, 0);
       }
       else
       {
@@ -74,7 +73,7 @@ void floater_viewer::update(scppr::scppr *renderer, floater *f, std::map<floater
         {
           renderer -> remove_object(grid[i][j]);
           delete grid[i][j];
-          grid[i][j] = 0;
+          grid[i][j] = NULL;
         }
       }
     }

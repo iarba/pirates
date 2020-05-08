@@ -16,7 +16,7 @@
 class viewer_t
 {
 public:
-  manipulator_t *init(std::string path, sea *s);
+  manipulator_t *init(std::string path);
   void destroy();
   void draw(obj *o);
   bool is_open();

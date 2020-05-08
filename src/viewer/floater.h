@@ -12,7 +12,7 @@ public:
   floater_viewer(floater *f, scppr::model_t *cube);
   ~floater_viewer();
   void unload(scppr::scppr *renderer);
-  void update(scppr::scppr *renderer, floater *f, std::map<floater_material_t, scppr::material_t> *material_vector);
+  void update(scppr::scppr *renderer, floater *f);
 private:
   scppr::object_t ***grid;
   int x;

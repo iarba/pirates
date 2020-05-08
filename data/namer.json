@@ -6,9 +6,13 @@
       "message1": "this is used for world object identification between",
       "message2": "integer based code and string based configs",
       "message3": "structure of this node can be whatever you want",
-      "message3": "the data SHOULD be unique, otherwise stuff catches fire",
+      "message4": "the data SHOULD be unique, otherwise stuff catches fire",
       "namer": -42,
-      "name": "foo"
+      "name": "foo",
+      "message5": "any additional data specific to the object",
+      "message6": "can be defined as additional fields",
+      "message7": "it is still your responsibility to bind them",
+      "model": "bar"
     },
     "base":
     {
@@ -50,12 +54,22 @@
           "highlight":
           {
             "namer": 6,
-            "name": "highlight"
+            "name": "highlight",
+            "model": "model_cube",
+            "texture":
+            {
+              "0": "texture_highlight"
+            }
           },
           "target_indicator":
           {
             "namer": 7,
-            "name": "target_indicator"
+            "name": "target_indicator",
+            "model": "model_cube",
+            "texture":
+            {
+              "0": "texture_target_indicator"
+            }
           }
         }
       },
@@ -64,7 +78,12 @@
         "neko":
         {
           "namer": 8,
-          "name": "neko"
+          "name": "neko",
+          "model": "model_cube",
+          "texture":
+          {
+            "0": "texture_neko"
+          }
         }
       },
       "material":
@@ -72,27 +91,52 @@
         "dirt":
         {
           "namer": 9,
-          "name": "dirt"
+          "name": "dirt",
+          "model": "model_cube",
+          "texture":
+          {
+            "0": "texture_dirt"
+          }
         },
         "grass":
         {
           "namer": 10,
-          "name": "grass"
+          "name": "grass",
+          "model": "model_cube",
+          "texture":
+          {
+            "0": "texture_grass"
+          }
         },
         "sand":
         {
           "namer": 11,
-          "name": "sand"
+          "name": "sand",
+          "model": "model_cube",
+          "texture":
+          {
+            "0": "texture_sand"
+          }
         },
         "stone":
         {
           "namer": 12,
-          "name": "stone"
+          "name": "stone",
+          "model": "model_cube",
+          "texture":
+          {
+            "0": "texture_stone"
+          }
         },
         "wood":
         {
           "namer": 13,
-          "name": "wood"
+          "name": "wood",
+          "model": "model_cube",
+          "texture":
+          {
+            "0": "texture_wood"
+          }
         }
       }
     }

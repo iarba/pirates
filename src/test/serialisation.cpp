@@ -4,9 +4,14 @@
 #include "model/ship.h"
 #include "model/island.h"
 #include "misc_utils.h"
+#include "loader.h"
 
 void test_serialisation()
 {
+  floater_material_t floater_sand = loader::name_registry.get_namer("sand");
+  floater_material_t floater_dirt = loader::name_registry.get_namer("dirt");
+  floater_material_t floater_stone = loader::name_registry.get_namer("stone");
+  floater_material_t floater_grass = loader::name_registry.get_namer("grass");
   TEST("TESTING SERIALISATION");
   ship *f1 = new ship(5, 5);
   f1 -> pp.position = {0, 0};

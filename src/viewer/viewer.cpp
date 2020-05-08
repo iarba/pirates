@@ -7,7 +7,7 @@
 #define SIMPLE_ID 1
 #define FLOATER_ID 2
 
-manipulator_t *viewer_t::init(std::string path, sea *s)
+manipulator_t *viewer_t::init(std::string path)
 {
   this -> path = path;
   renderer = new scppr::scppr("Pirates", path + "scppr/assets/");
@@ -22,28 +22,19 @@ manipulator_t *viewer_t::init(std::string path, sea *s)
   neko.diffuse = new scppr::texture_t(path + "assets/neko.png");
   highlight_material.diffuse = new scppr::texture_t(path + "assets/highlight.png");
   target_indicator_material.diffuse = new scppr::texture_t(path + "assets/target_indicator.png");
-  floater_material_vector[floater_dirt] = dirt;
-  floater_material_vector[floater_grass] = grass;
-  floater_material_vector[floater_sand] = sand;
-  floater_material_vector[floater_stone] = stone;
-  floater_material_vector[floater_wood] = wood;
   pirate_material_vector[pirate_neko] = neko;
   camera = new camera_t(renderer);
   sun = new scppr::light_t();
   sun -> color = {0.5, 0.5, 0.5};
   sun -> position = {0, 1000, 0};
   renderer -> add_light(sun);
-  return new manipulator_t(s, camera, renderer);
+  return new manipulator_t(camera, renderer);
 }
 
 void viewer_t::destroy()
 {
   delete camera;
   delete sun;
-  for( auto it : floater_material_vector)
-  {
-    delete it.second.diffuse;
-  }
   for( auto it : pirate_material_vector)
   {
     delete it.second.diffuse;
@@ -120,7 +111,7 @@ void viewer_t::draw_floater(floater *f, physical_properties pp)
     fv = new floater_viewer(f, cube);
     alias.put(f, fv, FLOATER_ID);
   }
-  fv -> update(renderer, f, &floater_material_vector);
+  fv -> update(renderer, f);
   auto cc = f -> children;
   for(auto it : cc)
   {

@@ -8,14 +8,9 @@
 
 #define CELL_SIZE 1
 
-enum floater_material_t
-{
-  floater_dirt = 1,
-  floater_grass,
-  floater_sand,
-  floater_stone,
-  floater_wood
-};
+typedef namer_t floater_material_t;
+
+extern floater_material_t floater_default_material;
 
 class cell_t
 {
@@ -28,7 +23,7 @@ public:
   bool solid = false;
   bool collidable = false;
   int mark = 0;
-  floater_material_t material = floater_wood;
+  floater_material_t material = 0;
 };
 
 class grid_t

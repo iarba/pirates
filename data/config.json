@@ -1,10 +1,7 @@
 {
-  "include":
-  {
-    "target": "namer.json"
-  },
   "model":
   {
+    "prefix": "model_",
     "cube":
     {
       "name": "cube",
@@ -18,45 +15,50 @@
   },
   "texture":
   {
+    "prefix": "texture_",
     "dirt":
     {
-      "name:": "dirt",
+      "name": "dirt",
       "path": "../assets/dirt.jpg"
     },
     "grass":
     {
-      "name:": "grass",
+      "name": "grass",
       "path": "../assets/grass.jpg"
     },
     "sand":
     {
-      "name:": "sand",
+      "name": "sand",
       "path": "../assets/sand.jpg"
     },
     "stone":
     {
-      "name:": "stone",
+      "name": "stone",
       "path": "../assets/stone.jpg"
     },
     "wood":
     {
-      "name:": "wood",
+      "name": "wood",
       "path": "../assets/wood.jpg"
     },
     "neko":
     {
-      "name:": "neko",
+      "name": "neko",
       "path": "../assets/neko.png"
     },
     "highlight":
     {
-      "name:": "highlight",
+      "name": "highlight",
       "path": "../assets/highlight.png"
     },
     "target_indicator":
     {
-      "name:": "target_indicator",
+      "name": "target_indicator",
       "path": "../assets/target_indicator.png"
     }
+  },
+  "include":
+  {
+    "target": "namer.json"
   }
 }
