@@ -13,13 +13,6 @@ manipulator_t *viewer_t::init(std::string path)
   this -> path = path;
   renderer = new scppr::scppr("Pirates", path + "scppr/assets/");
   cube = new scppr::model_t(path + "scppr/assets/cube.obj");
-  cannon = new scppr::model_t(path + "assets/cannon.obj");
-  scppr::material_t dirt, grass, sand, stone, wood, neko;
-  dirt.diffuse = new scppr::texture_t(path + "assets/dirt.jpg");
-  grass.diffuse = new scppr::texture_t(path + "assets/grass.jpg");
-  sand.diffuse = new scppr::texture_t(path + "assets/sand.jpg");
-  stone.diffuse = new scppr::texture_t(path + "assets/stone.jpg");
-  wood.diffuse = new scppr::texture_t(path + "assets/wood.jpg");
   highlight_material.diffuse = new scppr::texture_t(path + "assets/highlight.png");
   target_indicator_material.diffuse = new scppr::texture_t(path + "assets/target_indicator.png");
   camera = new camera_t(renderer);
@@ -34,12 +27,7 @@ void viewer_t::destroy()
 {
   delete camera;
   delete sun;
-  for( auto it : pirate_material_vector)
-  {
-    delete it.second.diffuse;
-  }
   delete cube;
-  delete cannon;
   delete renderer;
 }
 
