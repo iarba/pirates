@@ -12,9 +12,6 @@ manipulator_t *viewer_t::init(std::string path)
 {
   this -> path = path;
   renderer = new scppr::scppr("Pirates", path + "scppr/assets/");
-  cube = new scppr::model_t(path + "scppr/assets/cube.obj");
-  highlight_material.diffuse = new scppr::texture_t(path + "assets/highlight.png");
-  target_indicator_material.diffuse = new scppr::texture_t(path + "assets/target_indicator.png");
   camera = new camera_t(renderer);
   sun = new scppr::light_t();
   sun -> color = {0.5, 0.5, 0.5};
@@ -27,7 +24,6 @@ void viewer_t::destroy()
 {
   delete camera;
   delete sun;
-  delete cube;
   delete renderer;
 }
 
@@ -95,7 +91,7 @@ void viewer_t::draw_floater(floater *f, physical_properties pp)
   floater_viewer *fv = (floater_viewer *)alias.get(f);
   if(fv == NULL)
   {
-    fv = new floater_viewer(f, cube);
+    fv = new floater_viewer(f);
     alias.put(f, fv, FLOATER_ID);
   }
   fv -> update(renderer, f);
@@ -151,38 +147,16 @@ void viewer_t::draw_solid(solid *s, physical_properties pp)
 void viewer_t::draw_attachment(attachment *a, physical_properties pp)
 {
   physical_properties abs_pp = pp + a -> pp;
-  if(a -> name == highlight_namer)
+  scppr::object_t *av = (scppr::object_t *)alias.get(a);
+  if(av == NULL)
   {
-    highlight *hl = static_cast<highlight *>(a);
-    scppr::object_t *hlv = (scppr::object_t *)alias.get(hl);
-    if(hlv == NULL)
-    {
-      hlv = new scppr::object_t();
-      hlv -> model = cube;
-      hlv -> scale = {0.50, 0.01, 0.50};
-      hlv -> material_overwrite[0] = highlight_material;
-      renderer -> add_object(hlv);
-      alias.put(hl, hlv, SIMPLE_ID);
-    }
-    hlv -> position = {abs_pp.position.x, 0.53, abs_pp.position.y};
-    hlv -> rotation = {0, abs_pp.angle, 0};
+    av = new scppr::object_t();
+    renderer -> add_object(av);
+    alias.put(a, av, SIMPLE_ID);
   }
-  if(a -> name == target_indicator_namer)
-  {
-    target_indicator *ti = static_cast<target_indicator *>(a);
-    scppr::object_t *tiv = (scppr::object_t *)alias.get(ti);
-    if(tiv == NULL)
-    {
-      tiv = new scppr::object_t();
-      tiv -> model = cube;
-      tiv -> scale = {0.50, 0.01, 0.50};
-      tiv -> material_overwrite[0] = target_indicator_material;
-      renderer -> add_object(tiv);
-      alias.put(ti, tiv, SIMPLE_ID);
-    }
-    tiv -> position = {abs_pp.position.x, 0.53, abs_pp.position.y};
-    tiv -> rotation = {0, abs_pp.angle, 0};
-  }
+  loader::name_registry.apply_loader(a -> name, av);
+  av -> position += glm::dvec3(abs_pp.position.x, 0, abs_pp.position.y);
+  av -> rotation += glm::dvec3(0, abs_pp.angle, 0);
   auto cc = a -> children;
   for(auto it : cc)
   {

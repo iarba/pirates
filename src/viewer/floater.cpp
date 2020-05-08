@@ -2,7 +2,7 @@
 #include "misc_utils.h"
 #include "loader.h"
 
-floater_viewer::floater_viewer(floater *f, scppr::model_t *cube)
+floater_viewer::floater_viewer(floater *f)
 {
   this -> x = f -> grid.x;
   this -> z = f -> grid.z;
@@ -11,7 +11,6 @@ floater_viewer::floater_viewer(floater *f, scppr::model_t *cube)
   {
     grid[i] = new scppr::object_t *[z]();
   }
-  this -> cube = cube;
 }
 
 floater_viewer::~floater_viewer()

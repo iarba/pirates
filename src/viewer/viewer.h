@@ -27,11 +27,8 @@ private:
   void draw_floater(floater *f, physical_properties pp);
   void draw_solid(solid *s, physical_properties pp);
   void draw_attachment(attachment *a, physical_properties pp);
-  scppr::model_t *cube;
   std::string path;
   camera_t *camera;
-  scppr::material_t highlight_material;
-  scppr::material_t target_indicator_material;
   scppr::light_t *sun;
 };
 
