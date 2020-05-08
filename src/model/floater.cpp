@@ -4,6 +4,7 @@
 #include <boost/unordered_map.hpp>
 #include <map>
 #include "loader.h"
+#include "misc_utils.h"
 
 floater_material_t floater_default_material;
 
@@ -24,9 +25,9 @@ void floater::init(boost::property_tree::ptree namer_node)
     {
     }
     loader::name_registry.bind(namer, mat.second.get<std::string>("name"));
-    glm::dvec3 position = {0, 0, 0};
-    glm::dvec3 rotation = {0, 0, 0};
-    glm::dvec3 scale = {0.5, 0.5, 0.5};
+    glm::dvec3 position = tree_to_vec3(mat.second.get_child("model_offset.position"));
+    glm::dvec3 rotation = tree_to_vec3(mat.second.get_child("model_offset.rotation"));
+    glm::dvec3 scale = tree_to_vec3(mat.second.get_child("model_offset.scale"));
     scppr::model_t *model = loader::name_registry.get_model(mat.second.get<std::string>("model"));
     std::map<int, scppr::material_t> texture_overload;
     boost::property_tree::ptree t_node = mat.second.get_child("texture");

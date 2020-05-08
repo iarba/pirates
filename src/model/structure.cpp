@@ -1,5 +1,6 @@
 #include "model/structure.h"
 #include "loader.h"
+#include "misc_utils.h"
 
 namer_t structure_namer = 0;
 
@@ -26,9 +27,9 @@ void structure::init(boost::property_tree::ptree namer_node)
     {
     }
     loader::name_registry.bind(namer, str.second.get<std::string>("name"));
-    glm::dvec3 position = {0, 1, 0};
-    glm::dvec3 rotation = {0, 0, 0};
-    glm::dvec3 scale = {0.5, 0.5, 0.5};
+    glm::dvec3 position = tree_to_vec3(str.second.get_child("model_offset.position"));
+    glm::dvec3 rotation = tree_to_vec3(str.second.get_child("model_offset.rotation"));
+    glm::dvec3 scale = tree_to_vec3(str.second.get_child("model_offset.scale"));
     scppr::model_t *model = loader::name_registry.get_model(str.second.get<std::string>("model"));
     std::map<int, scppr::material_t> texture_overload;
     boost::property_tree::ptree t_node = str.second.get_child("texture");

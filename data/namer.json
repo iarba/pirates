@@ -56,6 +56,27 @@
             "namer": 6,
             "name": "highlight",
             "model": "model_cube",
+            "model_offset":
+            {
+              "scale":
+              {
+                "x": 0.5,
+                "y": 0.01,
+                "z": 0.5
+              },
+              "position":
+              {
+                "x": 0,
+                "y": 0.53,
+                "z": 0
+              },
+              "rotation":
+              {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
             "texture":
             {
               "0": "texture_highlight"
@@ -66,6 +87,27 @@
             "namer": 7,
             "name": "target_indicator",
             "model": "model_cube",
+            "model_offset":
+            {
+              "scale":
+              {
+                "x": 0.5,
+                "y": 0.01,
+                "z": 0.5
+              },
+              "position":
+              {
+                "x": 0,
+                "y": 0.53,
+                "z": 0
+              },
+              "rotation":
+              {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
             "texture":
             {
               "0": "texture_target_indicator"
@@ -80,6 +122,27 @@
           "namer": 8,
           "name": "neko",
           "model": "model_cube",
+          "model_offset":
+          {
+            "scale":
+            {
+              "x": 0.5,
+              "y": 0.01,
+              "z": 0.5
+            },
+            "position":
+            {
+              "x": 0,
+              "y": 0.51,
+              "z": 0
+            },
+            "rotation":
+            {
+              "x": 0,
+              "y": 1.57079632679,
+              "z": 0
+            }
+          },
           "default": true,
           "texture":
           {
@@ -94,6 +157,27 @@
           "namer": 14,
           "name": "cannon",
           "model": "model_cannon",
+          "model_offset":
+          {
+            "scale":
+            {
+              "x": 0.5,
+              "y": 0.5,
+              "z": 0.5
+            },
+            "position":
+            {
+              "x": 0,
+              "y": 1,
+              "z": 0
+            },
+            "rotation":
+            {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            }
+          },
           "default": true,
           "texture":
           {
@@ -107,6 +191,27 @@
           "namer": 9,
           "name": "dirt",
           "model": "model_cube",
+          "model_offset":
+          {
+            "scale":
+            {
+              "x": 0.5,
+              "y": 0.5,
+              "z": 0.5
+            },
+            "position":
+            {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "rotation":
+            {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            }
+          },
           "texture":
           {
             "0": "texture_dirt"
@@ -117,6 +222,27 @@
           "namer": 10,
           "name": "grass",
           "model": "model_cube",
+          "model_offset":
+          {
+            "scale":
+            {
+              "x": 0.5,
+              "y": 0.5,
+              "z": 0.5
+            },
+            "position":
+            {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "rotation":
+            {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            }
+          },
           "texture":
           {
             "0": "texture_grass"
@@ -127,6 +253,27 @@
           "namer": 11,
           "name": "sand",
           "model": "model_cube",
+          "model_offset":
+          {
+            "scale":
+            {
+              "x": 0.5,
+              "y": 0.5,
+              "z": 0.5
+            },
+            "position":
+            {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "rotation":
+            {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            }
+          },
           "texture":
           {
             "0": "texture_sand"
@@ -137,6 +284,27 @@
           "namer": 12,
           "name": "stone",
           "model": "model_cube",
+          "model_offset":
+          {
+            "scale":
+            {
+              "x": 0.5,
+              "y": 0.5,
+              "z": 0.5
+            },
+            "position":
+            {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "rotation":
+            {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            }
+          },
           "texture":
           {
             "0": "texture_stone"
@@ -147,6 +315,27 @@
           "namer": 13,
           "name": "wood",
           "model": "model_cube",
+          "model_offset":
+          {
+            "scale":
+            {
+              "x": 0.5,
+              "y": 0.5,
+              "z": 0.5
+            },
+            "position":
+            {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "rotation":
+            {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            }
+          },
           "default": true,
           "texture":
           {

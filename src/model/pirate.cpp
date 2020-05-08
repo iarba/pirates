@@ -1,5 +1,6 @@
 #include "model/pirate.h"
 #include "loader.h"
+#include "misc_utils.h"
 
 namer_t pirate_namer = 0;
 pirate_race_t pirate_default_race = 0;
@@ -25,9 +26,9 @@ void pirate::init(boost::property_tree::ptree namer_node)
     {
     }
     loader::name_registry.bind(namer, rac.second.get<std::string>("name"));
-    glm::dvec3 position = {0, 0.51, 0};
-    glm::dvec3 rotation = {0, M_PI / 2, 0};
-    glm::dvec3 scale = {0.5, 0.01, 0.5};
+    glm::dvec3 position = tree_to_vec3(rac.second.get_child("model_offset.position"));
+    glm::dvec3 rotation = tree_to_vec3(rac.second.get_child("model_offset.rotation"));
+    glm::dvec3 scale = tree_to_vec3(rac.second.get_child("model_offset.scale"));
     scppr::model_t *model = loader::name_registry.get_model(rac.second.get<std::string>("model"));
     std::map<int, scppr::material_t> texture_overload;
     boost::property_tree::ptree t_node = rac.second.get_child("texture");
