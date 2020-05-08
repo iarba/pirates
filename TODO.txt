@@ -57,13 +57,34 @@ Solids delayed for later
   6.4 seek object pointed by world coordinates                             V
 
 7. models
-  7.1 refactor the way models are loaded
-  7.2 export models to file
-  7.3 load models from file
-
-models delayes for later
+  7.1 refactor the way models are loaded                                   V
+  7.2 export models to file                                                V
+  7.3 load models from file                                                V
 
 8. solids
   8.1 selected solids are highlighted                                      V
   8.2 selected solids can be moved using rightclick                        V
   8.3 solid movement is target based                                       V
+
+9. floaters
+  9.1 floaters can "dock"
+  9.2 floaters can shoot cannons
+  9.3 floaters take damage from cannons
+  9.4 make collisions a bit more realistic
+  9.5 maybe better floater model
+
+10. solids
+  10.1 solids are able to pathfind to avoid collisions
+  10.2 solids can switch between "docked: floaters
+  10.3 pirates can man various positions, resulting in control gain/loss
+  10.4 pseudo shadow
+
+11. sea
+  11.1 add texture to sea
+  11.2 add environment pruning
+  11.3 add random sea generation
+
+12. sound
+  12.1 add a sound library
+  12.2 play background music
+  12.3 add sounds based on actions
