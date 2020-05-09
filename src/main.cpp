@@ -27,6 +27,15 @@ int main(int argc, char **argv)
   floater_material_t floater_dirt = loader::name_registry.get_namer("dirt");
   floater_material_t floater_stone = loader::name_registry.get_namer("stone");
   floater_material_t floater_grass = loader::name_registry.get_namer("grass");
+  floater *f4 = new ship(5, 5);
+  f4 -> pp.position = {-4, 4};
+  f4 -> grid.at(1, 1) -> collidable = true;
+  f4 -> grid.at(1, 2) -> collidable = true;
+  f4 -> grid.at(2, 1) -> collidable = true;
+  f4 -> grid.at(2, 2) -> collidable = true;
+  f4 -> grid.at(2, 3) -> collidable = true;
+  f4 -> grid.at(3, 1) -> collidable = true;
+  f4 -> grid.at(3, 2) -> collidable = true;
   floater *f1 = new ship(5, 5);
   f1 -> pp.position = {0, 0};
   //
@@ -496,6 +505,7 @@ int main(int argc, char **argv)
   s -> children[1] = f1;
   s -> children[2] = f2;
   s -> children[3] = f3;
+  s -> children[4] = f4;
   while(viewer.is_open())
   {
     man -> poll();
