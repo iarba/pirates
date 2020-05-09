@@ -9,6 +9,12 @@
 #include "model/physical_properties.h"
 #include "manipulator/rays.h"
 
+enum action_t
+{
+  act_select,
+  act_board
+};
+
 class slicer_t
 {
 public:
@@ -20,6 +26,7 @@ public:
   void targeted_turn_left_enable();
   void targeted_turn_left_disable();
   void add_ray(ray r);
+  void toggle_board();
   bool enabled = true;
   double sps = 100;
   double dt = 0.01;
@@ -45,8 +52,10 @@ private:
   int occupation = 0;
   std::vector<ray> rays;
   solid *selected;
+  floater *controlled;
   floater *ray_targeted;
   glm::dvec2 pos_targeted;
+  action_t action = act_select;
 };
 
 extern slicer_t slicer;

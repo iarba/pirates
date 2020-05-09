@@ -83,6 +83,10 @@ void manipulator_t::keyboard_callback(int key, int scancode, int action, int mod
     {
       slicer.targeted_turn_right_disable();
     }
+    if(key == GLFW_KEY_B)
+    {
+      slicer.toggle_board();
+    }
   }
 }
 

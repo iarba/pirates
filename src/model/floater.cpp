@@ -257,7 +257,14 @@ std::vector<glm::dvec2> floater::get_bounding_perimeter()
   {
     this -> generate_perimeter();
   }
-  return bounding_perimeter;
+  std::vector<glm::dvec2> perimeter = bounding_perimeter;
+  glm::dvec2 translation = pp.position;
+  glm::dmat2 rotation = get_rotation_matrix(pp.angle);
+  for(int i = 0; i < perimeter.size(); i++)
+  {
+    perimeter[i] = translation + rotation * (perimeter[i] - glm::dvec2((double)(grid.x - 1) / 2, (double)(grid.z - 1) / 2));
+  }
+  return perimeter;
 }
 
 boost::property_tree::ptree floater::serialise()

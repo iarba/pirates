@@ -43,9 +43,25 @@ void slicer_t::tick(obj *o)
   }
   ray_targeted = NULL;
   selected = NULL;
+  controlled = NULL;
   occupation++;
+  for(auto &ray : rays)
+  {
+    if(ray.consumed)
+    {
+      continue;
+    }
+    if(action == act_board)
+    {
+      if(ray.button == GLFW_MOUSE_BUTTON_2)
+      {
+        action = act_select;
+        ray.consumed = true;
+      }
+    }
+  }
   _tick(o, physical_properties());
-  if(ray_targeted && selected)
+  if(action == act_select && ray_targeted && selected)
   {
     if(selected -> parent == ray_targeted)
     {
@@ -88,6 +104,11 @@ void slicer_t::tick(obj *o)
       ti -> lifespan = 1;
       ray_targeted -> add(ti);
     }
+  }
+  if(action == act_board && ray_targeted && controlled && ray_targeted != controlled)
+  {
+    // dock(ray_targeted, controlled);
+    action = act_select;
   }
   rays.clear();
 }
@@ -135,19 +156,7 @@ void slicer_t::tick_sea(sea *o, physical_properties pp)
       {
         // get perimeter of both shapes
         std::vector<glm::dvec2> op = origin -> get_bounding_perimeter();
-        glm::dvec2 translation = origin -> pp.position;
-        glm::dmat2 rotation = get_rotation_matrix(origin -> pp.angle);
-        for(int i = 0; i < op.size(); i++)
-        {
-          op[i] = translation + rotation * (op[i] - glm::dvec2((double)(origin -> grid.x - 1) / 2, (double)(origin -> grid.z - 1) / 2));
-        }
         std::vector<glm::dvec2> tp = target -> get_bounding_perimeter();
-        translation = target -> pp.position;
-        rotation = get_rotation_matrix(target -> pp.angle);
-        for(int i = 0; i < tp.size(); i++)
-        {
-          tp[i] = translation + rotation * (tp[i] - glm::dvec2((double)(target -> grid.x - 1) / 2, (double)(target -> grid.z - 1) / 2));
-        }
         // get pruned vector of points, filtering by points that are in the target bounding box
         std::vector<glm::dvec2> pop;
         std::vector<glm::dvec2> ptp;
@@ -248,15 +257,16 @@ void slicer_t::tick_sea(sea *o, physical_properties pp)
 
 void slicer_t::tick_floater(floater *o, physical_properties pp)
 {
-  for(auto ray:rays)
+  for(auto ray : rays)
   {
-    collider_box floater_c = o -> get_bounding_box();
-    physical_properties ppp; // pseudo physical properties, don't bash my naming convention
-    ppp.position = ray.position;
-    collider_circle ray_c(ppp, 0.1);
+    if(ray.consumed)
+    {
+      continue;
+    }
     glm::dvec2 _axis;
     double _offset;
-    if(!selected && floater_c.collides(&ray_c, &_axis, &_offset))
+    std::vector<glm::dvec2> perimeter = o -> get_bounding_perimeter();
+    if(!selected && point_is_in_shape(ray.position, perimeter))
     {
       ray_targeted = o;
       pos_targeted = ray.position;
@@ -264,6 +274,7 @@ void slicer_t::tick_floater(floater *o, physical_properties pp)
   }
   if(o -> targeted)
   {
+    controlled = o;
     glm::dvec2 forward_axis = get_rotation_matrix(o -> pp.angle) * glm::dvec2(0, 1);
     o -> pp.position_velocity += target_f_acc * forward_axis;
     o -> pp.angular_velocity -= target_r_acc;
@@ -403,30 +414,37 @@ void slicer_t::tick_solid(solid *o, physical_properties pp)
   physical_properties abs_pp = pp + o -> pp;
   for(auto ray : rays)
   {
-    if(ray.button == GLFW_MOUSE_BUTTON_1)
+    if(ray.consumed)
     {
-      bool old_targeted = o -> targeted;
-      bool new_targeted = glm::distance(ray.position, abs_pp.position) < 0.5;
-      if(old_targeted && !new_targeted)
-      {
-        std::vector<oid_t> highlights = o -> find_id(highlight_namer);
-        for(auto hl : highlights)
-        {
-          o -> erase_id(hl);
-        }
-      }
-      if(!old_targeted && new_targeted)
-      {
-        o -> add(new highlight());
-      }
-      o -> targeted = new_targeted;
+      continue;
     }
-    if(ray.button == GLFW_MOUSE_BUTTON_2)
+    if(action == act_select)
     {
-      if(o -> targeted)
+      if(ray.button == GLFW_MOUSE_BUTTON_1)
       {
-        // move target to new position
-        selected = o;
+        bool old_targeted = o -> targeted;
+        bool new_targeted = glm::distance(ray.position, abs_pp.position) < 0.5;
+        if(old_targeted && !new_targeted)
+        {
+          std::vector<oid_t> highlights = o -> find_id(highlight_namer);
+          for(auto hl : highlights)
+          {
+            o -> erase_id(hl);
+          }
+        }
+        if(!old_targeted && new_targeted)
+        {
+          o -> add(new highlight());
+        }
+        o -> targeted = new_targeted;
+      }
+      if(ray.button == GLFW_MOUSE_BUTTON_2)
+      {
+        if(o -> targeted)
+        {
+          // move target to new position
+          selected = o;
+        }
       }
     }
   }
@@ -488,4 +506,16 @@ void slicer_t::targeted_turn_left_disable()
 void slicer_t::add_ray(ray r)
 {
   rays.push_back(r);
+}
+
+void slicer_t::toggle_board()
+{
+  if(action == act_board)
+  {
+    action = act_select;
+  }
+  else
+  {
+    action = act_board;
+  }
 }
