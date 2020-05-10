@@ -36,7 +36,7 @@ int main(int argc, char **argv)
   f4 -> grid.at(2, 3) -> collidable = true;
   f4 -> grid.at(3, 1) -> collidable = true;
   f4 -> grid.at(3, 2) -> collidable = true;
-  floater *f1 = new ship(5, 5);
+  floater *f1 = new ship(9, 9);
   f1 -> pp.position = {0, 0};
   //
   // **
@@ -44,23 +44,23 @@ int main(int argc, char **argv)
   // **
   //
   f1 -> grid.at(1, 1) -> collidable = true;
-  f1 -> grid.at(1, 2) -> collidable = true;
   f1 -> grid.at(2, 1) -> collidable = true;
   f1 -> grid.at(2, 2) -> collidable = true;
   f1 -> grid.at(2, 3) -> collidable = true;
+  f1 -> grid.at(2, 4) -> collidable = true;
+  //f1 -> grid.at(2, 5) -> collidable = true;
   f1 -> grid.at(3, 1) -> collidable = true;
-  f1 -> grid.at(3, 2) -> collidable = true;
   f1 -> targeted = true;
   pirate *p1 = new pirate();
-  p1 -> pp.position = {0.5, -1};
+  p1 -> pp.position = {-1.5, -3};
   p1 -> focused = true;
   f1 -> children[1] = p1;
   structure *st = new structure();
-  st -> pp.position = {-1, 0};
+  st -> pp.position = {-3, -3};
   st -> pp.angle = M_PI + M_PI / 2;
   f1 -> children[2] = st;
   st = new structure();
-  st -> pp.position = {1, 0};
+  st -> pp.position = {-1, -3};
   st -> pp.angle = M_PI / 2;
   f1 -> children[3] = st;
   floater *f2 = new island(5, 5);

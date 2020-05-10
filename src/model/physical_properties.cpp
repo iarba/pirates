@@ -7,6 +7,7 @@ physical_properties::physical_properties()
 
 physical_properties::physical_properties(boost::property_tree::ptree node)
 {
+  offset = tree_to_vec2(node.get_child("offset"));
   position = tree_to_vec2(node.get_child("position"));
   position_velocity = tree_to_vec2(node.get_child("position_velocity"));
   angle = node.get<double>("angle");
@@ -20,6 +21,7 @@ physical_properties::physical_properties(boost::property_tree::ptree node)
 boost::property_tree::ptree physical_properties::serialise()
 {
   boost::property_tree::ptree node;
+  node.put_child("offset", vec2_to_tree(offset));
   node.put_child("position", vec2_to_tree(position));
   node.put_child("position_velocity", vec2_to_tree(position_velocity));
   node.put("angle", angle);
@@ -35,7 +37,8 @@ physical_properties operator+(const physical_properties &pp1, const physical_pro
 {
   physical_properties res = pp1;
   glm::dmat2 rmat = get_rotation_matrix(pp1.angle);
-  res.position += rmat * pp2.position;
+  res.position += pp1.offset + rmat * (pp2.position - pp1.offset);
+  res.offset = rmat * pp2.offset;
   res.position_velocity += rmat * pp2.position;
   res.angle += pp2.angle;
   res.angular_velocity += pp2.angular_velocity;

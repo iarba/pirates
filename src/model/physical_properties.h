@@ -9,6 +9,7 @@ class physical_properties
 public:
   physical_properties();
   physical_properties(boost::property_tree::ptree node);
+  glm::dvec2 offset = {0, 0};
   glm::dvec2 position = {0, 0};
   glm::dvec2 position_velocity = {0, 0};
   double angle = 0;

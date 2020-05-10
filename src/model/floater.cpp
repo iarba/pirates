@@ -271,6 +271,8 @@ void floater::generate_centroid()
   }
   centroid.x = centroid.x / (3 * darea);
   centroid.y = centroid.y / (3 * darea);
+  glm::dvec2 translation = pp.position;
+  pp.offset = centroid - glm::dvec2((double)(grid.x - 1) / 2, (double)(grid.z - 1) / 2);
   centroid_expired = false;
 }
 
@@ -280,12 +282,16 @@ std::vector<glm::dvec2> floater::get_bounding_perimeter()
   {
     this -> generate_perimeter();
   }
+  if(this -> centroid_expired)
+  {
+    this -> generate_centroid();
+  }
   std::vector<glm::dvec2> perimeter = bounding_perimeter;
   glm::dvec2 translation = pp.position;
   glm::dmat2 rotation = get_rotation_matrix(pp.angle);
   for(int i = 0; i < perimeter.size(); i++)
   {
-    perimeter[i] = translation + rotation * (perimeter[i] - glm::dvec2((double)(grid.x - 1) / 2, (double)(grid.z - 1) / 2));
+    perimeter[i] = translation + pp.offset + rotation * (perimeter[i] - glm::dvec2((double)(grid.x - 1) / 2, (double)(grid.z - 1) / 2) - pp.offset);
   }
   return perimeter;
 }
@@ -297,10 +303,7 @@ glm::dvec2 floater::get_centroid()
     this -> generate_centroid();
   }
   glm::dvec2 translation = pp.position;
-  glm::dmat2 rotation = get_rotation_matrix(pp.angle);
-  printf("center %lf %lf\n", pp.position.x, pp.position.y);
-  glm::dvec2 cent = translation + rotation * (centroid - glm::dvec2((double)(grid.x - 1) / 2, (double)(grid.z - 1) / 2));
-  printf("centroid %lf %lf\n", cent.x, cent.y);
+  glm::dvec2 cent = translation + centroid - glm::dvec2((double)(grid.x - 1) / 2, (double)(grid.z - 1) / 2);
   return cent;
 }
 

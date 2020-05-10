@@ -61,7 +61,7 @@ void floater_viewer::update(scppr::scppr *renderer, floater *f)
         }
         loader::name_registry.apply_loader(c -> material, grid[i][j]);
         glm::dvec2 pos = {(double)i - (double)(x - 1) / 2, (double)j - (double)(z - 1) / 2};
-        pos = rotation * pos;
+        pos = rotation * (pos - f -> pp.offset) + f -> pp.offset;
         pos = pos + translation;
         grid[i][j] -> position += glm::dvec3(pos.x, 0, pos.y);
         grid[i][j] -> rotation += glm::dvec3(0, f -> pp.angle, 0);
