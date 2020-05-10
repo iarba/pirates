@@ -191,7 +191,7 @@ void slicer_t::tick_sea(sea *o, physical_properties pp)
             glm::dvec2 impulse = axis * offset;
             double mass = origin -> pp.mass + target -> pp.mass;
             // push the origin
-            glm::dvec2 push_axis = glm::normalize(point - origin -> pp.position);
+            glm::dvec2 push_axis = glm::normalize(point - origin -> get_centroid());
             glm::dvec2 push_delta = glm::dot(impulse, push_axis) * push_axis;
             origin -> pp.position_velocity += push_delta * floater_collision_push_strength * mass * origin -> pp.inverse_mass;
             // rotate the origin
@@ -203,7 +203,7 @@ void slicer_t::tick_sea(sea *o, physical_properties pp)
             // invert the impulse
             impulse = -impulse;
             // push the target
-            push_axis = glm::normalize(point - target -> pp.position);
+            push_axis = glm::normalize(point - target -> get_centroid());
             push_delta = glm::dot(impulse, push_axis) * push_axis;
             target -> pp.position_velocity += push_delta * floater_collision_push_strength * mass * target -> pp.inverse_mass;
             // rotate the target
@@ -226,7 +226,7 @@ void slicer_t::tick_sea(sea *o, physical_properties pp)
             glm::dvec2 impulse = axis * offset;
             double mass = target -> pp.mass + origin -> pp.mass;
             // push the target
-            glm::dvec2 push_axis = glm::normalize(point - target -> pp.position);
+            glm::dvec2 push_axis = glm::normalize(point - target -> get_centroid());
             glm::dvec2 push_delta = glm::dot(impulse, push_axis) * push_axis;
             target -> pp.position_velocity += push_delta * floater_collision_push_strength * mass * target -> pp.inverse_mass;
             // rotate the target
@@ -238,7 +238,7 @@ void slicer_t::tick_sea(sea *o, physical_properties pp)
             // invert the impulse
             impulse = -impulse;
             // push the origin
-            push_axis = glm::normalize(point - origin -> pp.position);
+            push_axis = glm::normalize(point - origin -> get_centroid());
             push_delta = glm::dot(impulse, push_axis) * push_axis;
             origin -> pp.position_velocity += push_delta * floater_collision_push_strength * mass * origin -> pp.inverse_mass;
             // rotate the origin

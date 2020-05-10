@@ -251,6 +251,29 @@ void floater::generate_perimeter()
   perimeter_expired = false;
 }
 
+void floater::generate_centroid()
+{
+  if(this -> perimeter_expired)
+  {
+    this -> generate_perimeter();
+  }
+  centroid.x = 0;
+  centroid.y = 0;
+  double darea = 0;
+  int j = bounding_perimeter.size() - 1;
+  for(int i = 0; i < bounding_perimeter.size(); i++)
+  {
+    double part = bounding_perimeter[i].x * bounding_perimeter[j].y - bounding_perimeter[j].x * bounding_perimeter[i].y;
+    darea += part;
+    centroid.x += (bounding_perimeter[i].x + bounding_perimeter[j].x) * part;
+    centroid.y += (bounding_perimeter[i].y + bounding_perimeter[j].y) * part;
+    j = i;
+  }
+  centroid.x = centroid.x / (3 * darea);
+  centroid.y = centroid.y / (3 * darea);
+  centroid_expired = false;
+}
+
 std::vector<glm::dvec2> floater::get_bounding_perimeter()
 {
   if(this -> perimeter_expired)
@@ -265,6 +288,20 @@ std::vector<glm::dvec2> floater::get_bounding_perimeter()
     perimeter[i] = translation + rotation * (perimeter[i] - glm::dvec2((double)(grid.x - 1) / 2, (double)(grid.z - 1) / 2));
   }
   return perimeter;
+}
+
+glm::dvec2 floater::get_centroid()
+{
+  if(this -> centroid_expired)
+  {
+    this -> generate_centroid();
+  }
+  glm::dvec2 translation = pp.position;
+  glm::dmat2 rotation = get_rotation_matrix(pp.angle);
+  printf("center %lf %lf\n", pp.position.x, pp.position.y);
+  glm::dvec2 cent = translation + rotation * (centroid - glm::dvec2((double)(grid.x - 1) / 2, (double)(grid.z - 1) / 2));
+  printf("centroid %lf %lf\n", cent.x, cent.y);
+  return cent;
 }
 
 boost::property_tree::ptree floater::serialise()
