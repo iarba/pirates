@@ -34,7 +34,7 @@ public:
   grid_t(boost::property_tree::ptree node);
   ~grid_t();
   cell_t *at(int x, int z);
-  void fill_parse_mark(int xpos, int zpos, int marker);
+  void fill_visit_mark(int xpos, int zpos, int marker);
   boost::property_tree::ptree serialise();
   cell_t **_grid;
   int x;

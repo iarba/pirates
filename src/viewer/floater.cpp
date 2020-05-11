@@ -47,6 +47,7 @@ void floater_viewer::update(scppr::scppr *renderer, floater *f)
 {
   glm::dvec2 translation = {f -> pp.position.x, f -> pp.position.y};
   glm::dmat2 rotation = get_rotation_matrix(f -> pp.angle);
+  f -> get_centroid();
   for(int i = 0; i < x; i++)
   {
     for(int j = 0; j < z; j++)

@@ -153,21 +153,21 @@ cell_t *grid_t::at(int x, int z)
   return _grid[x] + z;
 }
 
-void grid_t::fill_parse_mark(int xpos, int zpos, int marker)
+void grid_t::fill_visit_mark(int xpos, int zpos, int marker)
 {
   if(!at(xpos, zpos) -> collidable)
   {
     return;
   }
-  if(at(xpos, zpos) -> perimeter_parsed_mark == marker)
+  if(at(xpos, zpos) -> perimeter_visited_mark == marker)
   {
     return;
   }
-  at(xpos, zpos) -> perimeter_parsed_mark = marker;
-  fill_parse_mark(xpos + 1, zpos    , marker);
-  fill_parse_mark(xpos - 1, zpos    , marker);
-  fill_parse_mark(xpos    , zpos + 1, marker);
-  fill_parse_mark(xpos    , zpos - 1, marker);
+  at(xpos, zpos) -> perimeter_visited_mark = marker;
+  fill_visit_mark(xpos + 1, zpos    , marker);
+  fill_visit_mark(xpos - 1, zpos    , marker);
+  fill_visit_mark(xpos    , zpos + 1, marker);
+  fill_visit_mark(xpos    , zpos - 1, marker);
 }
 
 boost::property_tree::ptree grid_t::serialise()
@@ -211,11 +211,11 @@ void floater::generate_perimeter()
   bounding_perimeter.clear();
   marker++;
   // step 1 - find first collidable = true
-  int x, z;
-  bool found = false;
   while(true)
   {
     std::vector<glm::dvec2> partial_perimeter;
+    int x, z;
+    bool found = false;
     for(x = 0; x < grid.x; x++)
     {
       for(z = 0; z < grid.z; z++)
@@ -268,7 +268,7 @@ void floater::generate_perimeter()
       partial_perimeter.push_back({x + dblx[d], z + dblz[d]});
       grid.at(x + dblx[d], z + dblz[d]) -> perimeter_parsed_mark = marker;
     }
-    grid.fill_parse_mark(x, z, marker);
+    grid.fill_visit_mark(x, z, marker);
     bounding_perimeter.add(partial_perimeter);
   }
   perimeter_expired = false;
@@ -294,28 +294,22 @@ glm::dvec2 generate_centroid_for(std::vector<glm::dvec2> bounding_perimeter, dou
 }
 void floater::generate_centroid()
 {
+  centroid = {0, 0};
   if(this -> perimeter_expired)
   {
     this -> generate_perimeter();
   }
-  std::vector<glm::dvec2> partial_centroids;
-  std::vector<double> partial_areas;
+  double total_area;
   for(int i = 0; i < bounding_perimeter.perimeters.size(); i++)
   {
     double partial_area = 0;
     glm::dvec2 partial_centroid = generate_centroid_for(bounding_perimeter.perimeters[i], &partial_area);
-    partial_centroids.push_back(partial_centroid);
-    partial_areas.push_back(partial_area);
+    centroid += partial_centroid * partial_area;
+    total_area += partial_area;
   }
-  double total_area = 0;
-  for(int i = 0; i < bounding_perimeter.perimeters.size(); i++)
-  {
-    centroid += partial_areas[i] * partial_centroids[i];
-    total_area += partial_areas[i];
-  }
-  centroid /= total_area;
-  pp.offset = centroid - glm::dvec2((double)(grid.x - 1) / 2, (double)(grid.z - 1) / 2);
+  centroid = centroid / total_area;
   centroid_expired = false;
+  pp.offset = centroid - glm::dvec2((double)(grid.x - 1) / 2, (double)(grid.z - 1) / 2);
 }
 
 perimeters_t floater::get_bounding_perimeter()
