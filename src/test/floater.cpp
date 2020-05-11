@@ -91,16 +91,23 @@ void test_floater_interaction()
   collider_box cb = f -> get_bounding_box();
   PASS;
   TEST("TESTING PERIMETER GENERATION");
-  std::vector<glm::dvec2> v = f -> get_bounding_perimeter();
-  if(v.size() == 52)
+  perimeters_t v = f -> get_bounding_perimeter();
+  if(v.perimeters.size() != 1)
+  {
+    std::string reason = "perimeter failed to generate";
+    FAIL_REASON(reason);
+    goto next1;
+  }
+  if(v.perimeters[0].size() == 52)
   {
     PASS;
   }
   else
   {
-    std::string reason = "expected size 52 got " + std::to_string(v.size());
+    std::string reason = "expected size 52 got " + std::to_string(v.perimeters[0].size());
     FAIL_REASON(reason);
   }
+  next1:
   delete f;
 }
 

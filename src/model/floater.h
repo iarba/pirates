@@ -4,7 +4,7 @@
 #include "model/obj.h"
 #include "model/physical_properties.h"
 #include "model/collider/box.h"
-#include <vector>
+#include "model/perimeters.h"
 
 #define CELL_SIZE 1
 
@@ -22,7 +22,8 @@ public:
   bool passable = false;
   bool solid = false;
   bool collidable = false;
-  int mark = 0;
+  int perimeter_parsed_mark = 0;
+  int perimeter_visited_mark = 0;
   floater_material_t material = 0;
 };
 
@@ -33,6 +34,7 @@ public:
   grid_t(boost::property_tree::ptree node);
   ~grid_t();
   cell_t *at(int x, int z);
+  void fill_parse_mark(int xpos, int zpos, int marker);
   boost::property_tree::ptree serialise();
   cell_t **_grid;
   int x;
@@ -49,14 +51,14 @@ public:
   collider_box get_bounding_box();
   void generate_perimeter();
   void generate_centroid();
-  std::vector<glm::dvec2> get_bounding_perimeter();
+  perimeters_t get_bounding_perimeter();
   glm::dvec2 get_centroid();
   virtual boost::property_tree::ptree serialise();
   physical_properties pp;
   grid_t grid;
   bool targeted = false;
   // V not serialised V
-  std::vector<glm::dvec2> bounding_perimeter;
+  perimeters_t bounding_perimeter;
   glm::dvec2 centroid;
   int marker = 0;
   bool perimeter_expired = true;

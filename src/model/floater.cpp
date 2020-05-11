@@ -153,6 +153,23 @@ cell_t *grid_t::at(int x, int z)
   return _grid[x] + z;
 }
 
+void grid_t::fill_parse_mark(int xpos, int zpos, int marker)
+{
+  if(!at(xpos, zpos) -> collidable)
+  {
+    return;
+  }
+  if(at(xpos, zpos) -> perimeter_parsed_mark == marker)
+  {
+    return;
+  }
+  at(xpos, zpos) -> perimeter_parsed_mark = marker;
+  fill_parse_mark(xpos + 1, zpos    , marker);
+  fill_parse_mark(xpos - 1, zpos    , marker);
+  fill_parse_mark(xpos    , zpos + 1, marker);
+  fill_parse_mark(xpos    , zpos - 1, marker);
+}
+
 boost::property_tree::ptree grid_t::serialise()
 {
   boost::property_tree::ptree node;
@@ -196,87 +213,112 @@ void floater::generate_perimeter()
   // step 1 - find first collidable = true
   int x, z;
   bool found = false;
-  for(x = 0; x < grid.x; x++)
+  while(true)
   {
-    for(z = 0; z < grid.z; z++)
+    std::vector<glm::dvec2> partial_perimeter;
+    for(x = 0; x < grid.x; x++)
     {
-      if(grid.at(x, z) -> collidable)
+      for(z = 0; z < grid.z; z++)
       {
-        found = true;
+        if(grid.at(x, z) -> collidable && grid.at(x, z) -> perimeter_visited_mark != marker)
+        {
+          found = true;
+          break;
+        }
+      }
+      if(found)
+      {
         break;
       }
     }
-    if(found)
+    if(!found)
     {
       break;
     }
-  }
-  if(!found)
-  {
-    return;
-  }
-  // step 2 - travel around the border, always keeping uncollidable to your left
-  // assumption - grid edge is uncollidable
-  direction_t d = right; // we know up and left is uncollidable
-  int startx = x;
-  int startz = z;
-  while(!(x == startx && z == startz && d == up))
-  { // while we're not where we started
-    if(grid.at(x + dblx[d], z + dblz[d]) -> mark != marker)
+    // step 2 - travel around the border, always keeping uncollidable to your left
+    // assumption - grid edge is uncollidable
+    direction_t d = right; // we know up and left is uncollidable
+    int startx = x;
+    int startz = z;
+    while(!(x == startx && z == startz && d == up))
+    { // while we're not where we started
+      if(grid.at(x + dblx[d], z + dblz[d]) -> perimeter_parsed_mark != marker)
+      {
+        partial_perimeter.push_back({x + dblx[d], z + dblz[d]});
+        grid.at(x + dblx[d], z + dblz[d]) -> perimeter_parsed_mark = marker;
+      }
+      if(grid.at(x + ddx[dlo[d]], z + ddz[dlo[d]]) -> collidable)
+      { // left is collidable now, move there and add to perimeter
+        d = dlo[d];
+        x += ddx[d];
+        z += ddz[d];
+        continue;
+      }
+      if(grid.at(x + ddx[d], z + ddz[d]) -> collidable)
+      { // forward is collidable
+        x += ddx[d];
+        z += ddz[d];
+        continue;
+      }
+      // if we got here, that means there's uncollidable both to our left and forward, so we turn right
+      d = dro[d];
+    }
+    if(grid.at(x + dblx[d], z + dblz[d]) -> perimeter_parsed_mark != marker)
     {
-      bounding_perimeter.push_back({x + dblx[d], z + dblz[d]});
-      grid.at(x + dblx[d], z + dblz[d]) -> mark = marker;
+      partial_perimeter.push_back({x + dblx[d], z + dblz[d]});
+      grid.at(x + dblx[d], z + dblz[d]) -> perimeter_parsed_mark = marker;
     }
-    if(grid.at(x + ddx[dlo[d]], z + ddz[dlo[d]]) -> collidable)
-    { // left is collidable now, move there and add to perimeter
-      d = dlo[d];
-      x += ddx[d];
-      z += ddz[d];
-      continue;
-    }
-    if(grid.at(x + ddx[d], z + ddz[d]) -> collidable)
-    { // forward is collidable
-      x += ddx[d];
-      z += ddz[d];
-      continue;
-    }
-    // if we got here, that means there's uncollidable both to our left and forward, so we turn right
-    d = dro[d];
-  }
-  if(grid.at(x + dblx[d], z + dblz[d]) -> mark != marker)
-  {
-    bounding_perimeter.push_back({x + dblx[d], z + dblz[d]});
-    grid.at(x + dblx[d], z + dblz[d]) -> mark = marker;
+    grid.fill_parse_mark(x, z, marker);
+    bounding_perimeter.add(partial_perimeter);
   }
   perimeter_expired = false;
 }
 
+glm::dvec2 generate_centroid_for(std::vector<glm::dvec2> bounding_perimeter, double *area)
+{
+  glm::dvec2 centroid;
+  *area = 0;
+  int j = bounding_perimeter.size() - 1;
+  for(int i = 0; i < bounding_perimeter.size(); i++)
+  {
+    double part = bounding_perimeter[i].x * bounding_perimeter[j].y - bounding_perimeter[j].x * bounding_perimeter[i].y;
+    *area += part;
+    centroid.x += (bounding_perimeter[i].x + bounding_perimeter[j].x) * part;
+    centroid.y += (bounding_perimeter[i].y + bounding_perimeter[j].y) * part;
+    j = i;
+  }
+  centroid.x = centroid.x / (3 * *area);
+  centroid.y = centroid.y / (3 * *area);
+  *area /= 2;
+  return centroid;
+}
 void floater::generate_centroid()
 {
   if(this -> perimeter_expired)
   {
     this -> generate_perimeter();
   }
-  centroid.x = 0;
-  centroid.y = 0;
-  double darea = 0;
-  int j = bounding_perimeter.size() - 1;
-  for(int i = 0; i < bounding_perimeter.size(); i++)
+  std::vector<glm::dvec2> partial_centroids;
+  std::vector<double> partial_areas;
+  for(int i = 0; i < bounding_perimeter.perimeters.size(); i++)
   {
-    double part = bounding_perimeter[i].x * bounding_perimeter[j].y - bounding_perimeter[j].x * bounding_perimeter[i].y;
-    darea += part;
-    centroid.x += (bounding_perimeter[i].x + bounding_perimeter[j].x) * part;
-    centroid.y += (bounding_perimeter[i].y + bounding_perimeter[j].y) * part;
-    j = i;
+    double partial_area = 0;
+    glm::dvec2 partial_centroid = generate_centroid_for(bounding_perimeter.perimeters[i], &partial_area);
+    partial_centroids.push_back(partial_centroid);
+    partial_areas.push_back(partial_area);
   }
-  centroid.x = centroid.x / (3 * darea);
-  centroid.y = centroid.y / (3 * darea);
-  glm::dvec2 translation = pp.position;
+  double total_area = 0;
+  for(int i = 0; i < bounding_perimeter.perimeters.size(); i++)
+  {
+    centroid += partial_areas[i] * partial_centroids[i];
+    total_area += partial_areas[i];
+  }
+  centroid /= total_area;
   pp.offset = centroid - glm::dvec2((double)(grid.x - 1) / 2, (double)(grid.z - 1) / 2);
   centroid_expired = false;
 }
 
-std::vector<glm::dvec2> floater::get_bounding_perimeter()
+perimeters_t floater::get_bounding_perimeter()
 {
   if(this -> perimeter_expired)
   {
@@ -286,12 +328,23 @@ std::vector<glm::dvec2> floater::get_bounding_perimeter()
   {
     this -> generate_centroid();
   }
-  std::vector<glm::dvec2> perimeter = bounding_perimeter;
+  perimeters_t perimeter = bounding_perimeter;
+  for(auto it : children)
+  {
+    obj *child = it.second;
+    if(child -> layer == 1)
+    {
+      perimeter = perimeter + static_cast<floater *>(child) -> get_bounding_perimeter();
+    }
+  }
   glm::dvec2 translation = pp.position;
   glm::dmat2 rotation = get_rotation_matrix(pp.angle);
-  for(int i = 0; i < perimeter.size(); i++)
+  for(int i = 0; i < perimeter.perimeters.size(); i++)
   {
-    perimeter[i] = translation + pp.offset + rotation * (perimeter[i] - glm::dvec2((double)(grid.x - 1) / 2, (double)(grid.z - 1) / 2) - pp.offset);
+    for(int j = 0; j < perimeter.perimeters[i].size(); j++)
+    {
+      perimeter.perimeters[i][j] = translation + pp.offset + rotation * (perimeter.perimeters[i][j] - glm::dvec2((double)(grid.x - 1) / 2, (double)(grid.z - 1) / 2) - pp.offset);
+    }
   }
   return perimeter;
 }
