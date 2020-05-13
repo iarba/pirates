@@ -98,3 +98,15 @@ void obj::erase_id(oid_t id)
 {
   children.erase(id);
 }
+
+void obj::remove_child(obj *o)
+{
+  for(auto it : children)
+  {
+    if(it.second == o)
+    {
+      erase_id(it.first);
+      return;
+    }
+  }
+}

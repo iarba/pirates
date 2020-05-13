@@ -21,6 +21,7 @@ public:
   oid_t add(obj *child);
   std::vector<oid_t> find_id(namer_t namer);
   void erase_id(oid_t id);
+  void remove_child(obj *o);
   int layer;
   namer_t name;
   std::map<oid_t, obj*> children;
