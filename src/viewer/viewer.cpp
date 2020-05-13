@@ -94,7 +94,7 @@ void viewer_t::draw_floater(floater *f, physical_properties pp)
     fv = new floater_viewer(f);
     alias.put(f, fv, FLOATER_ID);
   }
-  fv -> update(renderer, f);
+  fv -> update(renderer, f, abs_pp);
   auto cc = f -> children;
   for(auto it : cc)
   {

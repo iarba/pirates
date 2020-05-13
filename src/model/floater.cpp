@@ -209,6 +209,13 @@ collider_box floater::get_bounding_box()
 void floater::generate_perimeter()
 {
   bounding_perimeter.clear();
+  for(auto it : children)
+  {
+    if(it.second -> layer == 1)
+    {
+      bounding_perimeter = bounding_perimeter + static_cast<floater *>(it.second) -> get_bounding_perimeter();
+    }
+  }
   marker++;
   // step 1 - find first collidable = true
   while(true)
@@ -276,7 +283,7 @@ void floater::generate_perimeter()
 
 glm::dvec2 generate_centroid_for(std::vector<glm::dvec2> bounding_perimeter, double *area)
 {
-  glm::dvec2 centroid;
+  glm::dvec2 centroid = {0, 0};
   *area = 0;
   int j = bounding_perimeter.size() - 1;
   for(int i = 0; i < bounding_perimeter.size(); i++)

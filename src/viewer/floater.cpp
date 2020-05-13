@@ -43,10 +43,10 @@ void floater_viewer::unload(scppr::scppr *renderer)
   }
 }
 
-void floater_viewer::update(scppr::scppr *renderer, floater *f)
+void floater_viewer::update(scppr::scppr *renderer, floater *f, physical_properties pp)
 {
-  glm::dvec2 translation = {f -> pp.position.x, f -> pp.position.y};
-  glm::dmat2 rotation = get_rotation_matrix(f -> pp.angle);
+  glm::dvec2 translation = {pp.position.x, pp.position.y};
+  glm::dmat2 rotation = get_rotation_matrix(pp.angle);
   f -> get_centroid();
   for(int i = 0; i < x; i++)
   {
@@ -62,10 +62,10 @@ void floater_viewer::update(scppr::scppr *renderer, floater *f)
         }
         loader::name_registry.apply_loader(c -> material, grid[i][j]);
         glm::dvec2 pos = {(double)i - (double)(x - 1) / 2, (double)j - (double)(z - 1) / 2};
-        pos = rotation * (pos - f -> pp.offset) + f -> pp.offset;
+        pos = rotation * (pos - pp.offset) + pp.offset;
         pos = pos + translation;
         grid[i][j] -> position += glm::dvec3(pos.x, 0, pos.y);
-        grid[i][j] -> rotation += glm::dvec3(0, f -> pp.angle, 0);
+        grid[i][j] -> rotation += glm::dvec3(0, pp.angle, 0);
       }
       else
       {
