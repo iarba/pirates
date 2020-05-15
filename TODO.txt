@@ -67,7 +67,7 @@ Solids delayed for later
   8.3 solid movement is target based                                       V
 
 9. floaters
-  9.1 floaters can "dock"
+  9.1 floaters can "dock"                                                  V
   9.2 floaters can shoot cannons
   9.3 floaters take damage from cannons
   9.4 make collisions a bit more realistic

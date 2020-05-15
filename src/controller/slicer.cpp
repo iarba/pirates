@@ -276,8 +276,8 @@ void slicer_t::tick_sea(sea *o, physical_properties pp)
     printf("distance %lf < %lf\n", dist, bind.lash_length);
     if(dist > bind.lash_length)
     {
-      origin -> pp.position_velocity += (target -> get_centroid() - origin -> get_centroid()) * drag_strength;
-      target -> pp.position_velocity += (origin -> get_centroid() - target -> get_centroid()) * drag_strength;
+      origin -> pp.position_velocity += (target -> get_centroid() - origin -> get_centroid()) * origin -> pp.inverse_mass * drag_strength;
+      target -> pp.position_velocity += (origin -> get_centroid() - target -> get_centroid()) * target -> pp.inverse_mass * drag_strength;
     }
   }
   tick_children_of(o, pp);
