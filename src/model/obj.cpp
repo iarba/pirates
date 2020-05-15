@@ -113,3 +113,15 @@ void obj::remove_child(obj *o)
     }
   }
 }
+
+oid_t obj::find_id_of(obj *o)
+{
+  for(auto it : children)
+  {
+    if(it.second == o)
+    {
+      return it.first;
+    }
+  }
+  return 0;
+}

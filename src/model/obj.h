@@ -22,6 +22,7 @@ public:
   std::vector<oid_t> find_id(namer_t namer);
   void erase_id(oid_t id);
   void remove_child(obj *o);
+  oid_t find_id_of(obj *o);
   int layer;
   namer_t name;
   std::map<oid_t, obj*> children;

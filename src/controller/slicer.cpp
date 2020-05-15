@@ -108,7 +108,10 @@ void slicer_t::tick(obj *o)
   if(action == act_board && ray_targeted && controlled && ray_targeted != controlled)
   {
     // TODO: create a bind between the 2 floater centers
+    sea *s = static_cast<sea *>(o);
+    binder b(s -> find_id_of(controlled), s -> find_id_of(ray_targeted), glm::distance(ray_targeted -> get_centroid(), controlled -> get_centroid()));
     action = act_select;
+    s -> binds.insert(b);
   }
   rays.clear();
 }
@@ -262,6 +265,19 @@ void slicer_t::tick_sea(sea *o, physical_properties pp)
           }
         }
       }
+    }
+  }
+  for(auto bind : o -> binds)
+  {
+    printf("handling bind\n");
+    floater *origin = static_cast<floater *>(o -> children[bind.origin]);
+    floater *target = static_cast<floater *>(o -> children[bind.target]);
+    double dist = glm::distance(origin -> get_centroid(), target -> get_centroid());
+    printf("distance %lf < %lf\n", dist, bind.lash_length);
+    if(dist > bind.lash_length)
+    {
+      origin -> pp.position_velocity += (target -> get_centroid() - origin -> get_centroid()) * drag_strength;
+      target -> pp.position_velocity += (origin -> get_centroid() - target -> get_centroid()) * drag_strength;
     }
   }
   tick_children_of(o, pp);
