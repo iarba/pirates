@@ -27,6 +27,8 @@ public:
   void targeted_turn_left_disable();
   void add_ray(ray r);
   void toggle_board();
+  void fire_cannons_left();
+  void fire_cannons_right();
   bool enabled = true;
   double sps = 100;
   double dt = 0.01;
@@ -57,6 +59,8 @@ private:
   floater *ray_targeted;
   glm::dvec2 pos_targeted;
   action_t action = act_select;
+  bool fire_left = false;
+  bool fire_right = false;
 };
 
 extern slicer_t slicer;

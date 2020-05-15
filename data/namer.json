@@ -112,6 +112,37 @@
             {
               "0": "texture_target_indicator"
             }
+          },
+          "cannonball":
+          {
+            "namer": 15,
+            "name": "cannonball",
+            "model": "model_cube",
+            "model_offset":
+            {
+              "scale":
+              {
+                "x": 0.1,
+                "y": 0.01,
+                "z": 0.1
+              },
+              "position":
+              {
+                "x": 0,
+                "y": 0.53,
+                "z": 0
+              },
+              "rotation":
+              {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            "texture":
+            {
+              "0": "texture_cannonball"
+            }
           }
         }
       },

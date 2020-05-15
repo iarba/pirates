@@ -68,7 +68,7 @@ Solids delayed for later
 
 9. floaters
   9.1 floaters can "dock"                                                  V
-  9.2 floaters can shoot cannons
+  9.2 floaters can shoot cannons                                           V
   9.3 floaters take damage from cannons
   9.4 make collisions a bit more realistic
   9.5 maybe better floater model

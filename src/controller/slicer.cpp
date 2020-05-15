@@ -6,6 +6,7 @@
 #include "model/structure.h"
 #include "model/highlight.h"
 #include "model/target_indicator.h"
+#include "model/cannonball.h"
 #include "misc_utils.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/matrix_transform_2d.hpp>
@@ -113,6 +114,24 @@ void slicer_t::tick(obj *o)
     action = act_select;
     s -> binds.insert(b);
   }
+  if(controlled && fire_left)
+  {
+    cannonball *cb = new cannonball(2);
+    cb -> pp.angle = controlled -> pp.angle + M_PI / 2;
+    cb -> pp.position = controlled -> get_centroid();
+    cb -> pp.position_velocity = get_rotation_matrix(cb -> pp.angle) * glm::dvec2(0, 20);
+    o -> add(cb);
+    fire_left = false;
+  }
+  if(controlled && fire_right)
+  {
+    cannonball *cb = new cannonball(2);
+    cb -> pp.angle = controlled -> pp.angle - M_PI / 2;
+    cb -> pp.position = controlled -> get_centroid();
+    cb -> pp.position_velocity = get_rotation_matrix(cb -> pp.angle) * glm::dvec2(0, 20);
+    o -> add(cb);
+    fire_right = false;
+  }
   rays.clear();
 }
 
@@ -142,9 +161,17 @@ void slicer_t::tick_sea(sea *o, physical_properties pp)
   // pls don't add too many floaters at once, otherwise this will get expensive
   for(auto oit : o -> children)
   {
+    if(oit.second -> layer != 1)
+    {
+      continue;
+    }
     floater *origin = static_cast<floater *>(oit.second);
     for(auto tit : o -> children)
     {
+      if(tit.second -> layer != 1)
+      {
+        continue;
+      }
       // prune most collisions with a bounding box check
       floater *target = static_cast<floater *>(tit.second);
       if(origin == target)
@@ -550,4 +577,14 @@ void slicer_t::toggle_board()
   {
     action = act_board;
   }
+}
+
+void slicer_t::fire_cannons_left()
+{
+  fire_left = true;
+}
+
+void slicer_t::fire_cannons_right()
+{
+  fire_right = true;
 }

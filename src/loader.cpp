@@ -13,6 +13,7 @@
 #include "model/attachment.h"
 #include "model/highlight.h"
 #include "model/target_indicator.h"
+#include "model/cannonball.h"
 
 loader::namer_registry loader::name_registry;
 
@@ -51,6 +52,7 @@ void loader::load(std::string path)
       attachment::init(namer_node);
       highlight::init(namer_node);
       target_indicator::init(namer_node);
+      cannonball::init(namer_node);
     }
     if(node.first == "model")
     {

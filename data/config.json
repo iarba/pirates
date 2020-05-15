@@ -55,6 +55,11 @@
     {
       "name": "target_indicator",
       "path": "../assets/target_indicator.png"
+    },
+    "cannonball":
+    {
+      "name": "cannonball",
+      "path": "../assets/cannonball.png"
     }
   },
   "include":
