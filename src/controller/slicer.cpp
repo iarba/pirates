@@ -9,7 +9,6 @@
 #include "misc_utils.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/matrix_transform_2d.hpp>
-#include "model/compound.h"
 
 slicer_t slicer;
 
@@ -108,12 +107,7 @@ void slicer_t::tick(obj *o)
   }
   if(action == act_board && ray_targeted && controlled && ray_targeted != controlled)
   {
-    compound *nf = new compound(ray_targeted, controlled);
-    ray_targeted -> parent -> remove_child(ray_targeted);
-    controlled -> parent -> remove_child(controlled);
-    ray_targeted -> parent -> add(nf);
-    // TODO: create a new container floater containing both sub-floaters.
-    // collision is handled by parent, and the sub-floaters cannot move anymore
+    // TODO: create a bind between the 2 floater centers
     action = act_select;
   }
   rays.clear();

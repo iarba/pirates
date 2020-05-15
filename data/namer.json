@@ -34,11 +34,6 @@
           {
             "namer": 3,
             "name": "ship"
-          },
-          "compound":
-          {
-            "namer": 15,
-            "name": "compound"
           }
         },
         "solid":

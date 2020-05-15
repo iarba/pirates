@@ -7,7 +7,6 @@
 #include "model/floater.h"
 #include "model/ship.h"
 #include "model/island.h"
-#include "model/compound.h"
 #include "model/solid.h"
 #include "model/pirate.h"
 #include "model/structure.h"
@@ -46,7 +45,6 @@ void loader::load(std::string path)
       floater::init(namer_node);
       ship::init(namer_node);
       island::init(namer_node);
-      compound::init(namer_node);
       solid::init(namer_node);
       pirate::init(namer_node);
       structure::init(namer_node);

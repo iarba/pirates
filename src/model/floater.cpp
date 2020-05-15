@@ -209,13 +209,6 @@ collider_box floater::get_bounding_box()
 void floater::generate_perimeter()
 {
   bounding_perimeter.clear();
-  for(auto it : children)
-  {
-    if(it.second -> layer == 1)
-    {
-      bounding_perimeter = bounding_perimeter + static_cast<floater *>(it.second) -> get_bounding_perimeter();
-    }
-  }
   marker++;
   // step 1 - find first collidable = true
   while(true)
