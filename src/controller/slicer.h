@@ -53,7 +53,7 @@ private:
   double target_r_acc = 0;
   int occupation = 0;
   std::vector<ray> rays;
-  solid *selected;
+  std::set<solid *> selected;
   floater *controlled;
   floater *ray_targeted;
   glm::dvec2 pos_targeted;

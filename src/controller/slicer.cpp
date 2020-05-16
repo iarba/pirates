@@ -43,7 +43,7 @@ void slicer_t::tick(obj *o)
     return;
   }
   ray_targeted = NULL;
-  selected = NULL;
+  selected.clear();
   controlled = NULL;
   occupation++;
   for(auto &ray : rays)
@@ -62,48 +62,51 @@ void slicer_t::tick(obj *o)
     }
   }
   _tick(o, physical_properties());
-  if(action == act_select && ray_targeted && selected)
+  if(action == act_select && ray_targeted)
   {
-    if(selected -> parent == ray_targeted)
+    for(auto select : selected)
     {
-      pos_targeted.x -= ray_targeted -> pp.position.x;
-      pos_targeted.y -= ray_targeted -> pp.position.y;
-      pos_targeted = ray_targeted -> pp.offset + (pos_targeted - ray_targeted -> pp.offset) * get_rotation_matrix(ray_targeted -> pp.angle);
-      double fx = std::floor(pos_targeted.x);
-      double fy = std::floor(pos_targeted.y);
-      double cx = std::ceil(pos_targeted.x);
-      double cy = std::ceil(pos_targeted.y);
-      double x, y;
-      if(cx - pos_targeted.x > pos_targeted.x - fx)
+      if(select -> parent == ray_targeted)
       {
-        x = fx;
+        pos_targeted.x -= ray_targeted -> pp.position.x;
+        pos_targeted.y -= ray_targeted -> pp.position.y;
+        pos_targeted = ray_targeted -> pp.offset + (pos_targeted - ray_targeted -> pp.offset) * get_rotation_matrix(ray_targeted -> pp.angle);
+        double fx = std::floor(pos_targeted.x);
+        double fy = std::floor(pos_targeted.y);
+        double cx = std::ceil(pos_targeted.x);
+        double cy = std::ceil(pos_targeted.y);
+        double x, y;
+        if(cx - pos_targeted.x > pos_targeted.x - fx)
+        {
+          x = fx;
+        }
+        else
+        {
+          x = cx;
+        }
+        if(cy - pos_targeted.y > pos_targeted.y - fy)
+        {
+          y = fy;
+        }
+        else
+        {
+          y = cy;
+        }
+        if(ray_targeted -> grid.x % 2 == 0)
+        {
+          x += 0.5;
+        }
+        if(ray_targeted -> grid.z % 2 == 0)
+        {
+          y += 0.5;
+        }
+        select -> path.clear();
+        select -> path.push_back({x, y});
+        target_indicator *ti = new target_indicator();
+        ti -> pp.position = {x, y};
+        ti -> lifespan = 1;
+        ray_targeted -> add(ti);
       }
-      else
-      {
-        x = cx;
-      }
-      if(cy - pos_targeted.y > pos_targeted.y - fy)
-      {
-        y = fy;
-      }
-      else
-      {
-        y = cy;
-      }
-      if(ray_targeted -> grid.x % 2 == 0)
-      {
-        x += 0.5;
-      }
-      if(ray_targeted -> grid.z % 2 == 0)
-      {
-        y += 0.5;
-      }
-      selected -> path.clear();
-      selected -> path.push_back({x, y});
-      target_indicator *ti = new target_indicator();
-      ti -> pp.position = {x, y};
-      ti -> lifespan = 1;
-      ray_targeted -> add(ti);
     }
   }
   if(action == act_board && ray_targeted && controlled && ray_targeted != controlled)
@@ -116,16 +119,20 @@ void slicer_t::tick(obj *o)
   }
   if(fire_cannons)
   {
-    if(selected && selected -> name == structure_namer)
+    for(auto select : selected)
     {
-      structure *str = static_cast<structure *>(selected);
-      if(str -> can_shoot())
+      if(select -> name == structure_namer)
       {
-        cannonball *cb = new cannonball(2);
-        cb -> pp.angle = str -> pp.angle;
-        cb -> pp.position = str -> pp.position;
-        cb -> pp.position_velocity = get_rotation_matrix(cb -> pp.angle) * glm::dvec2(0, 20);
-        o -> add(cb);
+        structure *str = static_cast<structure *>(select);
+        if(str -> can_shoot())
+        {
+          cannonball *cb = new cannonball(2);
+          physical_properties abs_pp = static_cast<floater *>(str -> parent) -> pp + str -> pp;
+          cb -> pp.angle = abs_pp.angle;
+          cb -> pp.position = abs_pp.position;
+          cb -> pp.position_velocity = get_rotation_matrix(cb -> pp.angle) * glm::dvec2(0, 20);
+          o -> add(cb);
+        }
       }
     }
     fire_cannons = false;
@@ -321,7 +328,7 @@ void slicer_t::tick_floater(floater *o, physical_properties pp)
       perimeters_t perimeters = o -> get_bounding_perimeter();
       for(int i = 0; i < perimeters.perimeters.size(); i++)
       {
-        if(!selected && point_is_in_shape(ray.position, perimeters.perimeters[i]))
+        if(point_is_in_shape(ray.position, perimeters.perimeters[i]))
         {
           ray_targeted = o;
           pos_targeted = ray.position;
@@ -507,7 +514,7 @@ void slicer_t::tick_solid(solid *o, physical_properties pp)
   if(o -> targeted)
   {
     // move target to new position
-    selected = o;
+    selected.insert(o);
   }
   tick_physical_properties(o -> pp);
   tick_children_of(o, abs_pp);
