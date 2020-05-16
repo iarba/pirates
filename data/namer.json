@@ -188,6 +188,7 @@
           "namer": 14,
           "name": "cannon",
           "model": "model_cannon",
+          "can_shoot": true,
           "model_offset":
           {
             "scale":

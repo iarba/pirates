@@ -89,11 +89,13 @@ void manipulator_t::keyboard_callback(int key, int scancode, int action, int mod
     }
     if(key == GLFW_KEY_Q)
     {
-      slicer.fire_cannons_left();
     }
     if(key == GLFW_KEY_E)
     {
-      slicer.fire_cannons_right();
+    }
+    if(key == GLFW_KEY_F)
+    {
+      slicer.fire();
     }
   }
 }

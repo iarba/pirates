@@ -114,23 +114,21 @@ void slicer_t::tick(obj *o)
     action = act_select;
     s -> binds.insert(b);
   }
-  if(controlled && fire_left)
+  if(fire_cannons)
   {
-    cannonball *cb = new cannonball(2);
-    cb -> pp.angle = controlled -> pp.angle + M_PI / 2;
-    cb -> pp.position = controlled -> get_centroid();
-    cb -> pp.position_velocity = get_rotation_matrix(cb -> pp.angle) * glm::dvec2(0, 20);
-    o -> add(cb);
-    fire_left = false;
-  }
-  if(controlled && fire_right)
-  {
-    cannonball *cb = new cannonball(2);
-    cb -> pp.angle = controlled -> pp.angle - M_PI / 2;
-    cb -> pp.position = controlled -> get_centroid();
-    cb -> pp.position_velocity = get_rotation_matrix(cb -> pp.angle) * glm::dvec2(0, 20);
-    o -> add(cb);
-    fire_right = false;
+    if(selected && selected -> name == structure_namer)
+    {
+      structure *str = static_cast<structure *>(selected);
+      if(str -> can_shoot())
+      {
+        cannonball *cb = new cannonball(2);
+        cb -> pp.angle = str -> pp.angle;
+        cb -> pp.position = str -> pp.position;
+        cb -> pp.position_velocity = get_rotation_matrix(cb -> pp.angle) * glm::dvec2(0, 20);
+        o -> add(cb);
+      }
+    }
+    fire_cannons = false;
   }
   rays.clear();
 }
@@ -296,11 +294,9 @@ void slicer_t::tick_sea(sea *o, physical_properties pp)
   }
   for(auto bind : o -> binds)
   {
-    printf("handling bind\n");
     floater *origin = static_cast<floater *>(o -> children[bind.origin]);
     floater *target = static_cast<floater *>(o -> children[bind.target]);
     double dist = glm::distance(origin -> get_centroid(), target -> get_centroid());
-    printf("distance %lf < %lf\n", dist, bind.lash_length);
     if(dist > bind.lash_length)
     {
       origin -> pp.position_velocity += (target -> get_centroid() - origin -> get_centroid()) * origin -> pp.inverse_mass * drag_strength;
@@ -318,16 +314,19 @@ void slicer_t::tick_floater(floater *o, physical_properties pp)
     {
       continue;
     }
-    glm::dvec2 _axis;
-    double _offset;
-    perimeters_t perimeters = o -> get_bounding_perimeter();
-    for(int i = 0; i < perimeters.perimeters.size(); i++)
+    if(ray.button == GLFW_MOUSE_BUTTON_2)
     {
-      if(!selected && point_is_in_shape(ray.position, perimeters.perimeters[i]))
+      glm::dvec2 _axis;
+      double _offset;
+      perimeters_t perimeters = o -> get_bounding_perimeter();
+      for(int i = 0; i < perimeters.perimeters.size(); i++)
       {
-        ray_targeted = o;
-        pos_targeted = ray.position;
-        break;
+        if(!selected && point_is_in_shape(ray.position, perimeters.perimeters[i]))
+        {
+          ray_targeted = o;
+          pos_targeted = ray.position;
+          break;
+        }
       }
     }
   }
@@ -497,15 +496,12 @@ void slicer_t::tick_solid(solid *o, physical_properties pp)
         }
         o -> targeted = new_targeted;
       }
-      if(ray.button == GLFW_MOUSE_BUTTON_2)
-      {
-        if(o -> targeted)
-        {
-          // move target to new position
-          selected = o;
-        }
-      }
     }
+  }
+  if(o -> targeted)
+  {
+    // move target to new position
+    selected = o;
   }
   tick_physical_properties(o -> pp);
   tick_children_of(o, abs_pp);
@@ -579,12 +575,7 @@ void slicer_t::toggle_board()
   }
 }
 
-void slicer_t::fire_cannons_left()
+void slicer_t::fire()
 {
-  fire_left = true;
-}
-
-void slicer_t::fire_cannons_right()
-{
-  fire_right = true;
+  fire_cannons = true;
 }

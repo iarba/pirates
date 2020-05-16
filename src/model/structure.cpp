@@ -1,10 +1,13 @@
 #include "model/structure.h"
 #include "loader.h"
 #include "misc_utils.h"
+#include <set>
 
 namer_t structure_namer = 0;
 
 structure_type_t structure_default_type;
+
+std::set<structure_type_t> shooters;
 
 void structure::init(boost::property_tree::ptree namer_node)
 {
@@ -27,6 +30,16 @@ void structure::init(boost::property_tree::ptree namer_node)
     {
     }
     loader::name_registry.bind(namer, str.second.get<std::string>("name"));
+    try
+    {
+      if(str.second.get<bool>("can_shoot"))
+      {
+        shooters.insert(namer);
+      }
+    }
+    catch(std::exception &e)
+    {
+    }
     glm::dvec3 position = tree_to_vec3(str.second.get_child("model_offset.position"));
     glm::dvec3 rotation = tree_to_vec3(str.second.get_child("model_offset.rotation"));
     glm::dvec3 scale = tree_to_vec3(str.second.get_child("model_offset.scale"));
@@ -60,4 +73,9 @@ boost::property_tree::ptree structure::serialise()
 {
   boost::property_tree::ptree node = solid::serialise();
   return node;
+}
+
+bool structure::can_shoot()
+{
+  return shooters.find(type) != shooters.end();
 }

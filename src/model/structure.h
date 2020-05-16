@@ -16,6 +16,7 @@ public:
   ~structure();
   collider_box get_collider();
   virtual boost::property_tree::ptree serialise();
+  bool can_shoot();
   structure_type_t type;
 };
 
