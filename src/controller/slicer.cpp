@@ -480,8 +480,14 @@ void slicer_t::tick_solid(solid *o, physical_properties pp)
     {
       if(ray.button == GLFW_MOUSE_BUTTON_1)
       {
+        physical_properties ppp;
+        ppp.position = (ray.tl_position + ray.br_position) / 2.0;
+        collider_box rcb(ppp, ray.br_position.x - ray.tl_position.x, ray.br_position.y - ray.tl_position.y);
+        collider_circle tcb(abs_pp, 0.4);
+        glm::dvec2 axis;
+        double offset;
         bool old_targeted = o -> targeted;
-        bool new_targeted = glm::distance(ray.position, abs_pp.position) < 0.5;
+        bool new_targeted = rcb.collides(&tcb, &axis, &offset);
         if(old_targeted && !new_targeted)
         {
           std::vector<oid_t> highlights = o -> find_id(highlight_namer);

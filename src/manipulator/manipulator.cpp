@@ -108,8 +108,13 @@ void manipulator_t::mouse_callback(double xpos, double ypos)
 
 void manipulator_t::click_callback(int button, int state, int mods)
 {
+  if(state == GLFW_PRESS)
+  {
+    pos1 = {cursor_x, cursor_y};
+  }
   if(state == GLFW_RELEASE)
   {
-    slicer.add_ray(ray(camera, cursor_x, cursor_y, button));
+    pos2 = {cursor_x, cursor_y};
+    slicer.add_ray(ray(camera, pos1, pos2, button));
   }
 }

@@ -18,6 +18,8 @@ private:
   sea *s;
   camera_t *camera;
   scppr::scppr *renderer;
+  glm::dvec2 pos1;
+  glm::dvec2 pos2;
   double cursor_x;
   double cursor_y;
 };

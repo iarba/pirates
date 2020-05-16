@@ -6,8 +6,10 @@
 class ray
 {
 public:
-  ray(camera_t *camera, double x, double y, int button);
-  glm::dvec2 position;
+  ray(camera_t *camera, glm::dvec2 pos1, glm::dvec2 pos2, int button);
+  glm::dvec2 tl_position; // top left position
+  glm::dvec2 br_position; // bottom right position
+  glm::dvec2 position; // position on release
   int button;
   bool consumed = false;
 };
