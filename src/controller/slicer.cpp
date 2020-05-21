@@ -130,7 +130,7 @@ void slicer_t::tick(obj *o)
           physical_properties abs_pp = static_cast<floater *>(str -> parent) -> pp + str -> pp;
           cb -> pp.angle = abs_pp.angle;
           cb -> pp.position = abs_pp.position;
-          cb -> pp.position_velocity = get_rotation_matrix(cb -> pp.angle) * glm::dvec2(0, 20);
+          cb -> pp.position_velocity = abs_pp.position_velocity + get_rotation_matrix(cb -> pp.angle) * glm::dvec2(0, 20);
           o -> add(cb);
         }
       }
@@ -321,7 +321,7 @@ void slicer_t::tick_floater(floater *o, physical_properties pp)
     {
       continue;
     }
-    if(ray.button == GLFW_MOUSE_BUTTON_2)
+    if(action == act_select && ray.button == GLFW_MOUSE_BUTTON_2 || action != act_select)
     {
       glm::dvec2 _axis;
       double _offset;
