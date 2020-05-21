@@ -66,6 +66,10 @@ void slicer_t::tick(obj *o)
   {
     for(auto select : selected)
     {
+      if(select -> name == structure_namer)
+      {
+        continue;
+      }
       if(select -> parent == ray_targeted)
       {
         pos_targeted.x -= ray_targeted -> pp.position.x;
