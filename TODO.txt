@@ -77,7 +77,7 @@ Solids delayed for later
   10.1 solids are able to pathfind to avoid collisions
   10.2 solids can switch between "docked: floaters
   10.3 pirates can man various positions, resulting in control gain/loss
-  10.4 pseudo shadow
+  10.4 pseudo shadow                                                       V
 
 11. sea
   11.1 add texture to sea

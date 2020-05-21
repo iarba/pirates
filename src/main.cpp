@@ -3,6 +3,7 @@
 #include "model/ship.h"
 #include "model/island.h"
 #include "model/pirate.h"
+#include "model/pseudo_shadow.h"
 #include "model/structure.h"
 #include "controller/slicer.h"
 #include "viewer/viewer.h"
@@ -54,14 +55,17 @@ int main(int argc, char **argv)
   pirate *p1 = new pirate();
   p1 -> pp.position = {-1.5, -3};
   p1 -> focused = true;
+  p1 -> add(new pseudo_shadow());
   f1 -> children[1] = p1;
   structure *st = new structure();
   st -> pp.position = {-3, -3};
   st -> pp.angle = M_PI + M_PI / 2;
+  st -> add(new pseudo_shadow());
   f1 -> children[2] = st;
   st = new structure();
   st -> pp.position = {-1, -3};
   st -> pp.angle = M_PI / 2;
+  st -> add(new pseudo_shadow());
   f1 -> children[3] = st;
   floater *f2 = new island(5, 5);
   f2 -> pp.position = {5, 5};

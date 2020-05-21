@@ -60,6 +60,11 @@
     {
       "name": "cannonball",
       "path": "../assets/cannonball.png"
+    },
+    "pseudo_shadow":
+    {
+      "name": "pseudo_shadow",
+      "path": "../assets/pseudo_shadow.png"
     }
   },
   "include":

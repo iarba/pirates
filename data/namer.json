@@ -51,6 +51,37 @@
         },
         "attachment":
         {
+          "pseudo_shadow":
+          {
+            "namer": 16,
+            "name": "pseudo_shadow",
+            "model": "model_cube",
+            "model_offset":
+            {
+              "scale":
+              {
+                "x": 0.5,
+                "y": 0.01,
+                "z": 0.5
+              },
+              "position":
+              {
+                "x": 0,
+                "y": 0.501,
+                "z": 0
+              },
+              "rotation":
+              {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            "texture":
+            {
+              "0": "texture_pseudo_shadow"
+            }
+          },
           "highlight":
           {
             "namer": 6,
